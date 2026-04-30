@@ -1,0 +1,525 @@
+/* =============================================================
+   Pet Clinic — Global Stylesheet
+   File: public/css/style.css
+   All pages share these tokens, components, and utilities.
+   ============================================================= */
+
+/* ── 1. Design Tokens (CSS Custom Properties) ───────────────── */
+:root {
+    --pink-50      : #fff0f5;
+    --pink-100     : #ffe0ec;
+    --pink-200     : #ffb3cc;
+    --pink-400     : #f472a8;
+    --pink-500     : #e8438f;
+    --pink-600     : #d12e7a;
+    --white        : #ffffff;
+    --gray-100     : #f9f9f9;
+    --gray-400     : #a0a0a0;
+    --gray-500     : #777777;
+    --gray-600     : #555555;
+    --gray-800     : #222222;
+    --radius       : 14px;
+    --shadow       : 0 8px 40px rgba(232, 67, 143, .15);
+    --transition   : .25s ease;
+}
+
+/* ── 2. Reset & Base ────────────────────────────────────────── */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #fff0f5 0%, #ffe8f0 40%, #ffd6e7 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 16px;
+}
+
+/* ── 3. Keyframe Animations ─────────────────────────────────── */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes popIn {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0);    }
+    40%       { transform: translateY(-18px); }
+    60%       { transform: translateY(-10px); }
+}
+
+@keyframes wave {
+    0%, 100% { transform: rotate(0deg);  }
+    25%       { transform: rotate(10deg);  }
+    75%       { transform: rotate(-10deg); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0);   }
+    20%       { transform: translateX(-6px); }
+    40%       { transform: translateX(6px);  }
+    60%       { transform: translateX(-4px); }
+    80%       { transform: translateX(4px);  }
+}
+
+/* ── 4. Card ────────────────────────────────────────────────── */
+.card {
+    background   : var(--white);
+    border-radius: var(--radius);
+    box-shadow   : var(--shadow);
+    width        : 100%;
+    max-width    : 520px;
+    overflow     : hidden;
+    animation    : slideUp .45s cubic-bezier(.22, .61, .36, 1) both;
+}
+
+/* Narrower card variant used on the login page */
+.card--sm { max-width: 460px; }
+
+/* ── 5. Card Header ─────────────────────────────────────────── */
+.card-header {
+    background : linear-gradient(135deg, var(--pink-500), var(--pink-400));
+    padding    : 36px 40px 32px;
+    text-align : center;
+    position   : relative;
+}
+
+.card-header .paw-icon {
+    font-size    : 2.6rem;
+    display      : block;
+    margin-bottom: 10px;
+    filter       : drop-shadow(0 2px 6px rgba(0, 0, 0, .15));
+}
+
+/* Animated variant — used on login page */
+.card-header .paw-icon--wave {
+    font-size : 2.8rem;
+    animation : wave 2.4s ease-in-out infinite;
+}
+
+.card-header h1 {
+    color          : var(--white);
+    font-size      : 1.65rem;
+    font-weight    : 800;
+    letter-spacing : -.3px;
+}
+
+.card-header p {
+    color      : rgba(255, 255, 255, .85);
+    font-size  : .92rem;
+    margin-top : 6px;
+}
+
+/* ── 6. Card Body ───────────────────────────────────────────── */
+.card-body { padding: 36px 40px 40px; }
+
+/* ── 7. Alert Banners ───────────────────────────────────────── */
+.alert {
+    display       : flex;
+    align-items   : center;
+    gap           : 10px;
+    border-radius : 10px;
+    padding       : 13px 16px;
+    font-size     : .9rem;
+    font-weight   : 600;
+    margin-bottom : 22px;
+}
+
+.alert-success {
+    background : #f0fff8;
+    border     : 1.5px solid #68d9a4;
+    color      : #1a7a4c;
+}
+
+.alert-danger {
+    background : #fff2f5;
+    border     : 1.5px solid var(--pink-200);
+    color      : var(--pink-600);
+    animation  : shake .35s ease;
+}
+
+/* ── 8. Form Layout ─────────────────────────────────────────── */
+.form-row {
+    display               : grid;
+    grid-template-columns : 1fr 1fr;
+    gap                   : 16px;
+}
+
+.form-group { margin-bottom: 18px; }
+
+/* ── 9. Labels ──────────────────────────────────────────────── */
+label {
+    display        : block;
+    font-size      : .85rem;
+    font-weight    : 700;
+    color          : var(--gray-600);
+    margin-bottom  : 7px;
+    letter-spacing : .2px;
+}
+
+label .required     { color: var(--pink-500); margin-left: 2px; }
+label .label-hint   { color: var(--gray-400); font-weight: 500; }
+
+/* ── 10. Input Wrapper ──────────────────────────────────────── */
+.input-wrap {
+    position   : relative;
+    display    : flex;
+    align-items: center;
+}
+
+.input-wrap .icon {
+    position       : absolute;
+    left           : 14px;
+    font-size      : 1rem;
+    color          : var(--pink-400);
+    pointer-events : none;
+    line-height    : 1;
+}
+
+/* ── 11. Input Fields ───────────────────────────────────────── */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"] {
+    width          : 100%;
+    padding        : 11px 14px 11px 40px;
+    border         : 1.8px solid var(--pink-100);
+    border-radius  : 10px;
+    font-family    : 'Nunito', sans-serif;
+    font-size      : .95rem;
+    color          : var(--gray-800);
+    background     : var(--pink-50);
+    outline        : none;
+    transition     : border-color var(--transition),
+                     box-shadow   var(--transition),
+                     background   var(--transition);
+}
+
+input:focus {
+    border-color : var(--pink-400);
+    background   : var(--white);
+    box-shadow   : 0 0 0 3px rgba(244, 114, 168, .18);
+}
+
+input.is-invalid {
+    border-color : #f87171;
+    background   : #fff5f5;
+}
+
+/* ── 12. Password Toggle Button ─────────────────────────────── */
+.toggle-pwd {
+    position   : absolute;
+    right      : 12px;
+    background : none;
+    border     : none;
+    cursor     : pointer;
+    font-size  : 1rem;
+    color      : var(--gray-400);
+    padding    : 4px;
+    line-height: 1;
+    transition : color var(--transition);
+}
+.toggle-pwd:hover { color: var(--pink-500); }
+
+/* ── 13. Field-Level Error ──────────────────────────────────── */
+.field-error {
+    display    : flex;
+    align-items: center;
+    gap        : 5px;
+    color      : #e53e3e;
+    font-size  : .78rem;
+    font-weight: 600;
+    margin-top : 6px;
+}
+
+/* ── 14. Password Strength Bar ──────────────────────────────── */
+.strength-bar-wrap {
+    margin-top: 8px;
+    display   : none; /* JS reveals this */
+}
+
+.strength-bar-track {
+    height       : 5px;
+    border-radius: 99px;
+    background   : var(--pink-100);
+    overflow     : hidden;
+}
+
+.strength-bar-fill {
+    height       : 100%;
+    border-radius: 99px;
+    width        : 0%;
+    transition   : width .35s ease, background .35s ease;
+}
+
+.strength-label {
+    font-size  : .75rem;
+    font-weight: 700;
+    margin-top : 4px;
+    color      : var(--gray-400);
+}
+
+/* ── 15. Primary Button ─────────────────────────────────────── */
+.btn-primary {
+    display      : block;
+    width        : 100%;
+    padding      : 13px;
+    background   : linear-gradient(135deg, var(--pink-500), var(--pink-400));
+    color        : var(--white);
+    border       : none;
+    border-radius: 10px;
+    font-family  : 'Nunito', sans-serif;
+    font-size    : 1rem;
+    font-weight  : 800;
+    letter-spacing: .3px;
+    cursor       : pointer;
+    margin-top   : 8px;
+    text-align   : center;
+    text-decoration: none;
+    transition   : transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+    box-shadow   : 0 4px 18px rgba(232, 67, 143, .35);
+}
+.btn-primary:hover  { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232, 67, 143, .4); }
+.btn-primary:active { transform: translateY(0);    opacity: .9; }
+
+/* ── 16. Secondary / Outline Button ─────────────────────────── */
+.btn-secondary {
+    display        : inline-block;
+    padding        : 13px 32px;
+    background     : var(--white);
+    color          : var(--pink-500);
+    border         : 2px solid var(--pink-100);
+    border-radius  : 12px;
+    font-family    : 'Nunito', sans-serif;
+    font-size      : 1rem;
+    font-weight    : 800;
+    text-decoration: none;
+    transition     : transform var(--transition), box-shadow var(--transition);
+    cursor         : pointer;
+}
+.btn-secondary:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(232, 67, 143, .2); }
+
+/* ── 17. Pill / Inline Link Button ──────────────────────────── */
+.btn-pill {
+    display        : inline-block;
+    padding        : 12px 32px;
+    background     : linear-gradient(135deg, var(--pink-500), var(--pink-400));
+    color          : var(--white);
+    border-radius  : 10px;
+    font-weight    : 800;
+    text-decoration: none;
+    font-size      : .95rem;
+    box-shadow     : 0 4px 18px rgba(232, 67, 143, .35);
+    transition     : transform var(--transition), box-shadow var(--transition);
+}
+.btn-pill:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232, 67, 143, .4); }
+
+/* ── 18. Divider (text separator) ───────────────────────────── */
+.divider-line {
+    display    : flex;
+    align-items: center;
+    gap        : 12px;
+    margin     : 24px 0;
+    color      : var(--gray-400);
+    font-size  : .82rem;
+}
+.divider-line::before,
+.divider-line::after {
+    content   : '';
+    flex      : 1;
+    height    : 1px;
+    background: var(--pink-100);
+}
+
+/* Simple text-only divider (used in signup footer) */
+.divider-text {
+    text-align : center;
+    color      : var(--gray-400);
+    font-size  : .84rem;
+    margin-top : 22px;
+}
+.divider-text a {
+    color          : var(--pink-500);
+    font-weight    : 700;
+    text-decoration: none;
+}
+.divider-text a:hover { text-decoration: underline; }
+
+/* ── 19. Auth Prompt (login/signup cross-link) ───────────────── */
+.auth-prompt {
+    text-align: center;
+    font-size : .88rem;
+    color     : var(--gray-500);
+}
+.auth-prompt a {
+    color          : var(--pink-500);
+    font-weight    : 700;
+    text-decoration: none;
+}
+.auth-prompt a:hover { text-decoration: underline; }
+
+/* ── 20. Remember-me Row ────────────────────────────────────── */
+.form-meta {
+    display        : flex;
+    justify-content: space-between;
+    align-items    : center;
+    margin-bottom  : 22px;
+    flex-wrap      : wrap;
+    gap            : 8px;
+}
+
+.remember-label {
+    display    : flex;
+    align-items: center;
+    gap        : 8px;
+    font-size  : .85rem;
+    color      : var(--gray-500);
+    cursor     : pointer;
+    user-select: none;
+}
+
+.remember-label input[type="checkbox"] {
+    appearance   : none;
+    width        : 17px;
+    height       : 17px;
+    border       : 2px solid var(--pink-200);
+    border-radius: 5px;
+    background   : var(--pink-50);
+    cursor       : pointer;
+    transition   : background var(--transition), border-color var(--transition);
+    position     : relative;
+    flex-shrink  : 0;
+}
+.remember-label input[type="checkbox"]:checked {
+    background  : var(--pink-500);
+    border-color: var(--pink-500);
+}
+.remember-label input[type="checkbox"]:checked::after {
+    content  : '✓';
+    position : absolute;
+    top      : 50%;
+    left     : 50%;
+    transform: translate(-50%, -50%);
+    color    : white;
+    font-size: .7rem;
+    font-weight: 900;
+}
+
+.forgot-link {
+    font-size      : .85rem;
+    color          : var(--pink-500);
+    font-weight    : 700;
+    text-decoration: none;
+}
+.forgot-link:hover { text-decoration: underline; }
+
+/* ── 21. Paw Dot Decoration ─────────────────────────────────── */
+.paw-dots {
+    text-align   : center;
+    font-size    : 1.1rem;
+    letter-spacing: 6px;
+    color        : var(--pink-200);
+    margin-bottom: 18px;
+}
+
+/* ── 22. Success State (post-form) ─────────────────────────── */
+.success-card {
+    text-align: center;
+    padding   : 48px 40px;
+}
+.success-card .tick {
+    font-size    : 3.5rem;
+    display      : block;
+    margin-bottom: 16px;
+    animation    : popIn .5s cubic-bezier(.18, .89, .32, 1.28) both;
+}
+.success-card h2 {
+    font-size    : 1.45rem;
+    font-weight  : 800;
+    color        : var(--gray-800);
+    margin-bottom: 10px;
+}
+.success-card p { color: var(--gray-600); font-size: .95rem; }
+
+/* ── 23. Home / Hero Page ───────────────────────────────────── */
+body.page-home {
+    flex-direction: column;
+    text-align    : center;
+}
+
+.hero-icon {
+    font-size    : 4rem;
+    margin-bottom: 18px;
+    animation    : bounce .8s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+.hero-title {
+    font-size     : 2.4rem;
+    font-weight   : 900;
+    color         : var(--gray-800);
+    letter-spacing: -.5px;
+    margin-bottom : 12px;
+}
+.hero-title span { color: var(--pink-500); }
+
+.hero-subtitle {
+    color        : var(--gray-600);
+    font-size    : 1.05rem;
+    max-width    : 400px;
+    margin-bottom: 36px;
+    line-height  : 1.65;
+}
+
+.cta-wrap {
+    display        : flex;
+    gap            : 16px;
+    flex-wrap      : wrap;
+    justify-content: center;
+}
+
+.cta-wrap .btn-cta-primary {
+    padding        : 13px 32px;
+    border-radius  : 12px;
+    font-family    : 'Nunito', sans-serif;
+    font-size      : 1rem;
+    font-weight    : 800;
+    text-decoration: none;
+    background     : linear-gradient(135deg, var(--pink-500), var(--pink-400));
+    color          : var(--white);
+    box-shadow     : 0 4px 18px rgba(232, 67, 143, .35);
+    transition     : transform var(--transition), box-shadow var(--transition);
+    border         : none;
+    cursor         : pointer;
+}
+.cta-wrap .btn-cta-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(232, 67, 143, .4); }
+
+.cta-wrap .btn-cta-secondary {
+    padding        : 13px 32px;
+    border-radius  : 12px;
+    font-family    : 'Nunito', sans-serif;
+    font-size      : 1rem;
+    font-weight    : 800;
+    text-decoration: none;
+    background     : var(--white);
+    color          : var(--pink-500);
+    border         : 2px solid var(--pink-100);
+    transition     : transform var(--transition), box-shadow var(--transition);
+    cursor         : pointer;
+}
+.cta-wrap .btn-cta-secondary:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(232, 67, 143, .2); }
+
+/* ── 24. Responsive ─────────────────────────────────────────── */
+@media (max-width: 480px) {
+    .card-header,
+    .card-body   { padding-left: 22px; padding-right: 22px; }
+    .form-row    { grid-template-columns: 1fr; gap: 0; }
+}

@@ -1,8 +1,11 @@
 <?php
 
 /**
- * UserController — manages user registration (signup) flow.
- * Routes: ?url=user/signup  (GET → show form | POST → process form)
+ * UserController — manages user registration and authentication.
+ * Routes:
+ *   ?url=user/signup  (GET → show form | POST → process form)
+ *   ?url=user/login   (GET → show form | POST → process login)
+ *   ?url=user/logout  (GET → destroy session & redirect home)
  */
 class UserController extends Controller {
 
@@ -63,7 +66,10 @@ class UserController extends Controller {
                 );
 
                 if ($registered) {
-                    $success = true;
+                    // Store a flash message and redirect to login
+                    $_SESSION['flash_success'] = '🎉 Account created! Please log in to continue.';
+                    header('Location: ?url=user/login');
+                    exit;
                 } else {
                     $errors['general'] = 'Registration failed. Please try again.';
                 }
@@ -78,5 +84,71 @@ class UserController extends Controller {
         ];
 
         $this->view('user/signup', $data);
+    }
+
+    // ----------------------------------------------------------------
+    //  LOGIN
+    // ----------------------------------------------------------------
+
+    public function login() {
+        // If the user is already logged in, send them to the dashboard
+        if (Auth::isLoggedIn()) {
+            Auth::redirectToDashboard();
+        }
+
+        $userModel = $this->model('UserModel');
+        $error     = '';
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            // ── Sanitise inputs ──────────────────────────────────────
+            $email    = trim($_POST['email']    ?? '');
+            $password = $_POST['password']      ?? '';
+
+            // ── Basic presence check ─────────────────────────────────
+            if (empty($email) || empty($password)) {
+                $error = 'Please enter both your email and password.';
+            } else {
+                // ── Look up the user ─────────────────────────────────
+                $user = $userModel->getUserByEmail($email);
+
+                if ($user && password_verify($password, $user['password'])) {
+                    // ── Credentials valid → write session ────────────
+                    Auth::setSession($user);
+
+                    // Redirect to role-based dashboard
+                    Auth::redirectToDashboard();
+                } else {
+                    // ── Bad credentials – intentionally vague message ─
+                    $error = 'Incorrect email or password. Please try again.';
+                }
+            }
+        }
+
+        $data = [
+            'error'    => $error,
+            'oldEmail' => htmlspecialchars($_POST['email'] ?? ''),
+        ];
+
+        $this->view('user/login', $data);
+    }
+
+    // ----------------------------------------------------------------
+    //  UNAUTHORIZED
+    // ----------------------------------------------------------------
+
+    public function unauthorized() {
+        $this->view('user/unauthorized');
+    }
+
+    // ----------------------------------------------------------------
+    //  LOGOUT
+    // ----------------------------------------------------------------
+
+    public function logout() {
+        // Destroy all session data and redirect to the login page
+        Auth::destroySession();
+        header('Location: ?url=user/login');
+        exit;
     }
 }

@@ -47,24 +47,47 @@ class UserModel {
         string $lastName,
         string $email,
         string $phone,
-        string $password
+        string $password,
+        string $role = 'owner'         // default to pet owner for self-registration
     ): bool {
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
         $stmt = $this->db->conn->prepare(
-            "INSERT INTO users (first_name, last_name, email, phone, password, created_at)
-             VALUES (?, ?, ?, ?, ?, NOW())"
+            "INSERT INTO users (first_name, last_name, email, phone, password, role, created_at)
+             VALUES (?, ?, ?, ?, ?, ?, NOW())"
         );
         $stmt->bind_param(
-            "sssss",
+            "ssssss",
             $firstName,
             $lastName,
             $email,
             $phone,
-            $hashedPassword
+            $hashedPassword,
+            $role
         );
         $success = $stmt->execute();
         $stmt->close();
         return $success;
+    }
+
+    /**
+     * Find a user row by email address.
+     * Returns the full row as an associative array, or null if not found.
+     * Used by the login flow to verify credentials.
+     *
+     * @param  string     $email
+     * @return array|null
+     */
+    public function getUserByEmail(string $email): ?array {
+        $stmt = $this->db->conn->prepare(
+            "SELECT id, first_name, last_name, email, phone, password, role
+             FROM users WHERE email = ? LIMIT 1"
+        );
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user   = $result->fetch_assoc() ?: null;
+        $stmt->close();
+        return $user;
     }
 }
