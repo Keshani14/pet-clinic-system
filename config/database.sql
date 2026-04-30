@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS `users` (
     `phone`      VARCHAR(20)     NULL DEFAULT NULL,
     `password`   VARCHAR(255)    NOT NULL COMMENT 'bcrypt hash',
     `role`       ENUM('admin','vet','nurse','owner') NOT NULL DEFAULT 'owner',
+    `status`     ENUM('pending','approved','rejected') NOT NULL DEFAULT 'pending',
     `created_at` DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP
                                  ON UPDATE CURRENT_TIMESTAMP,
@@ -38,11 +39,11 @@ CREATE TABLE IF NOT EXISTS `users` (
 --  Seed Data: Auth System Users
 --  Note: Password for all seed accounts is 'password123'
 -- ============================================================
-INSERT IGNORE INTO `users` (`id`, `first_name`, `last_name`, `email`, `phone`, `password`, `role`) VALUES
-(1, 'System', 'Admin', 'admin@petclinic.com', '1112223333', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin'),
-(2, 'Sarah', 'Vet', 'dr.sarah@petclinic.com', '2223334444', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'vet'),
-(3, 'John', 'Nurse', 'john.nurse@petclinic.com', '3334445555', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'nurse'),
-(4, 'Jane', 'Owner', 'jane.owner@example.com', '4445556666', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'owner');
+INSERT IGNORE INTO `users` (`id`, `first_name`, `last_name`, `email`, `phone`, `password`, `role`, `status`) VALUES
+(1, 'System', 'Admin', 'admin@petclinic.com', '1112223333', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', 'approved'),
+(2, 'Sarah', 'Vet', 'dr.sarah@petclinic.com', '2223334444', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'vet', 'approved'),
+(3, 'John', 'Nurse', 'john.nurse@petclinic.com', '3334445555', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'nurse', 'approved'),
+(4, 'Jane', 'Owner', 'jane.owner@example.com', '4445556666', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'owner', 'approved');
 -- ============================================================
 --  Table: pets
 --  Stores pet profiles linked to owners.

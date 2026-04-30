@@ -23,6 +23,7 @@ class UserController extends Controller {
             $lastName        = trim(htmlspecialchars($_POST['last_name']    ?? ''));
             $email           = trim(htmlspecialchars($_POST['email']        ?? ''));
             $phone           = trim(htmlspecialchars($_POST['phone']        ?? ''));
+            $role            = trim(htmlspecialchars($_POST['role']         ?? 'owner'));
             $password        = $_POST['password']         ?? '';
             $confirmPassword = $_POST['confirm_password'] ?? '';
 
@@ -55,6 +56,10 @@ class UserController extends Controller {
                 $errors['confirm_password'] = 'Passwords do not match.';
             }
 
+            if (!in_array($role, ['owner', 'vet', 'nurse'])) {
+                $errors['role'] = 'Invalid role selected.';
+            }
+
             // ── Register if no errors ────────────────────────────────────
             if (empty($errors)) {
                 $registered = $userModel->register(
@@ -62,12 +67,17 @@ class UserController extends Controller {
                     $lastName,
                     $email,
                     $phone,
-                    $password
+                    $password,
+                    $role
                 );
 
                 if ($registered) {
                     // Store a flash message and redirect to login
-                    $_SESSION['flash_success'] = '🎉 Account created! Please log in to continue.';
+                    if ($role === 'owner') {
+                        $_SESSION['flash_success'] = '🎉 Account created! Please log in to continue.';
+                    } else {
+                        $_SESSION['flash_success'] = '📝 Registration submitted! Your account is waiting for admin approval.';
+                    }
                     header('Location: ?url=user/login');
                     exit;
                 } else {
@@ -113,11 +123,16 @@ class UserController extends Controller {
                 $user = $userModel->getUserByEmail($email);
 
                 if ($user && password_verify($password, $user['password'])) {
-                    // ── Credentials valid → write session ────────────
-                    Auth::setSession($user);
-
-                    // Redirect to role-based dashboard
-                    Auth::redirectToDashboard();
+                    // ── Check Approval Status ────────────────────────
+                    if ($user['status'] === 'approved') {
+                        // ── Credentials valid & approved → write session
+                        Auth::setSession($user);
+                        Auth::redirectToDashboard();
+                    } elseif ($user['status'] === 'pending') {
+                        $error = 'Your account is waiting for admin approval.';
+                    } else {
+                        $error = 'Your account registration has been rejected.';
+                    }
                 } else {
                     // ── Bad credentials – intentionally vague message ─
                     $error = 'Incorrect email or password. Please try again.';

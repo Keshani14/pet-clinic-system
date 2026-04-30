@@ -99,23 +99,23 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                 <?php endif; ?>
             </div>
 
-            <!-- Phone -->
+            <!-- Role Selection -->
             <div class="form-group">
-                <label for="phone">
-                    Phone Number <span class="label-hint">(optional)</span>
+                <label for="role">
+                    Register As <span class="required" aria-label="required">*</span>
                 </label>
                 <div class="input-wrap">
-                    <span class="icon" aria-hidden="true">📞</span>
-                    <input type="tel" id="phone" name="phone"
-                           placeholder="+94 77 123 4567"
-                           value="<?php echo htmlspecialchars($old['phone'] ?? ''); ?>"
-                           class="<?php echo !empty($errors['phone']) ? 'is-invalid' : ''; ?>"
-                           autocomplete="tel">
+                    <span class="icon" aria-hidden="true">🏷️</span>
+                    <select id="role" name="role" class="<?php echo !empty($errors['role']) ? 'is-invalid' : ''; ?>" aria-required="true">
+                        <option value="owner" <?php echo (isset($old['role']) && $old['role'] === 'owner') ? 'selected' : ''; ?>>Pet Owner (Instant Approval)</option>
+                        <option value="vet" <?php echo (isset($old['role']) && $old['role'] === 'vet') ? 'selected' : ''; ?>>Veterinarian (Requires Approval)</option>
+                        <option value="nurse" <?php echo (isset($old['role']) && $old['role'] === 'nurse') ? 'selected' : ''; ?>>Nurse (Requires Approval)</option>
+                    </select>
                 </div>
-                <?php if (!empty($errors['phone'])): ?>
+                <?php if (!empty($errors['role'])): ?>
                     <span class="field-error" role="alert">
                         <span aria-hidden="true">⚠</span>
-                        <?php echo htmlspecialchars($errors['phone']); ?>
+                        <?php echo htmlspecialchars($errors['role']); ?>
                     </span>
                 <?php endif; ?>
             </div>

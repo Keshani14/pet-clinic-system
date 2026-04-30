@@ -197,7 +197,8 @@ input[type="email"],
 input[type="tel"],
 input[type="password"],
 input[type="date"],
-textarea {
+textarea,
+select {
     width          : 100%;
     padding        : 11px 14px 11px 40px;
     border         : 1.8px solid var(--pink-100);
@@ -567,15 +568,25 @@ body.page-home {
     background: var(--pink-50);
     border-bottom: 2px solid var(--pink-100);
 }
-.table th, .table td {
-    padding: 12px;
-    text-align: left;
-}
 .table th {
+    padding: 16px 12px;
+    text-align: left;
     color: var(--gray-600);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.table td {
+    padding: 14px 12px;
+    text-align: left;
+    vertical-align: middle;
 }
 .table tbody tr {
     border-bottom: 1px solid var(--gray-100);
+    transition: background var(--transition);
+}
+.table tbody tr:hover {
+    background: rgba(255, 241, 242, 0.5);
 }
 .pet-thumbnail {
     width: 40px;

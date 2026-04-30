@@ -52,7 +52,7 @@ class MedicalRecordModel {
      */
     public function getAllRecords(): array {
         $query = "
-            SELECT mr.*, p.name as pet_name, p.type as pet_type, u.first_name as vet_first_name, u.last_name as vet_last_name
+            SELECT mr.*, p.name as pet_name, p.type as pet_type, p.photo as pet_photo, u.first_name as vet_first_name, u.last_name as vet_last_name
             FROM medical_records mr
             JOIN pets p ON mr.pet_id = p.id
             JOIN users u ON mr.vet_id = u.id

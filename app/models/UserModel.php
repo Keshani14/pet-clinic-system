@@ -52,18 +52,21 @@ class UserModel {
     ): bool {
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
+        $status = ($role === 'owner') ? 'approved' : 'pending';
+        
         $stmt = $this->db->conn->prepare(
-            "INSERT INTO users (first_name, last_name, email, phone, password, role, created_at)
-             VALUES (?, ?, ?, ?, ?, ?, NOW())"
+            "INSERT INTO users (first_name, last_name, email, phone, password, role, status, created_at)
+             VALUES (?, ?, ?, ?, ?, ?, ?, NOW())"
         );
         $stmt->bind_param(
-            "ssssss",
+            "sssssss",
             $firstName,
             $lastName,
             $email,
             $phone,
             $hashedPassword,
-            $role
+            $role,
+            $status
         );
         $success = $stmt->execute();
         $stmt->close();
@@ -80,7 +83,7 @@ class UserModel {
      */
     public function getUserByEmail(string $email): ?array {
         $stmt = $this->db->conn->prepare(
-            "SELECT id, first_name, last_name, email, phone, password, role
+            "SELECT id, first_name, last_name, email, phone, password, role, status
              FROM users WHERE email = ? LIMIT 1"
         );
         $stmt->bind_param("s", $email);
@@ -89,5 +92,37 @@ class UserModel {
         $user   = $result->fetch_assoc() ?: null;
         $stmt->close();
         return $user;
+    }
+
+    /**
+     * Fetch all users with 'pending' status.
+     * @return array
+     */
+    public function getPendingUsers(): array {
+        $query = "SELECT id, first_name, last_name, email, role, status FROM users WHERE status = 'pending' ORDER BY created_at DESC";
+        $result = $this->db->conn->query($query);
+        $users = [];
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $users[] = $row;
+            }
+        }
+        return $users;
+    }
+
+    /**
+     * Update the status of a user.
+     * @param int $id
+     * @param string $status
+     * @return bool
+     */
+    public function updateStatus(int $id, string $status): bool {
+        if (!in_array($status, ['approved', 'rejected'])) return false;
+        
+        $stmt = $this->db->conn->prepare("UPDATE users SET status = ? WHERE id = ?");
+        $stmt->bind_param("si", $status, $id);
+        $success = $stmt->execute();
+        $stmt->close();
+        return $success;
     }
 }
