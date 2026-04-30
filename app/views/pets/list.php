@@ -88,6 +88,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                                     </td>
                                 <?php endif; ?>
                                 <td>
+                                    <a href="?url=medical/viewHistory&pet_id=<?php echo $pet['id']; ?>" class="btn-pill btn-sm btn-dark">History 🏥</a>
                                     <a href="?url=pet/edit&id=<?php echo $pet['id']; ?>" class="btn-pill btn-sm">Edit ✏️</a>
                                     <a href="?url=pet/delete&id=<?php echo $pet['id']; ?>" class="btn-secondary btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this pet?');">Delete 🗑️</a>
                                 </td>

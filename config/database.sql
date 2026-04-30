@@ -67,3 +67,25 @@ CREATE TABLE IF NOT EXISTS `pets` (
   DEFAULT CHARSET=utf8mb4
   COLLATE=utf8mb4_unicode_ci
   COMMENT='Pet profiles';
+
+-- ============================================================
+--  Table: medical_records
+--  Stores the medical history for pets.
+-- ============================================================
+CREATE TABLE IF NOT EXISTS `medical_records` (
+    `id`         INT             NOT NULL AUTO_INCREMENT,
+    `pet_id`     INT             NOT NULL,
+    `vet_id`     INT UNSIGNED    NOT NULL,
+    `treatment_date` DATE        NOT NULL,
+    `diagnosis`  VARCHAR(255)    NOT NULL,
+    `treatment`  TEXT            NOT NULL,
+    `notes`      TEXT            NULL,
+    `created_at` DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk_mr_pet` FOREIGN KEY (`pet_id`) REFERENCES `pets` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_mr_vet` FOREIGN KEY (`vet_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_unicode_ci
+  COMMENT='Medical history for pets';

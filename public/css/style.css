@@ -610,8 +610,63 @@ body.page-home {
     color: #b91c1c;
     border-color: #f87171;
 }
+.btn-dark {
+    background: var(--gray-800);
+    color: white;
+}
+.btn-dark:hover {
+    background: var(--gray-700);
+    color: white;
+}
 
-/* ── 27. Sidebar Layout ─────────────────────────────────────── */
+/* ── 28. Timeline Styles ────────────────────────────────────── */
+.timeline {
+    position: relative;
+    padding: 20px 0;
+}
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 100px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--pink-100);
+}
+.timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+    display: flex;
+}
+.timeline-date {
+    width: 80px;
+    padding-right: 20px;
+    text-align: right;
+    font-weight: 600;
+    color: var(--gray-600);
+    font-size: 0.9rem;
+    padding-top: 15px;
+}
+.timeline-content {
+    flex: 1;
+    position: relative;
+    margin-left: 40px;
+}
+.timeline-content::before {
+    content: '';
+    position: absolute;
+    left: -26px;
+    top: 18px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--pink-400);
+    border: 3px solid var(--white);
+    box-shadow: 0 0 0 3px var(--pink-100);
+    z-index: 1;
+}
+
+/* ── 29. Sidebar Layout ─────────────────────────────────────── */
 .dashboard-wrapper {
     display: flex;
     min-height: 100vh;

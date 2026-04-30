@@ -45,6 +45,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                                 <th>Breed</th>
                                 <th>Owner</th>
                                 <th>Phone</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -71,6 +72,9 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                                         $displayOwnerPhone = !empty($pet['owner_phone']) ? $pet['owner_phone'] : ($pet['owner_phone_user'] ?? 'No phone');
                                         echo htmlspecialchars($displayOwnerPhone); 
                                         ?>
+                                    </td>
+                                    <td>
+                                        <a href="?url=medical/viewHistory&pet_id=<?php echo $pet['id']; ?>" class="btn-pill btn-sm btn-dark">History 🏥</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
