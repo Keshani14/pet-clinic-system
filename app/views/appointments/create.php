@@ -25,34 +25,31 @@ require_once __DIR__ . '/../../views/layouts/header.php';
 
                 <form action="?url=appointment/store" method="POST">
                     <div class="form-group">
-                        <label for="pet_id">Select Pet <span class="required">*</span></label>
+                        <label for="pet_name">Animal Type <span class="required">*</span></label>
                         <div class="input-wrap">
                             <span class="icon">🐾</span>
-                            <select name="pet_id" id="pet_id" class="<?php echo isset($errors['pet_id']) ? 'is-invalid' : ''; ?>" required>
-                                <option value="">-- Choose your pet --</option>
-                                <?php foreach ($pets as $pet): ?>
-                                    <option value="<?php echo $pet['id']; ?>" <?php echo (isset($old['pet_id']) && $old['pet_id'] == $pet['id']) ? 'selected' : ''; ?>>
-                                        <?php echo htmlspecialchars($pet['name']); ?> (<?php echo htmlspecialchars($pet['type']); ?>)
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                            <input type="text" name="pet_name" id="pet_name" placeholder="Enter animal type (e.g. Dog, Cat, Bird...)"
+                                   value="<?php echo htmlspecialchars($old['pet_name'] ?? ''); ?>"
+                                   class="<?php echo isset($errors['pet_name']) ? 'is-invalid' : ''; ?>" required>
                         </div>
-                        <?php if (isset($errors['pet_id'])): ?>
-                            <span class="field-error"><?php echo $errors['pet_id']; ?></span>
+                        <?php if (isset($errors['pet_name'])): ?>
+                            <span class="field-error"><?php echo $errors['pet_name']; ?></span>
                         <?php endif; ?>
                     </div>
 
-                    <div class="form-group">
-                        <label for="appointment_date">Date & Time <span class="required">*</span></label>
-                        <div class="input-wrap">
-                            <span class="icon">⏰</span>
-                            <input type="datetime-local" name="appointment_date" id="appointment_date" 
-                                   value="<?php echo htmlspecialchars($old['appointment_date'] ?? ''); ?>"
-                                   class="<?php echo isset($errors['appointment_date']) ? 'is-invalid' : ''; ?>" required>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="appointment_date">Date & Time <span class="required">*</span></label>
+                            <div class="input-wrap">
+                                <span class="icon">⏰</span>
+                                <input type="datetime-local" name="appointment_date" id="appointment_date" 
+                                       value="<?php echo htmlspecialchars($old['appointment_date'] ?? ''); ?>"
+                                       class="<?php echo isset($errors['appointment_date']) ? 'is-invalid' : ''; ?>" required>
+                            </div>
+                            <?php if (isset($errors['appointment_date'])): ?>
+                                <span class="field-error"><?php echo $errors['appointment_date']; ?></span>
+                            <?php endif; ?>
                         </div>
-                        <?php if (isset($errors['appointment_date'])): ?>
-                            <span class="field-error"><?php echo $errors['appointment_date']; ?></span>
-                        <?php endif; ?>
                     </div>
 
                     <div class="form-group">

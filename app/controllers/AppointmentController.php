@@ -13,11 +13,7 @@ class AppointmentController extends Controller {
      * Show the appointment booking form.
      */
     public function create() {
-        $petModel = $this->model('PetModel');
-        $pets = $petModel->getPetsByOwner($_SESSION['user_id']);
-
         $this->view('appointments/create', [
-            'pets' => $pets,
             'errors' => []
         ]);
     }
@@ -29,25 +25,26 @@ class AppointmentController extends Controller {
         $errors = [];
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $petId = $_POST['pet_id'] ?? '';
+            $petName = trim($_POST['pet_name'] ?? '');
             $date = $_POST['appointment_date'] ?? '';
             $reason = trim($_POST['reason'] ?? '');
 
-            if (empty($petId)) $errors['pet_id'] = "Please select a pet.";
+            if (empty($petName)) $errors['pet_name'] = "Please enter your pet's name.";
             if (empty($date)) $errors['appointment_date'] = "Please select a date and time.";
             if (empty($reason)) $errors['reason'] = "Please provide a reason for the appointment.";
 
             if (empty($errors)) {
                 $appointmentModel = $this->model('AppointmentModel');
                 $success = $appointmentModel->createAppointment([
-                    'pet_id' => $petId,
+                    'pet_id' => null, // Storing as name only as requested
+                    'pet_name' => $petName,
                     'owner_id' => $_SESSION['user_id'],
                     'appointment_date' => $date,
                     'reason' => $reason
                 ]);
 
                 if ($success) {
-                    $_SESSION['flash_success'] = "🎉 Appointment booked successfully! Waiting for clinic approval.";
+                    $_SESSION['flash_success'] = "🎉 Appointment booked successfully for " . htmlspecialchars($petName) . "!";
                     header('Location: ?url=appointment/myAppointments');
                     exit;
                 } else {
@@ -55,12 +52,8 @@ class AppointmentController extends Controller {
                 }
             }
         }
-
-        $petModel = $this->model('PetModel');
-        $pets = $petModel->getPetsByOwner($_SESSION['user_id']);
         
         $this->view('appointments/create', [
-            'pets' => $pets,
             'errors' => $errors,
             'old' => $_POST
         ]);
