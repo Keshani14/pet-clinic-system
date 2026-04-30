@@ -15,7 +15,9 @@ $currentUrl = $_GET['url'] ?? 'home/index';
         <a href="?url=pet/listPets" class="sidebar-link <?php echo ($currentUrl === 'pet/listPets') ? 'active' : ''; ?>">
             Patient Records
         </a>
-        <!-- Placeholder for future modules -->
+        <a href="?url=medical/index" class="sidebar-link <?php echo (strpos($currentUrl, 'medical/') === 0) ? 'active' : ''; ?>">
+            Medical Records
+        </a>
         <a href="#" class="sidebar-link">
             Appointments
         </a>

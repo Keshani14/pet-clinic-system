@@ -79,6 +79,7 @@ CREATE TABLE IF NOT EXISTS `medical_records` (
     `treatment_date` DATE        NOT NULL,
     `diagnosis`  VARCHAR(255)    NOT NULL,
     `treatment`  TEXT            NOT NULL,
+    `medicines`  TEXT            NULL,
     `notes`      TEXT            NULL,
     `created_at` DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

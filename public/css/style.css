@@ -195,7 +195,9 @@ label .label-hint   { color: var(--gray-400); font-weight: 500; }
 input[type="text"],
 input[type="email"],
 input[type="tel"],
-input[type="password"] {
+input[type="password"],
+input[type="date"],
+textarea {
     width          : 100%;
     padding        : 11px 14px 11px 40px;
     border         : 1.8px solid var(--pink-100);
@@ -208,6 +210,12 @@ input[type="password"] {
     transition     : border-color var(--transition),
                      box-shadow   var(--transition),
                      background   var(--transition);
+}
+
+textarea {
+    padding: 12px 14px;
+    resize: vertical;
+    min-height: 100px;
 }
 
 input:focus {

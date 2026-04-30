@@ -1,13 +1,26 @@
 <?php
 
 class MedicalController extends Controller {
+    
+    /**
+     * Show summary of all medical records
+     */
+    public function index() {
+        Auth::requireLogin();
+        Auth::requireRole('vet', 'admin');
+
+        $mrModel = $this->model('MedicalRecordModel');
+        $records = $mrModel->getAllRecords();
+
+        $this->view('medical/index', ['records' => $records]);
+    }
 
     /**
      * Show form to add a new medical record
      */
     public function addRecord() {
         Auth::requireLogin();
-        Auth::requireRole(['vet', 'admin']);
+        Auth::requireRole('vet', 'admin');
 
         if (!isset($_GET['pet_id'])) {
             header('Location: ?url=pet/listPets');
@@ -31,22 +44,25 @@ class MedicalController extends Controller {
      */
     public function store() {
         Auth::requireLogin();
-        Auth::requireRole(['vet', 'admin']);
+        Auth::requireRole('vet', 'admin');
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $petId     = (int)$_POST['pet_id'];
-            $diagnosis = trim(htmlspecialchars($_POST['diagnosis'] ?? ''));
-            $treatment = trim(htmlspecialchars($_POST['treatment'] ?? ''));
-            $notes     = trim(htmlspecialchars($_POST['notes'] ?? ''));
-            $vetId     = $_SESSION['user_id'];
+            $petId         = (int)$_POST['pet_id'];
+            $treatmentDate = trim($_POST['treatment_date'] ?? date('Y-m-d'));
+            $diagnosis     = trim(htmlspecialchars($_POST['diagnosis'] ?? ''));
+            $treatment     = trim(htmlspecialchars($_POST['treatment'] ?? ''));
+            $medicines     = trim(htmlspecialchars($_POST['medicines'] ?? ''));
+            $notes         = trim(htmlspecialchars($_POST['notes'] ?? ''));
+            $vetId         = $_SESSION['user_id'];
 
             $errors = [];
+            if (empty($treatmentDate)) $errors['treatment_date'] = "Treatment date is required.";
             if (empty($diagnosis)) $errors['diagnosis'] = "Diagnosis is required.";
             if (empty($treatment)) $errors['treatment'] = "Treatment is required.";
 
             if (empty($errors)) {
                 $mrModel = $this->model('MedicalRecordModel');
-                $success = $mrModel->addRecord($petId, $vetId, $diagnosis, $treatment, $notes);
+                $success = $mrModel->addRecord($petId, $vetId, $treatmentDate, $diagnosis, $treatment, $medicines, $notes);
 
                 if ($success) {
                     $_SESSION['flash_success'] = "✅ Medical record added successfully!";

@@ -37,12 +37,15 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                 <?php foreach ($history as $record): ?>
                     <div class="timeline-item">
                         <div class="timeline-date">
-                            <?php echo date('M d, Y', strtotime($record['created_at'])); ?>
+                            <?php echo date('M d, Y', strtotime($record['treatment_date'])); ?>
                         </div>
                         <div class="timeline-content card">
                             <div class="card-body">
                                 <h3 class="text-pink-bold" style="margin-top: 0;">Diagnosis: <?php echo htmlspecialchars($record['diagnosis']); ?></h3>
                                 <p class="text-gray-800"><strong>Treatment:</strong> <?php echo nl2br(htmlspecialchars($record['treatment'])); ?></p>
+                                <?php if (!empty($record['medicines'])): ?>
+                                    <p class="text-gray-800"><strong>💊 Prescribed Medicines:</strong><br><?php echo nl2br(htmlspecialchars($record['medicines'])); ?></p>
+                                <?php endif; ?>
                                 <?php if (!empty($record['notes'])): ?>
                                     <p class="text-gray-600" style="font-style: italic; border-left: 3px solid var(--pink-100); padding-left: 10px;">
                                         Notes: <?php echo nl2br(htmlspecialchars($record['notes'])); ?>
