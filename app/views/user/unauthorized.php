@@ -3,14 +3,14 @@ $pageTitle = 'Unauthorized — Pet Clinic';
 require_once __DIR__ . '/../../views/layouts/header.php';
 ?>
 
-<main class="card" role="main" style="text-align: center;">
+<main class="card text-center" role="main">
     <div class="card-body">
-        <span style="font-size: 4rem; display: block; margin-bottom: 20px;">🚫</span>
-        <h1 style="color: var(--gray-800); margin-bottom: 10px;">Access Denied</h1>
-        <p style="color: var(--gray-600); margin-bottom: 30px;">
+        <span class="icon-lg">🚫</span>
+        <h1 class="text-gray-800 mb-10">Access Denied</h1>
+        <p class="text-gray-600 mb-30">
             You do not have permission to view this page.
         </p>
-        <a href="?url=home/index" class="btn-primary" style="display: inline-block; width: auto; padding: 12px 30px;">Return Home</a>
+        <a href="?url=home/index" class="btn-primary btn-auto">Return Home</a>
     </div>
 </main>
 
