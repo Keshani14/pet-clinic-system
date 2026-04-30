@@ -1,20 +1,28 @@
 <?php
 $pageTitle = 'Pet Roster — Pet Clinic';
-$isVet = (Auth::role() === 'vet');
-if ($isVet) {
+$userRole = Auth::role();
+$hasSidebar = in_array($userRole, ['vet', 'admin']);
+
+if ($hasSidebar) {
     $bodyClass = 'dashboard-layout';
 }
 require_once __DIR__ . '/../../views/layouts/header.php';
 ?>
 
-<?php if ($isVet): ?>
+<?php if ($hasSidebar): ?>
 <div class="dashboard-wrapper">
-    <?php require_once __DIR__ . '/../../views/layouts/vet_sidebar.php'; ?>
+    <?php 
+    if ($userRole === 'vet') {
+        require_once __DIR__ . '/../../views/layouts/vet_sidebar.php';
+    } else {
+        require_once __DIR__ . '/../../views/layouts/admin_sidebar.php';
+    }
+    ?>
     <main class="main-content">
 <?php endif; ?>
 
-<div class="<?php echo $isVet ? '' : 'card card--lg'; ?>">
-    <?php if (!$isVet): ?>
+<div class="<?php echo $hasSidebar ? 'card--xl' : 'card card--lg'; ?>">
+    <?php if (!$hasSidebar): ?>
     <div class="card-header">
         <span class="paw-icon" aria-hidden="true">📋</span>
         <h1>Pet Roster</h1>
@@ -25,7 +33,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
         <p class="text-gray-600 mb-30">Complete list of registered pets across the clinic.</p>
     <?php endif; ?>
     
-    <div class="card-body" <?php echo $isVet ? 'style="padding: 0; background: transparent;"' : ''; ?>>
+    <div class="card-body <?php echo $hasSidebar ? 'card-body--plain' : ''; ?>">
         <?php if (!empty($_SESSION['flash_success'])): ?>
             <div class="alert alert-success" role="status">
                 <span aria-hidden="true">✅</span>
@@ -43,8 +51,8 @@ require_once __DIR__ . '/../../views/layouts/header.php';
         <?php if (empty($pets)): ?>
             <p class="empty-state">No pets found. Start by adding one!</p>
         <?php else: ?>
-            <div class="card" style="max-width: 100%; padding: 0;">
-                <table class="table" style="margin-top: 0;">
+            <div class="card card--xl card-body--plain">
+                <table class="table table--no-margin">
                     <thead>
                         <tr>
                             <th>Photo</th>
@@ -56,7 +64,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                                 <th>Owner</th>
                                 <th>Phone</th>
                             <?php endif; ?>
-                            <th>Actions</th>
+                            <th class="text-right">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -87,7 +95,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                                         ?>
                                     </td>
                                 <?php endif; ?>
-                                <td>
+                                <td class="text-right">
                                     <a href="?url=medical/viewHistory&pet_id=<?php echo $pet['id']; ?>" class="btn-pill btn-sm btn-dark">History 🏥</a>
                                     <a href="?url=pet/edit&id=<?php echo $pet['id']; ?>" class="btn-pill btn-sm">Edit ✏️</a>
                                     <a href="?url=pet/delete&id=<?php echo $pet['id']; ?>" class="btn-secondary btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this pet?');">Delete 🗑️</a>
@@ -99,7 +107,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
             </div>
         <?php endif; ?>
         
-        <?php if (!$isVet): ?>
+        <?php if (!$hasSidebar): ?>
             <div class="divider-line"></div>
             <div class="text-center">
                 <a href="?url=<?php echo Auth::role(); ?>/dashboard" class="link-back">← Back to Dashboard</a>
@@ -108,7 +116,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
     </div>
 </div>
 
-<?php if ($isVet): ?>
+<?php if ($hasSidebar): ?>
     </main>
 </div>
 <?php endif; ?>

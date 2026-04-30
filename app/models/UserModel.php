@@ -125,4 +125,20 @@ class UserModel {
         $stmt->close();
         return $success;
     }
+
+    /**
+     * Fetch all users with role 'vet' or 'nurse'.
+     * @return array
+     */
+    public function getStaffUsers(): array {
+        $query = "SELECT id, first_name, last_name, email, role, status FROM users WHERE role IN ('vet', 'nurse') ORDER BY created_at DESC";
+        $result = $this->db->conn->query($query);
+        $users = [];
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $users[] = $row;
+            }
+        }
+        return $users;
+    }
 }

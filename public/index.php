@@ -28,4 +28,8 @@ if (!method_exists($controllerName, $method)) {
 }
 
 $controller = new $controllerName();
-$controller->$method();
+
+// The rest of the URL segments are parameters (e.g., admin/approve/5)
+$params = array_slice($url, 2);
+
+call_user_func_array([$controller, $method], $params);

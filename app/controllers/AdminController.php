@@ -10,14 +10,31 @@ class AdminController extends Controller {
     }
 
     /**
-     * Show admin dashboard
+     * Show admin dashboard overview
      */
     public function dashboard() {
         $userModel = $this->model('UserModel');
-        $pendingUsers = $userModel->getPendingUsers();
+        $petModel = $this->model('PetModel');
+        
+        $stats = [
+            'pending_count' => count($userModel->getPendingUsers()),
+            'total_pets'    => count($petModel->getAllPets())
+        ];
         
         $this->view('admin/dashboard', [
-            'pendingUsers' => $pendingUsers
+            'stats' => $stats
+        ]);
+    }
+
+    /**
+     * Show list of pending join requests
+     */
+    public function requests() {
+        $userModel = $this->model('UserModel');
+        $staffUsers = $userModel->getStaffUsers();
+        
+        $this->view('admin/requests', [
+            'staffUsers' => $staffUsers
         ]);
     }
 
@@ -26,7 +43,7 @@ class AdminController extends Controller {
      */
     public function approve($id) {
         if (!$id) {
-            header('Location: ?url=admin/dashboard');
+            header('Location: ?url=admin/requests');
             exit;
         }
 
@@ -37,7 +54,7 @@ class AdminController extends Controller {
             $_SESSION['flash_error'] = '❌ Failed to approve user.';
         }
 
-        header('Location: ?url=admin/dashboard');
+        header('Location: ?url=admin/requests');
         exit;
     }
 
@@ -46,7 +63,7 @@ class AdminController extends Controller {
      */
     public function reject($id) {
         if (!$id) {
-            header('Location: ?url=admin/dashboard');
+            header('Location: ?url=admin/requests');
             exit;
         }
 
@@ -57,7 +74,7 @@ class AdminController extends Controller {
             $_SESSION['flash_error'] = '❌ Failed to reject user.';
         }
 
-        header('Location: ?url=admin/dashboard');
+        header('Location: ?url=admin/requests');
         exit;
     }
 }

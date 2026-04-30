@@ -8,8 +8,12 @@ class OwnerController extends Controller {
     }
 
     public function dashboard() {
+        $appointmentModel = $this->model('AppointmentModel');
+        $appointments = $appointmentModel->getAppointmentsByOwner($_SESSION['user_id']);
+
         $data = [
-            'name' => Auth::name()
+            'name' => Auth::name(),
+            'appointments' => array_slice($appointments, 0, 3) // show latest 3
         ];
         $this->view('owner/dashboard', $data);
     }

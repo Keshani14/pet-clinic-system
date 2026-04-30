@@ -197,6 +197,7 @@ input[type="email"],
 input[type="tel"],
 input[type="password"],
 input[type="date"],
+input[type="datetime-local"],
 textarea,
 select {
     width          : 100%;
@@ -214,7 +215,6 @@ select {
 }
 
 textarea {
-    padding: 12px 14px;
     resize: vertical;
     min-height: 100px;
 }
@@ -540,7 +540,8 @@ body.page-home {
 }
 
 /* ── 25. Layout & Utility Classes (Added for Dashboards) ────── */
-.card--lg { max-width: 800px; width: 100%; }
+.card--lg { max-width: 800px !important; width: 100%; }
+.card--xl { max-width: 1200px !important; width: 100%; }
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 .bg-blue { background: linear-gradient(135deg, #0ea5e9, #38bdf8); }
@@ -552,9 +553,13 @@ body.page-home {
 .icon-lg { font-size: 4rem; display: block; margin-bottom: 20px; }
 .btn-auto { display: inline-block; width: auto; padding: 12px 30px; }
 .empty-state { text-align: center; color: var(--gray-500); padding: 20px; }
+.card-body--plain { padding: 0 !important; background: transparent !important; }
+.table--no-margin { margin-top: 0 !important; }
 .text-gray-600 { color: var(--gray-600); }
 .text-gray-800 { color: var(--gray-800); }
 .text-pink-bold { font-weight: 700; color: var(--pink-500); }
+.text-green-bold { font-weight: 700; color: #10b981; }
+.text-danger-bold { font-weight: 700; color: #dc2626; }
 .link-back { color: var(--pink-500); font-weight: bold; text-decoration: none; }
 .link-back:hover { text-decoration: underline; }
 
@@ -637,8 +642,27 @@ body.page-home {
     background: var(--gray-700);
     color: white;
 }
+.btn-approve {
+    background: #10b981 !important;
+    color: white !important;
+}
+.btn-approve:hover {
+    background: #059669 !important;
+}
 
-/* ── 28. Timeline Styles ────────────────────────────────────── */
+/* ── 28. Badge Styles ───────────────────────────────────────── */
+.badge {
+    padding: 5px 12px;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: inline-block;
+}
+.badge-vet { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+.badge-nurse { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+.badge-owner { background: #fef9c3; color: #854d0e; border: 1px solid #fef08a; }
+
+/* ── 29. Timeline Styles ────────────────────────────────────── */
 .timeline {
     position: relative;
     padding: 20px 0;
@@ -758,3 +782,6 @@ body.page-home {
     font-weight: 800;
     color: var(--gray-800);
 }
+
+.stat-card--pending { background: var(--pink-50) !important; border: 2px solid var(--pink-100) !important; }
+.stat-card--pets { background: #f0fdf4 !important; border: 2px solid #dcfce7 !important; }

@@ -91,3 +91,21 @@ CREATE TABLE IF NOT EXISTS `medical_records` (
   DEFAULT CHARSET=utf8mb4
   COLLATE=utf8mb4_unicode_ci
   COMMENT='Medical history for pets';
+
+-- ============================================================
+--  Table: appointments
+--  Stores appointment bookings by pet owners.
+-- ============================================================
+CREATE TABLE IF NOT EXISTS `appointments` (
+    `id`               INT             NOT NULL AUTO_INCREMENT,
+    `pet_id`           INT             NOT NULL,
+    `owner_id`         INT             NOT NULL,
+    `appointment_date` DATETIME        NOT NULL,
+    `reason`           TEXT            NOT NULL,
+    `status`           ENUM('pending','approved','completed','cancelled') DEFAULT 'pending',
+    `created_at`       DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk_appt_pet` FOREIGN KEY (`pet_id`) REFERENCES `pets` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_appt_owner` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+

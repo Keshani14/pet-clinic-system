@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Global stylesheet — the ONLY CSS file for the whole system -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=1.1">
 
     <?php if (!empty($extraHead)) echo $extraHead; ?>
 </head>
