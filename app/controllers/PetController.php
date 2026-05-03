@@ -149,6 +149,33 @@ class PetController extends Controller {
         $this->view('pets/edit', ['pet' => $pet]);
     }
 
+    /**
+     * View a pet profile (Read-only view)
+     */
+    public function view($id = null) {
+        if (!$id) {
+            header('Location: ?url=pet/listPets');
+            exit;
+        }
+
+        $petModel = $this->model('PetModel');
+        $pet = $petModel->getPetById((int)$id);
+
+        if (!$pet) {
+            header('Location: ?url=pet/listPets');
+            exit;
+        }
+
+        // Fetch medical history for this pet
+        $medicalModel = $this->model('MedicalRecordModel');
+        $history = $medicalModel->getHistoryByPet((int)$id);
+
+        $this->view('pets/view', [
+            'pet' => $pet,
+            'history' => $history
+        ]);
+    }
+
     public function update() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['id'])) {
             header('Location: ?url=pet/listPets');

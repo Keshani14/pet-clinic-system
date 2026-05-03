@@ -48,7 +48,6 @@ class AppointmentModel {
         $result = $stmt->get_result();
         $appointments = [];
         while ($row = $result->fetch_assoc()) {
-            // Use manually entered name if registered pet is not found
             if (empty($row['registered_pet_name'])) {
                 $row['pet_name_display'] = $row['pet_name'];
             } else {
@@ -58,5 +57,61 @@ class AppointmentModel {
         }
         $stmt->close();
         return $appointments;
+    }
+
+    /**
+     * Fetch all appointments with owner and pet details.
+     */
+    public function getAllAppointments(): array {
+        $query = "
+            SELECT a.*, p.name as registered_pet_name, 
+                   u.first_name as owner_first, u.last_name as owner_last
+            FROM appointments a
+            LEFT JOIN pets p ON a.pet_id = p.id
+            JOIN users u ON a.owner_id = u.id
+            ORDER BY a.appointment_date ASC
+        ";
+        $result = $this->db->conn->query($query);
+        $appointments = [];
+        while ($row = $result->fetch_assoc()) {
+            $row['pet_name_display'] = $row['registered_pet_name'] ?? $row['pet_name'];
+            $row['owner_name'] = $row['owner_first'] . ' ' . $row['owner_last'];
+            $appointments[] = $row;
+        }
+        return $appointments;
+    }
+
+    /**
+     * Fetch appointments scheduled for today.
+     */
+    public function getTodayAppointments(): array {
+        $query = "
+            SELECT a.*, p.name as registered_pet_name, 
+                   u.first_name as owner_first, u.last_name as owner_last
+            FROM appointments a
+            LEFT JOIN pets p ON a.pet_id = p.id
+            JOIN users u ON a.owner_id = u.id
+            WHERE DATE(a.appointment_date) = CURDATE()
+            ORDER BY a.appointment_date ASC
+        ";
+        $result = $this->db->conn->query($query);
+        $appointments = [];
+        while ($row = $result->fetch_assoc()) {
+            $row['pet_name_display'] = $row['registered_pet_name'] ?? $row['pet_name'];
+            $row['owner_name'] = $row['owner_first'] . ' ' . $row['owner_last'];
+            $appointments[] = $row;
+        }
+        return $appointments;
+    }
+
+    /**
+     * Update appointment status.
+     */
+    public function updateStatus(int $id, string $status): bool {
+        $stmt = $this->db->conn->prepare("UPDATE appointments SET status = ? WHERE id = ?");
+        $stmt->bind_param("si", $status, $id);
+        $success = $stmt->execute();
+        $stmt->close();
+        return $success;
     }
 }

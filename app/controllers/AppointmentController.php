@@ -44,7 +44,7 @@ class AppointmentController extends Controller {
                 ]);
 
                 if ($success) {
-                    $_SESSION['flash_success'] = "🎉 Appointment booked successfully for " . htmlspecialchars($petName) . "!";
+                    $_SESSION['flash_success'] = "🎉 Appointment booked successfully for your " . htmlspecialchars($petName) . "!";
                     header('Location: ?url=appointment/myAppointments');
                     exit;
                 } else {

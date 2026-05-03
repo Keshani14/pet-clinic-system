@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `appointments` (
     `owner_id`         INT UNSIGNED    NOT NULL,
     `appointment_date` DATETIME        NOT NULL,
     `reason`           TEXT            NOT NULL,
-    `status`           ENUM('pending','approved','completed','cancelled') DEFAULT 'pending',
+    `status`           ENUM('pending','checked-in','ready','approved','completed','cancelled') DEFAULT 'pending',
     `created_at`       DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     CONSTRAINT `fk_appt_owner` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
