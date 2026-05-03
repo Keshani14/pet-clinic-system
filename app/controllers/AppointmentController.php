@@ -13,8 +13,12 @@ class AppointmentController extends Controller {
      * Show the appointment booking form.
      */
     public function create() {
+        $appointmentModel = $this->model('AppointmentModel');
+        $bookedSlots = $appointmentModel->getBookedSlots();
+
         $this->view('appointments/create', [
-            'errors' => []
+            'errors' => [],
+            'bookedSlots' => $bookedSlots
         ]);
     }
 
@@ -30,7 +34,14 @@ class AppointmentController extends Controller {
             $reason = trim($_POST['reason'] ?? '');
 
             if (empty($petName)) $errors['pet_name'] = "Please enter your pet's name.";
-            if (empty($date)) $errors['appointment_date'] = "Please select a date and time.";
+            if (empty($date)) {
+                $errors['appointment_date'] = "Please select a date and time.";
+            } else {
+                $appointmentModel = $this->model('AppointmentModel');
+                if ($appointmentModel->isSlotTaken($date)) {
+                    $errors['appointment_date'] = "Sorry, this time slot is already booked. Please choose another time.";
+                }
+            }
             if (empty($reason)) $errors['reason'] = "Please provide a reason for the appointment.";
 
             if (empty($errors)) {

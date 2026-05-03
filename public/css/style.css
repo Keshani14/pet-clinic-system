@@ -541,7 +541,12 @@ body.page-home {
 
 /* ── 25. Layout & Utility Classes (Added for Dashboards) ────── */
 .card--lg { max-width: 800px !important; width: 100%; }
-.card--xl { max-width: 1200px !important; width: 100%; }
+.card--xl { max-width: 1400px !important; width: 100%; }
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 .bg-blue { background: linear-gradient(135deg, #0ea5e9, #38bdf8); }

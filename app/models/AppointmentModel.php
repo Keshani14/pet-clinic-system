@@ -114,4 +114,39 @@ class AppointmentModel {
         $stmt->close();
         return $success;
     }
+
+    /**
+     * Check if a specific time slot is already booked.
+     * We consider a slot "taken" if there's an appointment within 30 minutes.
+     */
+    public function isSlotTaken(string $dateTime): bool {
+        $stmt = $this->db->conn->prepare(
+            "SELECT id FROM appointments 
+             WHERE ABS(TIMESTAMPDIFF(MINUTE, appointment_date, ?)) < 30
+             AND status NOT IN ('cancelled', 'rejected')
+             LIMIT 1"
+        );
+        $stmt->bind_param("s", $dateTime);
+        $stmt->execute();
+        $stmt->store_result();
+        $taken = $stmt->num_rows > 0;
+        $stmt->close();
+        return $taken;
+    }
+
+    /**
+     * Get all upcoming booked slots.
+     */
+    public function getBookedSlots(): array {
+        $query = "SELECT appointment_date FROM appointments 
+                  WHERE appointment_date >= NOW() 
+                  AND status NOT IN ('cancelled', 'rejected')
+                  ORDER BY appointment_date ASC";
+        $result = $this->db->conn->query($query);
+        $slots = [];
+        while ($row = $result->fetch_assoc()) {
+            $slots[] = $row['appointment_date'];
+        }
+        return $slots;
+    }
 }
