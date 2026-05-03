@@ -44,13 +44,14 @@ INSERT IGNORE INTO `users` (`id`, `first_name`, `last_name`, `email`, `phone`, `
 (2, 'Sarah', 'Vet', 'dr.sarah@petclinic.com', '2223334444', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'vet', 'approved'),
 (3, 'John', 'Nurse', 'john.nurse@petclinic.com', '3334445555', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'nurse', 'approved'),
 (4, 'Jane', 'Owner', 'jane.owner@example.com', '4445556666', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'owner', 'approved');
+
 -- ============================================================
 --  Table: pets
 --  Stores pet profiles linked to owners.
 -- ============================================================
 CREATE TABLE IF NOT EXISTS `pets` (
-    `id`         INT             NOT NULL AUTO_INCREMENT,
-    `owner_id`   INT             NULL,
+    `id`         INT UNSIGNED    NOT NULL AUTO_INCREMENT,
+    `owner_id`   INT UNSIGNED    NULL,
     `name`       VARCHAR(100)    NOT NULL,
     `type`       VARCHAR(50)     NOT NULL COMMENT 'e.g., Dog, Cat, Bird',
     `breed`      VARCHAR(100)    NOT NULL,
@@ -74,8 +75,8 @@ CREATE TABLE IF NOT EXISTS `pets` (
 --  Stores the medical history for pets.
 -- ============================================================
 CREATE TABLE IF NOT EXISTS `medical_records` (
-    `id`         INT             NOT NULL AUTO_INCREMENT,
-    `pet_id`     INT             NOT NULL,
+    `id`         INT UNSIGNED    NOT NULL AUTO_INCREMENT,
+    `pet_id`     INT UNSIGNED    NOT NULL,
     `vet_id`     INT UNSIGNED    NOT NULL,
     `treatment_date` DATE        NOT NULL,
     `diagnosis`  VARCHAR(255)    NOT NULL,
@@ -97,15 +98,14 @@ CREATE TABLE IF NOT EXISTS `medical_records` (
 --  Stores appointment bookings by pet owners.
 -- ============================================================
 CREATE TABLE IF NOT EXISTS `appointments` (
-    `id`               INT             NOT NULL AUTO_INCREMENT,
-    `pet_id`           INT             NOT NULL,
-    `owner_id`         INT             NOT NULL,
+    `id`               INT UNSIGNED    NOT NULL AUTO_INCREMENT,
+    `pet_id`           INT UNSIGNED    NULL,
+    `pet_name`         VARCHAR(100)    NULL,
+    `owner_id`         INT UNSIGNED    NOT NULL,
     `appointment_date` DATETIME        NOT NULL,
     `reason`           TEXT            NOT NULL,
     `status`           ENUM('pending','approved','completed','cancelled') DEFAULT 'pending',
     `created_at`       DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
-    CONSTRAINT `fk_appt_pet` FOREIGN KEY (`pet_id`) REFERENCES `pets` (`id`) ON DELETE CASCADE,
     CONSTRAINT `fk_appt_owner` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
