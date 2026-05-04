@@ -18,8 +18,11 @@ $currentUrl = $_GET['url'] ?? 'home/index';
         <a href="?url=appointment/myAppointments" class="sidebar-link <?php echo (strpos($currentUrl, 'appointment/') === 0) ? 'active' : ''; ?>">
             Appointments 🗓️
         </a>
-        <a href="#" class="sidebar-link">
-            Health Tips
+        <a href="?url=tip/index" class="sidebar-link <?php echo ($currentUrl === 'tip/index') ? 'active' : ''; ?>">
+            Health Tips 💡
+        </a>
+        <a href="?url=vaccination/index" class="sidebar-link <?php echo ($currentUrl === 'vaccination/index') ? 'active' : ''; ?>">
+            Vaccinations 💉
         </a>
     </nav>
     

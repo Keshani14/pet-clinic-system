@@ -152,7 +152,7 @@ class PetController extends Controller {
     /**
      * View a pet profile (Read-only view)
      */
-    public function view($id = null) {
+    public function profile($id = null) {
         if (!$id) {
             header('Location: ?url=pet/listPets');
             exit;

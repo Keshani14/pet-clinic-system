@@ -71,7 +71,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                                                     <a href="?url=nurse/markReady/<?php echo $appt['id']; ?>" class="btn-pill btn-sm btn-approve">Mark Ready</a>
                                                 <?php endif; ?>
                                                 
-                                                <a href="?url=pet/view/<?php echo $appt['pet_id']; ?>" class="btn-secondary btn-sm" style="padding: 6px 12px;">Profile</a>
+                                                <a href="?url=pet/profile/<?php echo $appt['pet_id']; ?>" class="btn-secondary btn-sm" style="padding: 6px 12px;">Profile</a>
                                             </div>
                                         </td>
                                     </tr>
