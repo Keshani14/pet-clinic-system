@@ -6,21 +6,26 @@
 
 /* ── 1. Design Tokens (CSS Custom Properties) ───────────────── */
 :root {
-    --pink-50      : #fff0f5;
-    --pink-100     : #ffe0ec;
-    --pink-200     : #ffb3cc;
-    --pink-400     : #f472a8;
-    --pink-500     : #e8438f;
-    --pink-600     : #d12e7a;
+    --pink-50      : #fff5f8;
+    --pink-100     : #ffe4ef;
+    --pink-200     : #ffc9e0;
+    --pink-400     : #f472b6;
+    --pink-500     : #db2777; /* Deeper Fuchsia */
+    --pink-600     : #be185d;
     --white        : #ffffff;
-    --gray-100     : #f9f9f9;
-    --gray-400     : #a0a0a0;
-    --gray-500     : #777777;
-    --gray-600     : #555555;
-    --gray-800     : #222222;
-    --radius       : 14px;
-    --shadow       : 0 8px 40px rgba(232, 67, 143, .15);
-    --transition   : .25s ease;
+    --gray-50      : #fdfdfd;
+    --gray-100     : #f8fafc;
+    --gray-200     : #e2e8f0;
+    --gray-400     : #94a3b8;
+    --gray-600     : #475569;
+    --gray-800     : #1e293b;
+    --radius-sm    : 10px;
+    --radius       : 20px;
+    --radius-lg    : 30px;
+    --shadow-sm    : 0 4px 6px -1px rgba(219, 39, 119, 0.05);
+    --shadow       : 0 10px 30px -5px rgba(219, 39, 119, 0.12), 0 4px 12px -2px rgba(219, 39, 119, 0.04);
+    --shadow-lg    : 0 25px 50px -12px rgba(219, 39, 119, 0.15);
+    --transition   : .3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ── 2. Reset & Base ────────────────────────────────────────── */
@@ -41,9 +46,12 @@ body {
 }
 
 body.dashboard-layout {
-    display: block; /* Disable flex centering */
+    display: block;
     padding: 0;
-    background: var(--gray-100);
+    background-color: #fcfcfd;
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(219, 39, 119, 0.03) 0, transparent 50%), 
+        radial-gradient(at 100% 0%, rgba(219, 39, 119, 0.03) 0, transparent 50%);
 }
 
 /* ── 3. Keyframe Animations ─────────────────────────────────── */
@@ -79,13 +87,14 @@ body.dashboard-layout {
 
 /* ── 4. Card ────────────────────────────────────────────────── */
 .card {
-    background   : var(--white);
+    background: var(--white);
     border-radius: var(--radius);
-    box-shadow   : var(--shadow);
-    width        : 100%;
-    max-width    : 520px;
-    overflow     : hidden;
-    animation    : slideUp .45s cubic-bezier(.22, .61, .36, 1) both;
+    box-shadow: var(--shadow);
+    width: 100%;
+    max-width: 520px;
+    overflow: hidden;
+    animation: slideUp .6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    border: 1px solid rgba(219, 39, 119, 0.05);
 }
 
 /* Narrower card variant used on the login page */
@@ -93,10 +102,11 @@ body.dashboard-layout {
 
 /* ── 5. Card Header ─────────────────────────────────────────── */
 .card-header {
-    background : linear-gradient(135deg, var(--pink-500), var(--pink-400));
-    padding    : 36px 40px 32px;
-    text-align : center;
-    position   : relative;
+    background: linear-gradient(135deg, var(--pink-600), var(--pink-500));
+    padding: 40px 40px 36px;
+    text-align: center;
+    position: relative;
+    border-bottom: 4px solid rgba(0,0,0,0.05);
 }
 
 .card-header .paw-icon {
@@ -200,29 +210,21 @@ input[type="date"],
 input[type="datetime-local"],
 textarea,
 select {
-    width          : 100%;
-    padding        : 11px 14px 11px 40px;
-    border         : 1.8px solid var(--pink-100);
-    border-radius  : 10px;
-    font-family    : 'Nunito', sans-serif;
-    font-size      : .95rem;
-    color          : var(--gray-800);
-    background     : var(--pink-50);
-    outline        : none;
-    transition     : border-color var(--transition),
-                     box-shadow   var(--transition),
-                     background   var(--transition);
+    width: 100%;
+    padding: 12px 16px 12px 42px;
+    border: 2px solid var(--gray-200);
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    color: var(--gray-800);
+    background: var(--white);
+    outline: none;
+    transition: var(--transition);
 }
 
-textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
-input:focus {
-    border-color : var(--pink-400);
-    background   : var(--white);
-    box-shadow   : 0 0 0 3px rgba(244, 114, 168, .18);
+input:focus, select:focus {
+    border-color: var(--pink-500);
+    box-shadow: 0 0 0 4px rgba(219, 39, 119, 0.1);
 }
 
 input.is-invalid {
@@ -285,26 +287,34 @@ input.is-invalid {
 
 /* ── 15. Primary Button ─────────────────────────────────────── */
 .btn-primary {
-    display      : block;
-    width        : 100%;
-    padding      : 13px;
-    background   : linear-gradient(135deg, var(--pink-500), var(--pink-400));
-    color        : var(--white);
-    border       : none;
-    border-radius: 10px;
-    font-family  : 'Nunito', sans-serif;
-    font-size    : 1rem;
-    font-weight  : 800;
-    letter-spacing: .3px;
-    cursor       : pointer;
-    margin-top   : 8px;
-    text-align   : center;
-    text-decoration: none;
-    transition   : transform var(--transition), box-shadow var(--transition), opacity var(--transition);
-    box-shadow   : 0 4px 18px rgba(232, 67, 143, .35);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, var(--pink-600), var(--pink-500));
+    color: var(--white);
+    border: none;
+    border-radius: 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 10px 20px -6px rgba(219, 39, 119, 0.3);
 }
-.btn-primary:hover  { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232, 67, 143, .4); }
-.btn-primary:active { transform: translateY(0);    opacity: .9; }
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px -8px rgba(219, 39, 119, 0.4);
+    opacity: 0.95;
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
 
 /* ── 16. Secondary / Outline Button ─────────────────────────── */
 .btn-secondary {
@@ -540,15 +550,15 @@ body.page-home {
 }
 
 /* ── 25. Layout & Utility Classes (Added for Dashboards) ────── */
-.card--lg { max-width: 800px !important; width: 100%; }
-.card--xl { max-width: 1400px !important; width: 100%; }
+.card--lg { max-width: 1200px !important; width: 100%; }
+.card--xl { max-width: 95% !important; width: 100%; margin: 0 auto; }
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 24px;
 }
-.text-center { text-align: center; }
-.text-right { text-align: right; }
+.text-center { text-align: center !important; }
+.text-right { text-align: right !important; }
 .bg-blue { background: linear-gradient(135deg, #0ea5e9, #38bdf8); }
 .bg-green { background: linear-gradient(135deg, #10b981, #34d399); }
 .my-20 { margin: 20px 0; }
@@ -569,35 +579,53 @@ body.page-home {
 .link-back:hover { text-decoration: underline; }
 
 /* ── 26. Table Styles ───────────────────────────────────────── */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 16px;
+    border: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-sm);
+}
+
 .table {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--white);
 }
+
 .table thead tr {
-    background: var(--pink-50);
-    border-bottom: 2px solid var(--pink-100);
+    background: var(--gray-50);
 }
+
 .table th {
-    padding: 16px 12px;
+    padding: 20px 40px;
     text-align: left;
-    color: var(--gray-600);
-    font-size: 0.85rem;
+    color: var(--gray-400);
+    font-size: 0.75rem;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--gray-200);
 }
+
 .table td {
-    padding: 14px 12px;
-    text-align: left;
+    padding: 22px 40px;
     vertical-align: middle;
-}
-.table tbody tr {
+    color: var(--gray-600);
+    font-size: 0.95rem;
     border-bottom: 1px solid var(--gray-100);
-    transition: background var(--transition);
+    transition: var(--transition);
 }
-.table tbody tr:hover {
-    background: rgba(255, 241, 242, 0.5);
+
+.table tbody tr:last-child td {
+    border-bottom: none;
 }
+
+.table tbody tr:hover td {
+    background: var(--pink-50);
+}
+
 .pet-thumbnail {
     width: 40px;
     height: 40px;
@@ -624,36 +652,6 @@ body.page-home {
     font-size: 0.85rem;
 }
 
-.btn-sm {
-    padding: 6px 12px;
-    font-size: 0.85rem;
-    margin-right: 5px;
-}
-.btn-danger {
-    background: var(--white);
-    color: #dc2626;
-    border-color: #fca5a5;
-}
-.btn-danger:hover {
-    background: #fef2f2;
-    color: #b91c1c;
-    border-color: #f87171;
-}
-.btn-dark {
-    background: var(--gray-800);
-    color: white;
-}
-.btn-dark:hover {
-    background: var(--gray-700);
-    color: white;
-}
-.btn-approve {
-    background: #10b981 !important;
-    color: white !important;
-}
-.btn-approve:hover {
-    background: #059669 !important;
-}
 
 /* ── 28. Badge Styles ───────────────────────────────────────── */
 .badge {
@@ -720,43 +718,68 @@ body.page-home {
     min-height: 100vh;
 }
 .sidebar {
-    width: 260px;
-    background: var(--white);
+    width: 280px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-right: 1px solid var(--pink-100);
-    padding: 30px 20px;
+    padding: 40px 24px;
     display: flex;
     flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
 }
+
 .sidebar-header {
-    text-align: center;
     margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
+
 .sidebar-header .paw-icon {
-    font-size: 2rem;
+    font-size: 2.2rem;
 }
+
 .sidebar-header h2 {
-    font-size: 1.2rem;
-    color: var(--pink-600);
-    margin-top: 10px;
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: var(--gray-800);
+    letter-spacing: -0.5px;
+    margin-top: 0;
 }
+
 .sidebar-nav {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
     flex: 1;
 }
+
 .sidebar-link {
-    display: block;
-    padding: 12px 16px;
-    border-radius: var(--radius);
-    color: var(--gray-600);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
     text-decoration: none;
-    font-weight: 600;
+    color: var(--gray-600);
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 14px;
     transition: var(--transition);
 }
-.sidebar-link:hover, .sidebar-link.active {
+
+.sidebar-link:hover {
     background: var(--pink-50);
     color: var(--pink-500);
+    transform: translateX(4px);
+}
+
+.sidebar-link.active {
+    background: var(--pink-500);
+    color: var(--white);
+    box-shadow: 0 8px 20px -6px rgba(219, 39, 119, 0.4);
 }
 .main-content {
     flex: 1;
@@ -790,3 +813,65 @@ body.page-home {
 
 .stat-card--pending { background: var(--pink-50) !important; border: 2px solid var(--pink-100) !important; }
 .stat-card--pets { background: #f0fdf4 !important; border: 2px solid #dcfce7 !important; }
+
+/* ── 30. Specialized Buttons ────────────────────────────────── */
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.btn-pill {
+    background: var(--pink-50);
+    color: var(--pink-500);
+    border: 1.5px solid var(--pink-100);
+    border-radius: 99px;
+}
+
+.btn-pill:hover {
+    background: var(--pink-500);
+    color: var(--white);
+    border-color: var(--pink-500);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(219, 39, 119, 0.2);
+}
+
+.btn-danger {
+    background: #fff1f2;
+    color: #e11d48;
+    border: 1px solid #fecdd3;
+}
+
+.btn-danger:hover {
+    background: #e11d48;
+    color: var(--white);
+    border-color: #e11d48;
+}
+
+.btn-dark {
+    background: var(--gray-800);
+    color: var(--white);
+    border: none;
+}
+
+.btn-dark:hover {
+    background: var(--gray-600);
+}
+
+.btn-approve {
+    background: #ecfdf5 !important;
+    color: #059669 !important;
+    border: 1px solid #a7f3d0 !important;
+}
+
+.btn-approve:hover {
+    background: #059669 !important;
+    color: var(--white) !important;
+    border-color: #059669 !important;
+}

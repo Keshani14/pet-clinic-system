@@ -31,56 +31,76 @@ require_once __DIR__ . '/../../views/layouts/header.php';
             </div>
             
             <div class="card-body">
-                <?php if (!empty($errors['general'])): ?>
-                    <div class="alert alert-error"><?php echo $errors['general']; ?></div>
+                <?php if (empty($myPets)): ?>
+                    <div class="text-center py-40">
+                        <div class="icon-lg mb-20" style="font-size: 4rem;">🐾</div>
+                        <h2 class="text-gray-800 mb-10">No Pets Found</h2>
+                        <p class="text-gray-600 mb-30" style="font-size: 1.1rem;">
+                            Please add a pet before booking an appointment.
+                        </p>
+                        <a href="?url=pet/addPet" class="btn-primary" style="max-width: 250px; margin: 0 auto; display: block;">
+                            Add Pet +
+                        </a>
+                    </div>
+                <?php else: ?>
+                    <?php if (!empty($errors['general'])): ?>
+                        <div class="alert alert-error"><?php echo $errors['general']; ?></div>
+                    <?php endif; ?>
+
+                    <form action="?url=appointment/store" method="POST" id="appointmentForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="pet_name">Select Pet <span class="required">*</span></label>
+                                <div class="input-wrap">
+                                    <span class="icon">🐾</span>
+                                    <select name="pet_id" id="pet_id" 
+                                            class="<?php echo isset($errors['pet_id']) ? 'is-invalid' : ''; ?>" required>
+                                        <option value="">-- Choose a Pet --</option>
+                                        <?php foreach ($myPets as $pet): ?>
+                                            <option value="<?php echo $pet['id']; ?>"
+                                                <?php echo (isset($old['pet_id']) && $old['pet_id'] == $pet['id']) ? 'selected' : ''; ?>>
+                                                <?php echo htmlspecialchars($pet['name']); ?> (<?php echo htmlspecialchars($pet['type']); ?>)
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <?php if (isset($errors['pet_id'])): ?>
+                                    <span class="field-error"><?php echo $errors['pet_id']; ?></span>
+                                <?php endif; ?>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="appointment_date">Date & Time <span class="required">*</span></label>
+                                <div class="input-wrap">
+                                    <span class="icon">⏰</span>
+                                    <input type="text" name="appointment_date" id="appointment_date" 
+                                           placeholder="Select a date and time..."
+                                           value="<?php echo htmlspecialchars($old['appointment_date'] ?? ''); ?>"
+                                           class="<?php echo isset($errors['appointment_date']) ? 'is-invalid' : ''; ?>" required>
+                                </div>
+                                <?php if (isset($errors['appointment_date'])): ?>
+                                    <span class="field-error"><?php echo $errors['appointment_date']; ?></span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reason">Reason for Visit <span class="required">*</span></label>
+                            <div class="input-wrap">
+                                <span class="icon">📝</span>
+                                <textarea name="reason" id="reason" rows="4" placeholder="Briefly describe why you are booking this appointment..." 
+                                          class="<?php echo isset($errors['reason']) ? 'is-invalid' : ''; ?>" required><?php echo htmlspecialchars($old['reason'] ?? ''); ?></textarea>
+                            </div>
+                            <?php if (isset($errors['reason'])): ?>
+                                <span class="field-error"><?php echo $errors['reason']; ?></span>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="my-20">
+                            <button type="submit" class="btn-primary" style="max-width: 300px; margin: 0 auto;">Confirm Booking 🐾</button>
+                        </div>
+                    </form>
                 <?php endif; ?>
-
-                <form action="?url=appointment/store" method="POST" id="appointmentForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="pet_name">Animal Type <span class="required">*</span></label>
-                            <div class="input-wrap">
-                                <span class="icon">🐾</span>
-                                <input type="text" name="pet_name" id="pet_name" placeholder="Enter animal type (e.g. Dog, Cat, Bird...)"
-                                       value="<?php echo htmlspecialchars($old['pet_name'] ?? ''); ?>"
-                                       class="<?php echo isset($errors['pet_name']) ? 'is-invalid' : ''; ?>" required>
-                            </div>
-                            <?php if (isset($errors['pet_name'])): ?>
-                                <span class="field-error"><?php echo $errors['pet_name']; ?></span>
-                            <?php endif; ?>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="appointment_date">Date & Time <span class="required">*</span></label>
-                            <div class="input-wrap">
-                                <span class="icon">⏰</span>
-                                <input type="text" name="appointment_date" id="appointment_date" 
-                                       placeholder="Select a date and time..."
-                                       value="<?php echo htmlspecialchars($old['appointment_date'] ?? ''); ?>"
-                                       class="<?php echo isset($errors['appointment_date']) ? 'is-invalid' : ''; ?>" required>
-                            </div>
-                            <?php if (isset($errors['appointment_date'])): ?>
-                                <span class="field-error"><?php echo $errors['appointment_date']; ?></span>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="reason">Reason for Visit <span class="required">*</span></label>
-                        <div class="input-wrap">
-                            <span class="icon">📝</span>
-                            <textarea name="reason" id="reason" rows="4" placeholder="Briefly describe why you are booking this appointment..." 
-                                      class="<?php echo isset($errors['reason']) ? 'is-invalid' : ''; ?>" required><?php echo htmlspecialchars($old['reason'] ?? ''); ?></textarea>
-                        </div>
-                        <?php if (isset($errors['reason'])): ?>
-                            <span class="field-error"><?php echo $errors['reason']; ?></span>
-                        <?php endif; ?>
-                    </div>
-
-                    <div class="my-20">
-                        <button type="submit" class="btn-primary" style="max-width: 300px; margin: 0 auto;">Confirm Booking 🐾</button>
-                    </div>
-                </form>
 
                 <div class="divider-line"></div>
                 <div class="text-center">

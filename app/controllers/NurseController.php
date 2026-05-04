@@ -48,6 +48,22 @@ class NurseController extends Controller {
     }
 
     /**
+     * Confirm a pending appointment.
+     */
+    public function confirm($id) {
+        if (!$id) {
+            header('Location: ?url=nurse/appointments');
+            exit;
+        }
+        $appointmentModel = $this->model('AppointmentModel');
+        if ($appointmentModel->updateStatus((int)$id, 'confirmed')) {
+            $_SESSION['flash_success'] = '✅ Appointment confirmed.';
+        }
+        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? '?url=nurse/appointments'));
+        exit;
+    }
+
+    /**
      * Mark an appointment as 'checked-in'.
      */
     public function checkIn($id) {
@@ -68,22 +84,43 @@ class NurseController extends Controller {
     }
 
     /**
-     * Mark an appointment as 'ready' for the vet.
+     * Show form to prepare patient (vitals).
      */
-    public function markReady($id) {
-        if (!$id) {
+    public function prepare($id) {
+        $appointmentModel = $this->model('AppointmentModel');
+        $appointment = $appointmentModel->getAppointmentById((int)$id);
+
+        if (!$appointment) {
             header('Location: ?url=nurse/appointments');
             exit;
         }
 
-        $appointmentModel = $this->model('AppointmentModel');
-        if ($appointmentModel->updateStatus((int)$id, 'ready')) {
-            $_SESSION['flash_success'] = '🎯 Patient marked as READY for the Vet.';
-        } else {
-            $_SESSION['flash_error'] = '❌ Failed to update status.';
-        }
+        $this->view('nurse/prepare', [
+            'appointment' => $appointment
+        ]);
+    }
 
-        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? '?url=nurse/appointments'));
+    /**
+     * Save vitals and mark as ready for vet.
+     */
+    public function saveVitals($id) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $appointmentModel = $this->model('AppointmentModel');
+            $success = $appointmentModel->updateVitals((int)$id, [
+                'weight' => $_POST['weight'] ?? '',
+                'temperature' => $_POST['temperature'] ?? '',
+                'vitals_notes' => $_POST['vitals_notes'] ?? ''
+            ]);
+
+            if ($success) {
+                $_SESSION['flash_success'] = '🎯 Vitals saved. Patient is now in the Vet queue.';
+                header('Location: ?url=nurse/appointments');
+                exit;
+            }
+        }
+        header('Location: ?url=nurse/appointments');
         exit;
     }
+
+
 }

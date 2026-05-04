@@ -39,7 +39,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Animal Type</th>
+                                    <th>Pet</th>
                                     <th>Date & Time</th>
                                     <th>Reason</th>
                                     <th>Status</th>
@@ -49,7 +49,10 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                             <tbody>
                                 <?php foreach ($appointments as $appt): ?>
                                     <tr>
-                                        <td class="text-pink-bold"><?php echo htmlspecialchars($appt['pet_name_display']); ?></td>
+                                        <td>
+                                            <div class="text-pink-bold"><?php echo htmlspecialchars($appt['pet_name_display']); ?></div>
+                                            <small class="text-gray-500"><?php echo htmlspecialchars($appt['display_type']); ?></small>
+                                        </td>
                                         <td>
                                             <strong><?php echo date('M d, Y', strtotime($appt['appointment_date'])); ?></strong><br>
                                             <small class="text-gray-500"><?php echo date('h:i A', strtotime($appt['appointment_date'])); ?></small>

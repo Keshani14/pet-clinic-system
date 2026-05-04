@@ -1,26 +1,20 @@
 <?php
-$pageTitle = 'Patient Queue — Pet Clinic';
+$pageTitle = 'Clinic Schedule — Pet Clinic';
 $bodyClass = 'dashboard-layout';
 require_once __DIR__ . '/../../views/layouts/header.php';
 ?>
 
 <div class="dashboard-wrapper">
-    <?php require_once __DIR__ . '/../../views/layouts/nurse_sidebar.php'; ?>
+    <?php require_once __DIR__ . '/../../views/layouts/vet_sidebar.php'; ?>
     <main class="main-content">
         <div class="card card--xl">
             <div class="card-header">
-                <span class="paw-icon" aria-hidden="true">📋</span>
-                <h1>Patient Queue</h1>
-                <p>Manage all scheduled appointments and patient check-ins.</p>
+                <span class="paw-icon" aria-hidden="true">🗓️</span>
+                <h1>Clinic Schedule</h1>
+                <p>View all appointments and patient statuses across the clinic.</p>
             </div>
             
             <div class="card-body">
-                <?php if (isset($_SESSION['flash_success'])): ?>
-                    <div class="alert alert-success">
-                        <?php echo $_SESSION['flash_success']; unset($_SESSION['flash_success']); ?>
-                    </div>
-                <?php endif; ?>
-
                 <?php if (empty($appointments)): ?>
                     <div class="empty-state">
                         <span class="icon-lg">📅</span>
@@ -49,34 +43,30 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                                             <small class="text-gray-500"><?php echo date('h:i A', strtotime($appt['appointment_date'])); ?></small>
                                         </td>
                                         <td>
-                                            <?php if ($appt['status'] === 'checked-in'): ?>
-                                                <span class="badge badge-nurse">Checked-in</span>
+                                            <?php if ($appt['status'] === 'pending'): ?>
+                                                <span class="text-gray-500">⏳ Pending</span>
+                                            <?php elseif ($appt['status'] === 'confirmed'): ?>
+                                                <span class="text-blue-bold">🗓️ Confirmed</span>
+                                            <?php elseif ($appt['status'] === 'checked-in'): ?>
+                                                <span class="badge badge-nurse">📍 Checked-in</span>
                                             <?php elseif ($appt['status'] === 'ready'): ?>
-                                                <span class="badge badge-vet">Ready</span>
+                                                <span class="badge badge-vet">🚀 Ready for Vet</span>
+                                            <?php elseif ($appt['status'] === 'in-consultation'): ?>
+                                                <span class="text-pink-bold">🩺 In Consultation</span>
                                             <?php elseif ($appt['status'] === 'completed'): ?>
                                                 <span class="text-green-bold">✅ Completed</span>
-                                            <?php elseif ($appt['status'] === 'cancelled'): ?>
-                                                <span class="text-danger-bold">❌ Cancelled</span>
                                             <?php else: ?>
                                                 <span class="text-gray-600"><?php echo ucfirst($appt['status']); ?></span>
                                             <?php endif; ?>
                                         </td>
                                         <td class="text-right">
-                                            <div style="display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap;">
-                                                <?php if ($appt['status'] === 'pending'): ?>
-                                                    <a href="?url=nurse/confirm/<?php echo $appt['id']; ?>" class="btn-pill btn-sm btn-approve">Confirm ✅</a>
-                                                <?php endif; ?>
-
-                                                <?php if ($appt['status'] === 'confirmed'): ?>
-                                                    <a href="?url=nurse/checkIn/<?php echo $appt['id']; ?>" class="btn-pill btn-sm">Check-In 📍</a>
-                                                <?php endif; ?>
-                                                
-                                                <?php if ($appt['status'] === 'checked-in'): ?>
-                                                    <a href="?url=nurse/prepare/<?php echo $appt['id']; ?>" class="btn-pill btn-sm btn-dark">Prepare Case 📝</a>
+                                            <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                                                <?php if ($appt['status'] === 'ready'): ?>
+                                                    <a href="?url=vet/consult/<?php echo $appt['id']; ?>" class="btn-pill btn-sm btn-approve">Consult</a>
                                                 <?php endif; ?>
                                                 
                                                 <?php if (!empty($appt['pet_id'])): ?>
-                                                    <a href="?url=medical/viewHistory&pet_id=<?php echo $appt['pet_id']; ?>" class="btn-pill btn-sm" style="background: var(--pink-50); color: var(--pink-600); border: 1px solid var(--pink-100);">History 🏥</a>
+                                                    <a href="?url=medical/viewHistory&pet_id=<?php echo $appt['pet_id']; ?>" class="btn-pill btn-sm btn-dark">History</a>
                                                 <?php endif; ?>
                                             </div>
                                         </td>
@@ -89,7 +79,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
 
                 <div class="divider-line"></div>
                 <div class="text-center">
-                    <a href="?url=nurse/dashboard" class="link-back">← Back to Dashboard</a>
+                    <a href="?url=vet/dashboard" class="link-back">← Back to Dashboard</a>
                 </div>
             </div>
         </div>

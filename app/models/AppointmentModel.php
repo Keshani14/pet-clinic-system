@@ -37,7 +37,7 @@ class AppointmentModel {
      */
     public function getAppointmentsByOwner(int $ownerId): array {
         $stmt = $this->db->conn->prepare(
-            "SELECT a.*, p.name as registered_pet_name 
+            "SELECT a.*, p.name as registered_pet_name, p.type as pet_type 
              FROM appointments a
              LEFT JOIN pets p ON a.pet_id = p.id
              WHERE a.owner_id = ?
@@ -48,10 +48,13 @@ class AppointmentModel {
         $result = $stmt->get_result();
         $appointments = [];
         while ($row = $result->fetch_assoc()) {
-            if (empty($row['registered_pet_name'])) {
-                $row['pet_name_display'] = $row['pet_name'];
-            } else {
+            if (!empty($row['registered_pet_name'])) {
                 $row['pet_name_display'] = $row['registered_pet_name'];
+                $row['display_type'] = $row['pet_type'];
+            } else {
+                // Fallback for cases where pet_id might be null or pet was deleted
+                $row['pet_name_display'] = $row['pet_name'];
+                $row['display_type'] = 'Unknown';
             }
             $appointments[] = $row;
         }
@@ -64,7 +67,7 @@ class AppointmentModel {
      */
     public function getAllAppointments(): array {
         $query = "
-            SELECT a.*, p.name as registered_pet_name, 
+            SELECT a.*, p.name as registered_pet_name, p.type as pet_type,
                    u.first_name as owner_first, u.last_name as owner_last
             FROM appointments a
             LEFT JOIN pets p ON a.pet_id = p.id
@@ -86,7 +89,7 @@ class AppointmentModel {
      */
     public function getTodayAppointments(): array {
         $query = "
-            SELECT a.*, p.name as registered_pet_name, 
+            SELECT a.*, p.name as registered_pet_name, p.type as pet_type,
                    u.first_name as owner_first, u.last_name as owner_last
             FROM appointments a
             LEFT JOIN pets p ON a.pet_id = p.id
@@ -113,6 +116,57 @@ class AppointmentModel {
         $success = $stmt->execute();
         $stmt->close();
         return $success;
+    }
+
+    /**
+     * Update vitals (Nurse step).
+     */
+    public function updateVitals(int $id, array $data): bool {
+        $stmt = $this->db->conn->prepare(
+            "UPDATE appointments SET weight = ?, temperature = ?, vitals_notes = ?, status = 'ready' WHERE id = ?"
+        );
+        $stmt->bind_param("sssi", $data['weight'], $data['temperature'], $data['vitals_notes'], $id);
+        $success = $stmt->execute();
+        $stmt->close();
+        return $success;
+    }
+
+    /**
+     * Update consultation details (Vet step).
+     */
+    public function updateConsultation(int $id, array $data): bool {
+        $stmt = $this->db->conn->prepare(
+            "UPDATE appointments SET diagnosis = ?, prescription = ?, status = 'completed' WHERE id = ?"
+        );
+        $stmt->bind_param("ssi", $data['diagnosis'], $data['prescription'], $id);
+        $success = $stmt->execute();
+        $stmt->close();
+        return $success;
+    }
+
+    /**
+     * Fetch a single appointment by ID.
+     */
+    public function getAppointmentById(int $id): ?array {
+        $stmt = $this->db->conn->prepare(
+            "SELECT a.*, p.name as pet_name_orig, p.type as pet_type, 
+                    u.first_name as owner_first, u.last_name as owner_last
+             FROM appointments a
+             LEFT JOIN pets p ON a.pet_id = p.id
+             JOIN users u ON a.owner_id = u.id
+             WHERE a.id = ?"
+        );
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        if ($row) {
+            $row['pet_name_display'] = $row['pet_name_orig'] ?? $row['pet_name'];
+            $row['display_type'] = $row['pet_type'] ?? 'Unknown';
+            $row['owner_name'] = $row['owner_first'] . ' ' . $row['owner_last'];
+        }
+        $stmt->close();
+        return $row;
     }
 
     /**

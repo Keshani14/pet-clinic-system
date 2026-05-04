@@ -14,11 +14,18 @@ class AppointmentController extends Controller {
      */
     public function create() {
         $appointmentModel = $this->model('AppointmentModel');
+        $petModel = $this->model('PetModel');
+        
         $bookedSlots = $appointmentModel->getBookedSlots();
+        $myPets = $petModel->getPetsByOwner($_SESSION['user_id']);
+
+        $preselectedPetId = $_GET['pet_id'] ?? '';
 
         $this->view('appointments/create', [
             'errors' => [],
-            'bookedSlots' => $bookedSlots
+            'bookedSlots' => $bookedSlots,
+            'myPets' => $myPets,
+            'old' => ['pet_id' => $preselectedPetId]
         ]);
     }
 
@@ -29,11 +36,11 @@ class AppointmentController extends Controller {
         $errors = [];
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $petName = trim($_POST['pet_name'] ?? '');
+            $petId = $_POST['pet_id'] ?? '';
             $date = $_POST['appointment_date'] ?? '';
             $reason = trim($_POST['reason'] ?? '');
 
-            if (empty($petName)) $errors['pet_name'] = "Please enter your pet's name.";
+            if (empty($petId)) $errors['pet_id'] = "Please select your pet.";
             if (empty($date)) {
                 $errors['appointment_date'] = "Please select a date and time.";
             } else {
@@ -46,8 +53,12 @@ class AppointmentController extends Controller {
 
             if (empty($errors)) {
                 $appointmentModel = $this->model('AppointmentModel');
+                $petModel = $this->model('PetModel');
+                $pet = $petModel->getPetById($petId);
+                $petName = $pet['name'] ?? 'Pet';
+
                 $success = $appointmentModel->createAppointment([
-                    'pet_id' => null, // Storing as name only as requested
+                    'pet_id' => $petId,
                     'pet_name' => $petName,
                     'owner_id' => $_SESSION['user_id'],
                     'appointment_date' => $date,
@@ -55,7 +66,7 @@ class AppointmentController extends Controller {
                 ]);
 
                 if ($success) {
-                    $_SESSION['flash_success'] = "🎉 Appointment booked successfully for your " . htmlspecialchars($petName) . "!";
+                    $_SESSION['flash_success'] = "🎉 Appointment booked successfully for " . htmlspecialchars($petName) . "!";
                     header('Location: ?url=appointment/myAppointments');
                     exit;
                 } else {
@@ -64,9 +75,16 @@ class AppointmentController extends Controller {
             }
         }
         
+        $petModel = $this->model('PetModel');
+        $myPets = $petModel->getPetsByOwner($_SESSION['user_id']);
+        $appointmentModel = $this->model('AppointmentModel');
+        $bookedSlots = $appointmentModel->getBookedSlots();
+
         $this->view('appointments/create', [
             'errors' => $errors,
-            'old' => $_POST
+            'old' => $_POST,
+            'myPets' => $myPets,
+            'bookedSlots' => $bookedSlots
         ]);
     }
 
