@@ -1,7 +1,7 @@
 <?php
 $pageTitle = 'Pet Roster — Pet Clinic';
 $userRole = Auth::role();
-$hasSidebar = in_array($userRole, ['vet', 'admin', 'owner']);
+$hasSidebar = in_array($userRole, ['vet', 'admin', 'owner', 'nurse']);
 
 if ($hasSidebar) {
     $bodyClass = 'dashboard-layout';
@@ -16,6 +16,8 @@ require_once __DIR__ . '/../../views/layouts/header.php';
         require_once __DIR__ . '/../../views/layouts/vet_sidebar.php';
     } elseif ($userRole === 'admin') {
         require_once __DIR__ . '/../../views/layouts/admin_sidebar.php';
+    } elseif ($userRole === 'nurse') {
+        require_once __DIR__ . '/../../views/layouts/nurse_sidebar.php';
     } else {
         require_once __DIR__ . '/../../views/layouts/owner_sidebar.php';
     }

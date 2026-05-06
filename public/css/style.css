@@ -201,6 +201,8 @@ label .label-hint   { color: var(--gray-400); font-weight: 500; }
     line-height    : 1;
 }
 
+
+
 /* ── 11. Input Fields ───────────────────────────────────────── */
 input[type="text"],
 input[type="email"],
@@ -551,7 +553,11 @@ body.page-home {
 
 /* ── 25. Layout & Utility Classes (Added for Dashboards) ────── */
 .card--lg { max-width: 1200px !important; width: 100%; }
-.card--xl { max-width: 95% !important; width: 100%; margin: 0 auto; }
+.card--xl {
+    max-width: 1300px !important;
+    width: 98% !important;
+    margin: 0 auto;
+}
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -599,10 +605,10 @@ body.page-home {
 }
 
 .table th {
-    padding: 20px 40px;
+    padding: 12px 15px;
     text-align: left;
     color: var(--gray-400);
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -610,10 +616,10 @@ body.page-home {
 }
 
 .table td {
-    padding: 22px 40px;
+    padding: 12px 15px;
     vertical-align: middle;
     color: var(--gray-600);
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     border-bottom: 1px solid var(--gray-100);
     transition: var(--transition);
 }
@@ -874,4 +880,11 @@ body.page-home {
     background: #059669 !important;
     color: var(--white) !important;
     border-color: #059669 !important;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.82rem;
+    height: auto;
+    min-height: 0;
 }
