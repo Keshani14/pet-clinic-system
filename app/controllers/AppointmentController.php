@@ -20,12 +20,16 @@ class AppointmentController extends Controller {
         $myPets = $petModel->getPetsByOwner($_SESSION['user_id']);
 
         $preselectedPetId = $_GET['pet_id'] ?? '';
+        $preselectedReason = isset($_GET['vaccine']) ? 'Vaccination for: ' . $_GET['vaccine'] : '';
 
         $this->view('appointments/create', [
             'errors' => [],
             'bookedSlots' => $bookedSlots,
             'myPets' => $myPets,
-            'old' => ['pet_id' => $preselectedPetId]
+            'old' => [
+                'pet_id' => $preselectedPetId,
+                'reason' => $preselectedReason
+            ]
         ]);
     }
 
@@ -62,7 +66,8 @@ class AppointmentController extends Controller {
                     'pet_name' => $petName,
                     'owner_id' => $_SESSION['user_id'],
                     'appointment_date' => $date,
-                    'reason' => $reason
+                    'reason' => $reason,
+                    'appointment_type' => $_POST['appointment_type'] ?? 'general'
                 ]);
 
                 if ($success) {

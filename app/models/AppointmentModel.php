@@ -15,17 +15,19 @@ class AppointmentModel {
      * Create a new appointment record.
      */
     public function createAppointment(array $data): bool {
+        $type = $data['appointment_type'] ?? 'general';
         $stmt = $this->db->conn->prepare(
-            "INSERT INTO appointments (pet_id, pet_name, owner_id, appointment_date, reason, status) 
-             VALUES (?, ?, ?, ?, ?, 'pending')"
+            "INSERT INTO appointments (pet_id, pet_name, owner_id, appointment_date, reason, status, appointment_type) 
+             VALUES (?, ?, ?, ?, ?, 'pending', ?)"
         );
         $stmt->bind_param(
-            "isiss",
+            "isisss",
             $data['pet_id'],
             $data['pet_name'],
             $data['owner_id'],
             $data['appointment_date'],
-            $data['reason']
+            $data['reason'],
+            $type
         );
         $success = $stmt->execute();
         $stmt->close();
@@ -136,6 +138,8 @@ class AppointmentModel {
                 $this->db->conn->query("UPDATE appointments SET ready_at = NOW() WHERE id = $id");
             } elseif ($status === 'in-consultation') {
                 $this->db->conn->query("UPDATE appointments SET consultation_started_at = NOW() WHERE id = $id");
+            } elseif ($status === 'completed') {
+                $this->db->conn->query("UPDATE appointments SET completed_at = NOW() WHERE id = $id");
             }
         }
         

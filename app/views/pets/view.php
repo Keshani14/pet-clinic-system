@@ -77,6 +77,42 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                     <?php endif; ?>
                 </div>
 
+                <div class="mt-40">
+                    <h2 class="text-gray-800 mb-20" style="display: flex; align-items: center; gap: 10px;">
+                        <span>💉</span> Vaccination History
+                    </h2>
+                    <?php if (empty($vaccinations)): ?>
+                        <div class="empty-state" style="background: #fdf2f8;">
+                            <p>No vaccination records found for this pet.</p>
+                        </div>
+                    <?php else: ?>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Vaccine</th>
+                                        <th>Date Given</th>
+                                        <th>Next Due</th>
+                                        <th>Vet</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($vaccinations as $v): ?>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #059669;"><?php echo htmlspecialchars($v['vaccine_name']); ?></td>
+                                            <td><?php echo date('M d, Y', strtotime($v['date_given'])); ?></td>
+                                            <td class="text-pink-bold"><?php echo $v['next_due_date'] ? date('M d, Y', strtotime($v['next_due_date'])) : '-'; ?></td>
+                                            <td>Dr. <?php echo htmlspecialchars($v['vet_name']); ?></td>
+                                            <td><small><?php echo htmlspecialchars($v['notes'] ?? '-'); ?></small></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
                 <div class="divider-line"></div>
                 <div class="text-center">
                     <button onclick="window.history.back();" class="link-back">← Go Back</button>

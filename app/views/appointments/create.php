@@ -47,7 +47,18 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                         <div class="alert alert-error"><?php echo $errors['general']; ?></div>
                     <?php endif; ?>
 
+                    <?php 
+                    $reqType = $_GET['type'] ?? 'general';
+                    $isVaccination = ($reqType === 'vaccination');
+                    ?>
                     <form action="?url=appointment/store" method="POST" id="appointmentForm">
+                        <input type="hidden" name="appointment_type" value="<?php echo htmlspecialchars($reqType); ?>">
+                        
+                        <?php if ($isVaccination): ?>
+                        <div class="alert alert-info" style="margin-bottom: 25px; background: #fff5f5; border: 1px solid #fecaca; color: #991b1b;">
+                            <strong>🛡️ Vaccination Appointment:</strong> You are booking an immunization for your pet. Please specify the vaccine in the reason box if known.
+                        </div>
+                        <?php endif; ?>
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="pet_name">Select Pet <span class="required">*</span></label>
