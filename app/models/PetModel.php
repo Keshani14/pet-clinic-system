@@ -10,11 +10,11 @@ class PetModel {
     /**
      * Add a new pet to the database
      */
-    public function addPet(?int $ownerId, string $name, string $type, string $breed, int $age, ?string $photo = null, ?string $ownerName = null, ?string $ownerPhone = null): bool {
+    public function addPet(?int $ownerId, string $name, string $type, string $breed, int $age, ?string $photo = null, ?string $ownerName = null, ?string $ownerPhone = null, ?string $dob = null): bool {
         $stmt = $this->db->conn->prepare(
-            "INSERT INTO pets (owner_id, name, type, breed, age, photo, owner_name, owner_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+            "INSERT INTO pets (owner_id, name, type, breed, age, dob, photo, owner_name, owner_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
         );
-        $stmt->bind_param("isssisss", $ownerId, $name, $type, $breed, $age, $photo, $ownerName, $ownerPhone);
+        $stmt->bind_param("isssissss", $ownerId, $name, $type, $breed, $age, $dob, $photo, $ownerName, $ownerPhone);
         $stmt->execute();
         $petId = $stmt->insert_id;
         $success = $stmt->affected_rows > 0;
@@ -23,7 +23,13 @@ class PetModel {
         if ($success) {
             require_once 'VaccinationModel.php';
             $vaccinationModel = new VaccinationModel();
-            $vaccinationModel->generateInitialSchedule($petId, $type, (int)$age);
+            
+            // If DOB is not provided, estimate it from age
+            if (empty($dob)) {
+                $dob = date('Y-m-d', strtotime("-{$age} years"));
+            }
+            
+            $vaccinationModel->generateInitialSchedule($petId, $type, $dob);
         }
         
         return $success;

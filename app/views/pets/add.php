@@ -75,19 +75,73 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                         <?php endif; ?>
                     </div>
 
-                    <!-- Pet Age -->
-                    <div class="form-group">
-                        <label for="age">Age (Years) <span class="required">*</span></label>
-                        <div class="input-wrap">
-                            <span class="icon" aria-hidden="true">🎂</span>
-                            <input type="number" id="age" name="age" placeholder="2" min="1"
-                                   value="<?php echo htmlspecialchars($old['age'] ?? ''); ?>"
-                                   class="<?php echo !empty($errors['age']) ? 'is-invalid' : ''; ?>" required>
+                    <!-- Pet Age & DOB -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="age">Age (Years) <span class="required">*</span></label>
+                            <div class="input-wrap">
+                                <span class="icon" aria-hidden="true">🎂</span>
+                                <input type="number" id="age" name="age" placeholder="2" min="0"
+                                       value="<?php echo htmlspecialchars($old['age'] ?? ''); ?>"
+                                       class="<?php echo !empty($errors['age']) ? 'is-invalid' : ''; ?>" required>
+                            </div>
                         </div>
-                        <?php if (!empty($errors['age'])): ?>
-                            <span class="field-error"><span aria-hidden="true">⚠</span> <?php echo htmlspecialchars($errors['age']); ?></span>
-                        <?php endif; ?>
+                        <div class="form-group">
+                            <label for="dob">Date of Birth</label>
+                            <div class="input-wrap">
+                                <span class="icon" aria-hidden="true">📅</span>
+                                <input type="date" id="dob" name="dob"
+                                       value="<?php echo htmlspecialchars($old['dob'] ?? ''); ?>">
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- Vaccination Section -->
+                    <div class="divider-line"><span>💉 Vaccination Status</span></div>
+                    
+                    <div class="form-group">
+                        <label for="vac_status">Current Vaccination Status</label>
+                        <div class="input-wrap">
+                            <span class="icon">🛡️</span>
+                            <select name="vac_status" id="vac_status" onchange="toggleVacHistory(this.value)">
+                                <option value="not_vaccinated">Not Vaccinated</option>
+                                <option value="partially_vaccinated">Partially Vaccinated</option>
+                                <option value="already_vaccinated">Already Vaccinated</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="vac-history-section" style="display: none; background: #fff5f8; padding: 25px; border-radius: 20px; margin-bottom: 25px; border: 1px solid #ffe4ef; animation: slideUp 0.4s ease;">
+                        <h3 style="font-size: 0.95rem; color: var(--pink-600); margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                            <span>📜</span> Last Vaccination Record
+                        </h3>
+                        <div class="form-group">
+                            <label>Vaccine Name</label>
+                            <input type="text" name="history_vac_name" placeholder="e.g. Rabies, DHPPi" style="padding-left: 15px;">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Date Given</label>
+                                <input type="date" name="history_vac_date">
+                            </div>
+                            <div class="form-group">
+                                <label>Next Due Date</label>
+                                <input type="date" name="history_vac_next">
+                            </div>
+                        </div>
+                        <p style="font-size: 0.8rem; color: var(--gray-500); margin: 0;">* Future booster schedules will be calculated from these dates.</p>
+                    </div>
+
+                    <script>
+                    function toggleVacHistory(status) {
+                        const section = document.getElementById('vac-history-section');
+                        if (status === 'already_vaccinated' || status === 'partially_vaccinated') {
+                            section.style.display = 'block';
+                        } else {
+                            section.style.display = 'none';
+                        }
+                    }
+                    </script>
 
                     <!-- Pet Photo (Optional) -->
                     <div class="form-group">
