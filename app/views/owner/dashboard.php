@@ -35,7 +35,33 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                             <a href="?url=appointment/create" class="btn-pill btn-sm">Book New +</a>
                         </div>
                     </div>
+
+                    <!-- Vaccination Card -->
+                    <div class="card" style="background: #fdf2f8; border: 2px solid #fce7f3;">
+                        <div class="card-body text-center">
+                            <span class="icon-lg">💉</span>
+                            <h3 class="text-gray-800">Vaccinations</h3>
+                            <p class="text-gray-600 mb-20">Protect your pet with boosters.</p>
+                            <a href="?url=appointment/create&type=vaccination" class="btn-pill btn-sm" style="background: var(--pink-600); color: white;">Book Now +</a>
+                        </div>
+                    </div>
                 </div>
+
+                <?php if (!empty($reminders)): ?>
+                <div class="alert alert-info" style="margin-top: 30px; background: #fff5f5; border-left: 5px solid #fecaca; color: #991b1b; padding: 20px;">
+                    <h3 style="margin-bottom: 10px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+                        <span>🔔</span> Health Reminders
+                    </h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <?php foreach ($reminders as $rem): ?>
+                            <li style="margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                                <span><strong><?php echo htmlspecialchars($rem['pet_name']); ?></strong>: <?php echo htmlspecialchars($rem['vaccine_name']); ?> is <?php echo ($rem['status'] === 'Overdue') ? '<span style="color:red;font-weight:bold;">Overdue</span>' : 'due soon'; ?> (<?php echo date('M d, Y', strtotime($rem['due_date'])); ?>)</span>
+                                <a href="?url=appointment/create&type=vaccination" class="btn-pill btn-sm" style="font-size: 0.7rem; padding: 4px 10px; background: #fff; border: 1px solid #fecaca; color: #991b1b;">Book Now</a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <?php endif; ?>
 
                 <div class="divider-line"></div>
 

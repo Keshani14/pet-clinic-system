@@ -18,7 +18,7 @@ $currentUrl = $_GET['url'] ?? 'home/index';
         <a href="?url=medical/index" class="sidebar-link <?php echo (strpos($currentUrl, 'medical/') === 0) ? 'active' : ''; ?>">
             Medical Records
         </a>
-        <a href="#" class="sidebar-link">
+        <a href="?url=vet/appointments" class="sidebar-link <?php echo ($currentUrl === 'vet/appointments') ? 'active' : ''; ?>">
             Appointments
         </a>
     </nav>

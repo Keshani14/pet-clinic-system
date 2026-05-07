@@ -15,8 +15,16 @@ class PetModel {
             "INSERT INTO pets (owner_id, name, type, breed, age, photo, owner_name, owner_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
         );
         $stmt->bind_param("isssisss", $ownerId, $name, $type, $breed, $age, $photo, $ownerName, $ownerPhone);
-        $success = $stmt->execute();
+        $stmt->execute();
+        $petId = $stmt->insert_id;
+        $success = $stmt->affected_rows > 0;
         $stmt->close();
+
+        if ($success) {
+            require_once 'VaccinationModel.php';
+            $vaccinationModel = new VaccinationModel();
+            $vaccinationModel->generateInitialSchedule($petId, $type, (int)$age);
+        }
         
         return $success;
     }

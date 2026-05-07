@@ -1,7 +1,7 @@
 <?php
 $pageTitle = 'Pet Roster — Pet Clinic';
 $userRole = Auth::role();
-$hasSidebar = in_array($userRole, ['vet', 'admin']);
+$hasSidebar = in_array($userRole, ['vet', 'admin', 'owner', 'nurse']);
 
 if ($hasSidebar) {
     $bodyClass = 'dashboard-layout';
@@ -14,14 +14,18 @@ require_once __DIR__ . '/../../views/layouts/header.php';
     <?php 
     if ($userRole === 'vet') {
         require_once __DIR__ . '/../../views/layouts/vet_sidebar.php';
-    } else {
+    } elseif ($userRole === 'admin') {
         require_once __DIR__ . '/../../views/layouts/admin_sidebar.php';
+    } elseif ($userRole === 'nurse') {
+        require_once __DIR__ . '/../../views/layouts/nurse_sidebar.php';
+    } else {
+        require_once __DIR__ . '/../../views/layouts/owner_sidebar.php';
     }
     ?>
     <main class="main-content">
 <?php endif; ?>
 
-<div class="<?php echo $hasSidebar ? 'card--xl' : 'card card--lg'; ?>">
+<div class="card <?php echo $hasSidebar ? 'card--xl' : 'card--lg'; ?>">
     <?php if (!$hasSidebar): ?>
     <div class="card-header">
         <span class="paw-icon" aria-hidden="true">📋</span>
@@ -64,7 +68,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                                 <th>Owner</th>
                                 <th>Phone</th>
                             <?php endif; ?>
-                            <th class="text-right">Actions</th>
+                            <th style="text-align: center !important;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -95,10 +99,15 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                                         ?>
                                     </td>
                                 <?php endif; ?>
-                                <td class="text-right">
-                                    <a href="?url=medical/viewHistory&pet_id=<?php echo $pet['id']; ?>" class="btn-pill btn-sm btn-dark">History 🏥</a>
-                                    <a href="?url=pet/edit&id=<?php echo $pet['id']; ?>" class="btn-pill btn-sm">Edit ✏️</a>
-                                    <a href="?url=pet/delete&id=<?php echo $pet['id']; ?>" class="btn-secondary btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this pet?');">Delete 🗑️</a>
+                                <td class="text-center">
+                                    <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                                        <?php if (!in_array(Auth::role(), ['nurse', 'vet'])): ?>
+                                            <a href="?url=appointment/create&pet_id=<?php echo $pet['id']; ?>" class="btn-pill btn-sm btn-approve">Book 🗓️</a>
+                                        <?php endif; ?>
+                                        <a href="?url=medical/viewHistory&pet_id=<?php echo $pet['id']; ?>" class="btn-pill btn-sm btn-dark">History 🏥</a>
+                                        <a href="?url=pet/edit&id=<?php echo $pet['id']; ?>" class="btn-pill btn-sm">Edit ✏️</a>
+                                        <a href="?url=pet/delete&id=<?php echo $pet['id']; ?>" class="btn-secondary btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this pet?');">Delete 🗑️</a>
+                                    </div>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
