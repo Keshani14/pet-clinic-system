@@ -170,9 +170,14 @@ class PetController extends Controller {
         $medicalModel = $this->model('MedicalRecordModel');
         $history = $medicalModel->getHistoryByPet((int)$id);
 
+        // Fetch vaccination history
+        $vaccinationModel = $this->model('VaccinationModel');
+        $vaccinations = $vaccinationModel->getHistory((int)$id);
+
         $this->view('pets/view', [
             'pet' => $pet,
-            'history' => $history
+            'history' => $history,
+            'vaccinations' => $vaccinations
         ]);
     }
 

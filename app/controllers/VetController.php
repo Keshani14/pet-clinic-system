@@ -21,7 +21,7 @@ class VetController extends Controller {
 
         $todayDate = date('Y-m-d');
         foreach ($allAppts as $appt) {
-            if ($appt['status'] === 'completed' && date('Y-m-d', strtotime($appt['appointment_date'])) === $todayDate) {
+            if ($appt['status'] === 'completed' && !empty($appt['completed_at']) && date('Y-m-d', strtotime($appt['completed_at'])) === $todayDate) {
                 $stats['completed_today']++;
             }
         }
@@ -84,12 +84,27 @@ class VetController extends Controller {
                     
                     $vitalsStr = $nurseNote ? "W: {$nurseNote['weight']}kg, T: {$nurseNote['temperature']}C" : "No vitals";
 
+                    // Record Vaccination if applicable
+                    if (($_POST['appointment_type'] ?? '') === 'vaccination') {
+                        $vacModel = $this->model('VaccinationModel');
+                        $vacModel->recordVaccination([
+                            'appointment_id' => $id,
+                            'pet_id' => $appt['pet_id'],
+                            'vaccine_name' => $_POST['vaccine_name'] ?? 'General Vaccine',
+                            'date_given' => $_POST['date_given'] ?? date('Y-m-d'),
+                            'next_due_date' => $_POST['next_due_date'] ?? null,
+                            'notes' => $_POST['diagnosis'] ?? '',
+                            'batch_number' => $_POST['batch_number'] ?? '',
+                            'vet_id' => $_SESSION['user_id']
+                        ]);
+                    }
+
                     $mrModel->addRecord(
                         $appt['pet_id'],
                         $_SESSION['user_id'],
                         date('Y-m-d'),
-                        $_POST['diagnosis'] ?? 'No diagnosis',
-                        'Consultation',
+                        ($_POST['appointment_type'] === 'vaccination' ? 'Vaccination: ' . $_POST['vaccine_name'] : ($_POST['diagnosis'] ?? 'No diagnosis')),
+                        ($_POST['appointment_type'] === 'vaccination' ? 'Vaccination' : 'Consultation'),
                         $_POST['prescription'] ?? '',
                         'Vitals: ' . $vitalsStr . '. Symptoms: ' . ($nurseNote['symptoms'] ?? 'None')
                     );

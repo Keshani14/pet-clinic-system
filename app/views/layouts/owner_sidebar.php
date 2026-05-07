@@ -15,14 +15,14 @@ $currentUrl = $_GET['url'] ?? 'home/index';
         <a href="?url=pet/listPets" class="sidebar-link <?php echo ($currentUrl === 'pet/listPets') ? 'active' : ''; ?>">
             My Pets 🐾
         </a>
+        <a href="?url=owner/vaccinations" class="sidebar-link <?php echo (strpos($currentUrl, 'owner/vaccinations') === 0) ? 'active' : ''; ?>">
+            Vaccinations 💉
+        </a>
         <a href="?url=appointment/myAppointments" class="sidebar-link <?php echo (strpos($currentUrl, 'appointment/') === 0) ? 'active' : ''; ?>">
             Appointments 🗓️
         </a>
         <a href="?url=tip/index" class="sidebar-link <?php echo ($currentUrl === 'tip/index') ? 'active' : ''; ?>">
             Health Tips 💡
-        </a>
-        <a href="?url=vaccination/index" class="sidebar-link <?php echo ($currentUrl === 'vaccination/index') ? 'active' : ''; ?>">
-            Vaccinations 💉
         </a>
     </nav>
     

@@ -97,7 +97,11 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                                 <?php foreach ($appointments as $appt): ?>
                                     <tr>
                                         <td>
-                                            <strong class="text-pink-bold" style="font-size: 1.1rem;"><?php echo htmlspecialchars($appt['pet_name_display']); ?></strong><br>
+                                            <strong class="text-pink-bold" style="font-size: 1.1rem;"><?php echo htmlspecialchars($appt['pet_name_display']); ?></strong>
+                                            <?php if (($appt['appointment_type'] ?? 'general') === 'vaccination'): ?>
+                                                <span class="badge" style="font-size: 0.65rem; padding: 2px 6px; background: #e0f2fe; color: #0369a1; vertical-align: middle; margin-left: 5px;">Vaccination 💉</span>
+                                            <?php endif; ?>
+                                            <br>
                                             <span class="text-gray-600">Owner: <?php echo htmlspecialchars($appt['owner_name']); ?></span>
                                         </td>
                                         <td>
