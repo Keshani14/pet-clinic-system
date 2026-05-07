@@ -31,8 +31,12 @@ class PetController extends Controller {
             $type       = trim(htmlspecialchars($_POST['type'] ?? ''));
             $breed      = trim(htmlspecialchars($_POST['breed'] ?? ''));
             $age        = (int) ($_POST['age'] ?? 0);
+            $dob        = $_POST['dob'] ?? null;
             $ownerName  = trim(htmlspecialchars($_POST['owner_name'] ?? ''));
             $ownerPhone = trim(htmlspecialchars($_POST['owner_phone'] ?? ''));
+
+            // Vaccination data
+            $vacStatus  = $_POST['vac_status'] ?? 'not_vaccinated';
 
             // Validation
             if (empty($name)) {
@@ -43,9 +47,6 @@ class PetController extends Controller {
             }
             if (empty($breed)) {
                 $errors['breed'] = 'Breed is required.';
-            }
-            if ($age <= 0) {
-                $errors['age'] = 'Please enter a valid age.';
             }
 
             if (empty($errors)) {
@@ -75,16 +76,30 @@ class PetController extends Controller {
 
                 if (empty($errors)) {
                     $petModel = $this->model('PetModel');
+                    $vacModel = $this->model('VaccinationModel');
                     
                     $ownerId = null;
-                    // If the logged-in user is an owner, they own this pet.
                     if (Auth::role() === 'owner') {
                         $ownerId = $_SESSION['user_id'];
                     }
                     
-                    $added = $petModel->addPet($ownerId, $name, $type, $breed, $age, $photoPath, $ownerName, $ownerPhone);
+                    $petId = $petModel->addPet($ownerId, $name, $type, $breed, $age, $photoPath, $ownerName, $ownerPhone, $dob);
                     
-                    if ($added) {
+                    if ($petId) {
+                        // Handle "Already Vaccinated" history
+                        if ($vacStatus === 'already_vaccinated' || $vacStatus === 'partially_vaccinated') {
+                            if (!empty($_POST['history_vac_name'])) {
+                                $vacModel->addImportedHistory([
+                                    'pet_id' => $petId,
+                                    'vaccine_name' => $_POST['history_vac_name'],
+                                    'date_given' => $_POST['history_vac_date'] ?? date('Y-m-d'),
+                                    'next_due_date' => $_POST['history_vac_next'] ?? null,
+                                    'notes' => 'Imported during registration',
+                                    'uploaded_document' => null // Document upload logic can be added here
+                                ]);
+                            }
+                        }
+
                         $success = true;
                         $_SESSION['flash_success'] = '🐾 Pet added successfully!';
                         header('Location: ?url=pet/listPets');
@@ -170,14 +185,16 @@ class PetController extends Controller {
         $medicalModel = $this->model('MedicalRecordModel');
         $history = $medicalModel->getHistoryByPet((int)$id);
 
-        // Fetch vaccination history
+        // Fetch vaccination history (full)
         $vaccinationModel = $this->model('VaccinationModel');
-        $vaccinations = $vaccinationModel->getHistory((int)$id);
+        $vaccinations = $vaccinationModel->getFullHistory((int)$id);
+        $schedules = $vaccinationModel->getSchedulesByPet((int)$id);
 
         $this->view('pets/view', [
             'pet' => $pet,
             'history' => $history,
-            'vaccinations' => $vaccinations
+            'vaccinations' => $vaccinations,
+            'schedules' => $schedules
         ]);
     }
 

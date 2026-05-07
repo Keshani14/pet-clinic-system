@@ -138,35 +138,106 @@ class VaccinationModel {
     }
 
     /**
-     * Generate initial schedule based on pet type and age.
+     * Generate initial schedule based on pet type and DOB from templates.
      */
-    public function generateInitialSchedule(int $petId, string $type, int $ageYears): void {
-        $today = date('Y-m-d');
+    public function generateInitialSchedule(int $petId, string $type, string $dob): void {
         $type = strtolower(trim($type));
         
-        $schedules = [];
+        // Fetch templates for this pet type
+        $stmt = $this->db->conn->prepare("SELECT * FROM vaccine_templates WHERE LOWER(pet_type) = ? AND is_active = 1");
+        $stmt->bind_param("s", $type);
+        $stmt->execute();
+        $templates = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
 
-        if (strpos($type, 'dog') !== false || strpos($type, 'canine') !== false) {
-            $schedules[] = ['name' => 'Rabies', 'offset' => '+1 year'];
-            $schedules[] = ['name' => 'DHPP (Distemper/Parvo)', 'offset' => '+3 years'];
-            if ($ageYears < 1) {
-                $schedules[] = ['name' => 'Puppy Booster 1', 'offset' => '+1 month'];
-            }
-        } elseif (strpos($type, 'cat') !== false || strpos($type, 'feline') !== false) {
-            $schedules[] = ['name' => 'Rabies', 'offset' => '+1 year'];
-            $schedules[] = ['name' => 'FVRCP', 'offset' => '+3 years'];
-        } else {
-            $schedules[] = ['name' => 'General Wellness Check', 'offset' => '+6 months'];
+        // If no specific templates, try 'general'
+        if (empty($templates)) {
+            $stmt = $this->db->conn->prepare("SELECT * FROM vaccine_templates WHERE LOWER(pet_type) = 'general' AND is_active = 1");
+            $stmt->execute();
+            $templates = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+            $stmt->close();
         }
 
-        foreach ($schedules as $s) {
+        foreach ($templates as $t) {
+            // Calculate due date: DOB + recommended_age_weeks
+            $dueDate = date('Y-m-d', strtotime("+{$t['recommended_age_weeks']} weeks", strtotime($dob)));
+            
+            // Don't schedule if it was supposed to happen long ago (e.g., > 1 year ago) 
+            // unless it's a recurring booster.
+            
             $this->addSchedule([
                 'pet_id' => $petId,
-                'vaccine_name' => $s['name'],
-                'due_date' => date('Y-m-d', strtotime($s['offset'], strtotime($today))),
+                'vaccine_template_id' => $t['id'],
+                'vaccine_name' => $t['vaccine_name'],
+                'due_date' => $dueDate,
                 'status' => 'Upcoming'
             ]);
         }
+    }
+
+    /**
+     * Add a record to pet vaccination history (imported records).
+     */
+    public function addImportedHistory(array $data): bool {
+        $stmt = $this->db->conn->prepare(
+            "INSERT INTO pet_vaccination_history (pet_id, vaccine_name, date_given, next_due_date, notes, uploaded_document) 
+             VALUES (?, ?, ?, ?, ?, ?)"
+        );
+        $stmt->bind_param(
+            "isssss",
+            $data['pet_id'],
+            $data['vaccine_name'],
+            $data['date_given'],
+            $data['next_due_date'],
+            $data['notes'],
+            $data['uploaded_document']
+        );
+        $success = $stmt->execute();
+        $stmt->close();
+        
+        if ($success && !empty($data['next_due_date'])) {
+            // Mark similar upcoming schedules as completed
+            $this->markAsCompleted($data['pet_id'], $data['vaccine_name']);
+            
+            // Add the next booster schedule
+            $this->addSchedule([
+                'pet_id' => $data['pet_id'],
+                'vaccine_name' => $data['vaccine_name'],
+                'due_date' => $data['next_due_date'],
+                'status' => 'Upcoming'
+            ]);
+        }
+        
+        return $success;
+    }
+
+    /**
+     * Get all history (clinical + imported).
+     */
+    public function getFullHistory(int $petId): array {
+        $clinical = $this->getHistory($petId);
+        
+        $stmt = $this->db->conn->prepare("SELECT * FROM pet_vaccination_history WHERE pet_id = ? ORDER BY date_given DESC");
+        $stmt->bind_param("i", $petId);
+        $stmt->execute();
+        $imported = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        
+        foreach ($imported as &$imp) {
+            $imp['source'] = 'Imported';
+            $imp['vet_name'] = 'Owner Provided';
+        }
+        
+        foreach ($clinical as &$clin) {
+            $clin['source'] = 'Clinic';
+        }
+        
+        $combined = array_merge($clinical, $imported);
+        usort($combined, function($a, $b) {
+            return strtotime($b['date_given']) - strtotime($a['date_given']);
+        });
+        
+        return $combined;
     }
 
     /**

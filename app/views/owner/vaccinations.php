@@ -89,7 +89,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                                                     <th>Vaccine</th>
                                                     <th>Date Given</th>
                                                     <th>Next Due</th>
-                                                    <th>Administered By</th>
+                                                    <th>Source / Admin By</th>
                                                     <th>Notes</th>
                                                 </tr>
                                             </thead>
@@ -102,7 +102,15 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                                                         </td>
                                                         <td><?php echo date('M d, Y', strtotime($h['date_given'])); ?></td>
                                                         <td style="color: var(--pink-600); font-weight: 500;"><?php echo $h['next_due_date'] ? date('M d, Y', strtotime($h['next_due_date'])) : '-'; ?></td>
-                                                        <td>Dr. <?php echo htmlspecialchars($h['vet_name']); ?></td>
+                                                        <td>
+                                                            <?php if ($h['source'] === 'Clinic'): ?>
+                                                                <span class="badge" style="background: #ecfdf5; color: #059669; font-size: 0.7rem;">🏥 Clinic</span><br>
+                                                                <small class="text-gray-500">Dr. <?php echo htmlspecialchars($h['vet_name']); ?></small>
+                                                            <?php else: ?>
+                                                                <span class="badge" style="background: #fdf2f8; color: #db2777; font-size: 0.7rem;">📜 Imported</span><br>
+                                                                <small class="text-gray-500"><?php echo htmlspecialchars($h['vet_name']); ?></small>
+                                                            <?php endif; ?>
+                                                        </td>
                                                         <td><small class="text-gray-600"><?php echo htmlspecialchars($h['notes'] ?? '-'); ?></small></td>
                                                     </tr>
                                                 <?php endforeach; ?>

@@ -34,7 +34,7 @@ class OwnerController extends Controller {
         $allSchedules = [];
 
         foreach ($myPets as $pet) {
-            $fullHistory[$pet['id']] = $vaccinationModel->getHistory($pet['id']);
+            $fullHistory[$pet['id']] = $vaccinationModel->getFullHistory($pet['id']);
             $allSchedules[$pet['id']] = $vaccinationModel->getSchedulesByPet($pet['id']);
         }
 

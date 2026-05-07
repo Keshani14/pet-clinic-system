@@ -14,33 +14,27 @@ class VaccinationController extends Controller {
         $myPets = $petModel->getPetsByOwner($_SESSION['user_id']);
 
         // Vaccination schedule data (Core and Non-Core)
-        $vaccineGuide = [
-            'Dog' => [
-                'core' => [
-                    ['name' => 'Rabies', 'desc' => 'Mandatory. Prevents fatal viral disease.', 'frequency' => 'Every 1-3 years'],
-                    ['name' => 'DHPP', 'desc' => 'Distemper, Hepatitis, Parainfluenza, Parvovirus.', 'frequency' => 'Every 3 years'],
-                ],
-                'non_core' => [
-                    ['name' => 'Bordetella', 'desc' => 'Prevents Kennel Cough. Recommended for social dogs.', 'frequency' => 'Annually'],
-                    ['name' => 'Leptospirosis', 'desc' => 'Prevents bacterial disease from wildlife/water.', 'frequency' => 'Annually'],
-                ]
-            ],
-            'Cat' => [
-                'core' => [
-                    ['name' => 'Rabies', 'desc' => 'Mandatory. Prevents fatal viral disease.', 'frequency' => 'Every 1-3 years'],
-                    ['name' => 'FVRCP', 'desc' => 'Rhinotracheitis, Calicivirus, Panleukopenia.', 'frequency' => 'Every 3 years'],
-                ],
-                'non_core' => [
-                    ['name' => 'FeLV', 'desc' => 'Feline Leukemia. Recommended for outdoor cats.', 'frequency' => 'Annually'],
-                ]
-            ],
-            'Other' => [
-                'core' => [
-                    ['name' => 'General Checkup', 'desc' => 'Basic health screening and parasite control.', 'frequency' => 'Bi-annually'],
-                ],
-                'non_core' => []
-            ]
-        ];
+        // Fetch vaccine guide from templates
+        $db = new Database();
+        $res = $db->conn->query("SELECT pet_type, vaccine_name, description FROM vaccine_templates WHERE is_active = 1");
+        $templates = $res->fetch_all(MYSQLI_ASSOC);
+        
+        $vaccineGuide = [];
+        foreach ($templates as $t) {
+            $guideType = $t['pet_type'];
+            if (!isset($vaccineGuide[$guideType])) {
+                $vaccineGuide[$guideType] = ['core' => [], 'non_core' => []];
+            }
+            $vaccineGuide[$guideType]['core'][] = [
+                'name' => $t['vaccine_name'],
+                'desc' => $t['description'],
+                'frequency' => 'Based on template'
+            ];
+        }
+        
+        if (empty($vaccineGuide)) {
+            $vaccineGuide = ['Other' => ['core' => [], 'non_core' => []]];
+        }
 
         $this->view('vaccinations/index', [
             'myPets' => $myPets,

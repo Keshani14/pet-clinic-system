@@ -21,6 +21,9 @@ $currentUrl = $_GET['url'] ?? 'home/index';
         <a href="?url=medical/index" class="sidebar-link <?php echo ($currentUrl === 'medical/index') ? 'active' : ''; ?>">
             Clinic Records
         </a>
+        <a href="?url=vaccinetemplate/index" class="sidebar-link <?php echo ($currentUrl === 'vaccinetemplate/index') ? 'active' : ''; ?>">
+            Vaccine Templates 🛡️
+        </a>
     </nav>
     
     <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--pink-100);">

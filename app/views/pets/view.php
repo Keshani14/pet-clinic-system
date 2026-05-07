@@ -79,7 +79,43 @@ require_once __DIR__ . '/../../views/layouts/header.php';
 
                 <div class="mt-40">
                     <h2 class="text-gray-800 mb-20" style="display: flex; align-items: center; gap: 10px;">
-                        <span>💉</span> Vaccination History
+                        <span>📅</span> Upcoming Vaccination Schedule
+                    </h2>
+                    <?php if (empty($schedules)): ?>
+                        <p class="text-gray-500" style="font-style: italic;">No upcoming vaccinations scheduled.</p>
+                    <?php else: ?>
+                        <div class="table-responsive mb-30">
+                            <table class="table">
+                                <thead style="background: #fdf2f8;">
+                                    <tr>
+                                        <th>Vaccine</th>
+                                        <th>Due Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($schedules as $s): ?>
+                                        <?php if ($s['status'] !== 'Completed'): ?>
+                                        <tr>
+                                            <td style="font-weight: 600;"><?php echo htmlspecialchars($s['vaccine_name']); ?></td>
+                                            <td><?php echo date('M d, Y', strtotime($s['due_date'])); ?></td>
+                                            <td>
+                                                <?php if ($s['status'] === 'Overdue'): ?>
+                                                    <span class="badge" style="background: #fee2e2; color: #b91c1c;">Overdue</span>
+                                                <?php else: ?>
+                                                    <span class="badge" style="background: #fef3c7; color: #92400e;">Upcoming</span>
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php endif; ?>
+
+                    <h2 class="text-gray-800 mb-20" style="display: flex; align-items: center; gap: 10px;">
+                        <span>💉</span> Immunization History
                     </h2>
                     <?php if (empty($vaccinations)): ?>
                         <div class="empty-state" style="background: #fdf2f8;">
@@ -93,7 +129,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                                         <th>Vaccine</th>
                                         <th>Date Given</th>
                                         <th>Next Due</th>
-                                        <th>Vet</th>
+                                        <th>Source / Admin</th>
                                         <th>Notes</th>
                                     </tr>
                                 </thead>
@@ -103,7 +139,15 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                                             <td style="font-weight: 700; color: #059669;"><?php echo htmlspecialchars($v['vaccine_name']); ?></td>
                                             <td><?php echo date('M d, Y', strtotime($v['date_given'])); ?></td>
                                             <td class="text-pink-bold"><?php echo $v['next_due_date'] ? date('M d, Y', strtotime($v['next_due_date'])) : '-'; ?></td>
-                                            <td>Dr. <?php echo htmlspecialchars($v['vet_name']); ?></td>
+                                            <td>
+                                                <?php if (($v['source'] ?? '') === 'Clinic'): ?>
+                                                    <span class="badge" style="background: #ecfdf5; color: #059669; font-size: 0.7rem;">🏥 Clinic</span><br>
+                                                    <small>Dr. <?php echo htmlspecialchars($v['vet_name']); ?></small>
+                                                <?php else: ?>
+                                                    <span class="badge" style="background: #fdf2f8; color: #db2777; font-size: 0.7rem;">📜 Imported</span><br>
+                                                    <small><?php echo htmlspecialchars($v['vet_name'] ?? 'Owner Provided'); ?></small>
+                                                <?php endif; ?>
+                                            </td>
                                             <td><small><?php echo htmlspecialchars($v['notes'] ?? '-'); ?></small></td>
                                         </tr>
                                     <?php endforeach; ?>
