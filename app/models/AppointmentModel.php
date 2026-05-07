@@ -108,14 +108,93 @@ class AppointmentModel {
     }
 
     /**
-     * Update appointment status.
+     * Update appointment status with logging.
      */
-    public function updateStatus(int $id, string $status): bool {
+    public function updateStatus(int $id, string $status, ?int $updatedBy = null): bool {
+        // Fetch current status for logging
+        $currentAppt = $this->getAppointmentById($id);
+        $oldStatus = $currentAppt['status'] ?? null;
+        
         $stmt = $this->db->conn->prepare("UPDATE appointments SET status = ? WHERE id = ?");
         $stmt->bind_param("si", $status, $id);
         $success = $stmt->execute();
         $stmt->close();
+
+        if ($success && $updatedBy) {
+            // Log the change
+            $stmtLog = $this->db->conn->prepare(
+                "INSERT INTO status_logs (appointment_id, old_status, new_status, updated_by) VALUES (?, ?, ?, ?)"
+            );
+            $stmtLog->bind_param("issi", $id, $oldStatus, $status, $updatedBy);
+            $stmtLog->execute();
+            $stmtLog->close();
+            
+            // Handle specific timestamps
+            if ($status === 'checked-in') {
+                $this->db->conn->query("UPDATE appointments SET checked_in_at = NOW(), nurse_id = $updatedBy WHERE id = $id");
+            } elseif ($status === 'ready') {
+                $this->db->conn->query("UPDATE appointments SET ready_at = NOW() WHERE id = $id");
+            } elseif ($status === 'in-consultation') {
+                $this->db->conn->query("UPDATE appointments SET consultation_started_at = NOW() WHERE id = $id");
+            }
+        }
+        
         return $success;
+    }
+
+    /**
+     * Search and Filter appointments (for Nurse Dashboard).
+     */
+    public function searchAppointments(?string $query = null, ?string $status = null, ?string $date = null): array {
+        $sql = "SELECT a.*, p.name as pet_name_orig, p.type as pet_type, 
+                       u.first_name as owner_first, u.last_name as owner_last,
+                       nn.weight, nn.temperature, nn.symptoms, nn.notes as nurse_notes
+                FROM appointments a
+                LEFT JOIN pets p ON a.pet_id = p.id
+                JOIN users u ON a.owner_id = u.id
+                LEFT JOIN nurse_notes nn ON a.id = nn.appointment_id
+                WHERE 1=1";
+        
+        $params = [];
+        $types = "";
+
+        if ($query) {
+            $sql .= " AND (p.name LIKE ? OR u.first_name LIKE ? OR u.last_name LIKE ?)";
+            $q = "%$query%";
+            array_push($params, $q, $q, $q);
+            $types .= "sss";
+        }
+
+        if ($status && $status !== 'all') {
+            $sql .= " AND a.status = ?";
+            array_push($params, $status);
+            $types .= "s";
+        }
+
+        if ($date) {
+            $sql .= " AND DATE(a.appointment_date) = ?";
+            array_push($params, $date);
+            $types .= "s";
+        }
+
+        $sql .= " ORDER BY a.appointment_date ASC";
+
+        $stmt = $this->db->conn->prepare($sql);
+        if (!empty($params)) {
+            $stmt->bind_param($types, ...$params);
+        }
+        
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $appts = [];
+        while ($row = $result->fetch_assoc()) {
+            $row['pet_name_display'] = $row['pet_name_orig'] ?? $row['pet_name'];
+            $row['display_type'] = $row['pet_type'] ?? 'Unknown';
+            $row['owner_name'] = $row['owner_first'] . ' ' . $row['owner_last'];
+            $appts[] = $row;
+        }
+        $stmt->close();
+        return $appts;
     }
 
     /**
@@ -150,10 +229,12 @@ class AppointmentModel {
     public function getAppointmentById(int $id): ?array {
         $stmt = $this->db->conn->prepare(
             "SELECT a.*, p.name as pet_name_orig, p.type as pet_type, 
-                    u.first_name as owner_first, u.last_name as owner_last
+                    u.first_name as owner_first, u.last_name as owner_last,
+                    nn.weight, nn.temperature, nn.symptoms, nn.notes as nurse_notes
              FROM appointments a
              LEFT JOIN pets p ON a.pet_id = p.id
              JOIN users u ON a.owner_id = u.id
+             LEFT JOIN nurse_notes nn ON a.id = nn.appointment_id
              WHERE a.id = ?"
         );
         $stmt->bind_param("i", $id);

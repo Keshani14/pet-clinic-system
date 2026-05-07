@@ -64,8 +64,9 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="text-gray-600" style="max-width: 250px; font-style: italic; font-size: 0.9rem;">
-                                            "<?php echo htmlspecialchars($appt['vitals_notes'] ?? 'No notes'); ?>"
+                                        <div class="text-gray-600" style="max-width: 300px; font-size: 0.85rem;">
+                                            <strong>Symptoms:</strong> <?php echo htmlspecialchars($appt['symptoms'] ?? 'None'); ?><br>
+                                            <strong>Note:</strong> <span style="font-style: italic;">"<?php echo htmlspecialchars($appt['nurse_notes'] ?? 'No extra notes'); ?>"</span>
                                         </div>
                                     </td>
                                     <td class="text-right">

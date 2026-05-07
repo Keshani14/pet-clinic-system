@@ -9,16 +9,18 @@ class VetController extends Controller {
 
     public function dashboard() {
         $appointmentModel = $this->model('AppointmentModel');
+        // Show all patients with status 'ready', regardless of scheduled date
+        $waitingList = $appointmentModel->searchAppointments(null, 'ready', null);
+        
         $allAppts = $appointmentModel->getAllAppointments();
         
         $stats = [
-            'waiting' => 0,
+            'waiting' => count($waitingList),
             'completed_today' => 0
         ];
 
         $todayDate = date('Y-m-d');
         foreach ($allAppts as $appt) {
-            if ($appt['status'] === 'ready') $stats['waiting']++;
             if ($appt['status'] === 'completed' && date('Y-m-d', strtotime($appt['appointment_date'])) === $todayDate) {
                 $stats['completed_today']++;
             }
@@ -27,7 +29,7 @@ class VetController extends Controller {
         $data = [
             'name'  => Auth::name(),
             'stats' => $stats,
-            'waiting_list' => array_filter($allAppts, function($a) { return $a['status'] === 'ready'; })
+            'waiting_list' => $waitingList
         ];
         $this->view('vet/dashboard', $data);
     }
@@ -37,18 +39,22 @@ class VetController extends Controller {
      */
     public function consult($id) {
         $appointmentModel = $this->model('AppointmentModel');
+        $nurseNoteModel = $this->model('NurseNoteModel');
+        
         $appointment = $appointmentModel->getAppointmentById((int)$id);
+        $nurseNote = $nurseNoteModel->getNoteByAppointment((int)$id);
 
         if (!$appointment) {
             header('Location: ?url=vet/dashboard');
             exit;
         }
 
-        // Set status to in-consultation
-        $appointmentModel->updateStatus((int)$id, 'in-consultation');
+        // Set status to in-consultation and log it
+        $appointmentModel->updateStatus((int)$id, 'in-consultation', $_SESSION['user_id']);
 
         $this->view('vet/consult', [
-            'appointment' => $appointment
+            'appointment' => $appointment,
+            'nurseNote' => $nurseNote
         ]);
     }
 
@@ -58,6 +64,11 @@ class VetController extends Controller {
     public function complete($id) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $appointmentModel = $this->model('AppointmentModel');
+            
+            // Log completion status
+            $appointmentModel->updateStatus((int)$id, 'completed', $_SESSION['user_id']);
+            
+            // Update consultation details
             $success = $appointmentModel->updateConsultation((int)$id, [
                 'diagnosis' => $_POST['diagnosis'] ?? '',
                 'prescription' => $_POST['prescription'] ?? ''
@@ -68,6 +79,11 @@ class VetController extends Controller {
                 $appt = $appointmentModel->getAppointmentById((int)$id);
                 if ($appt && !empty($appt['pet_id'])) {
                     $mrModel = $this->model('MedicalRecordModel');
+                    $nurseNoteModel = $this->model('NurseNoteModel');
+                    $nurseNote = $nurseNoteModel->getNoteByAppointment((int)$id);
+                    
+                    $vitalsStr = $nurseNote ? "W: {$nurseNote['weight']}kg, T: {$nurseNote['temperature']}C" : "No vitals";
+
                     $mrModel->addRecord(
                         $appt['pet_id'],
                         $_SESSION['user_id'],
@@ -75,7 +91,7 @@ class VetController extends Controller {
                         $_POST['diagnosis'] ?? 'No diagnosis',
                         'Consultation',
                         $_POST['prescription'] ?? '',
-                        'Vitals: W=' . ($appt['weight'] ?? '-') . ', T=' . ($appt['temperature'] ?? '-')
+                        'Vitals: ' . $vitalsStr . '. Symptoms: ' . ($nurseNote['symptoms'] ?? 'None')
                     );
                 }
 

@@ -16,19 +16,25 @@ require_once __DIR__ . '/../../views/layouts/header.php';
             
             <div class="card-body">
                 <!-- Vitals Summary Box -->
-                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 30px; display: flex; gap: 40px;">
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 30px; display: flex; gap: 40px; flex-wrap: wrap;">
                     <div>
                         <small class="text-gray-500" style="display: block; margin-bottom: 4px; text-transform: uppercase; font-weight: 700;">Weight</small>
-                        <span style="font-size: 1.5rem; font-weight: 800; color: var(--gray-800);"><?php echo htmlspecialchars($appointment['weight'] ?? '-'); ?> <small style="font-size: 0.9rem;">kg</small></span>
+                        <span style="font-size: 1.5rem; font-weight: 800; color: var(--gray-800);"><?php echo htmlspecialchars($nurseNote['weight'] ?? '-'); ?> <small style="font-size: 0.9rem;">kg</small></span>
                     </div>
                     <div>
                         <small class="text-gray-500" style="display: block; margin-bottom: 4px; text-transform: uppercase; font-weight: 700;">Temperature</small>
-                        <span style="font-size: 1.5rem; font-weight: 800; color: var(--gray-800);"><?php echo htmlspecialchars($appointment['temperature'] ?? '-'); ?> <small style="font-size: 0.9rem;">°C</small></span>
+                        <span style="font-size: 1.5rem; font-weight: 800; color: var(--gray-800);"><?php echo htmlspecialchars($nurseNote['temperature'] ?? '-'); ?> <small style="font-size: 0.9rem;">°C</small></span>
                     </div>
-                    <div style="flex: 1;">
+                    <div style="flex: 1; min-width: 250px;">
+                        <small class="text-gray-500" style="display: block; margin-bottom: 4px; text-transform: uppercase; font-weight: 700;">Symptoms</small>
+                        <p class="text-gray-700" style="font-style: italic; margin: 0;">"<?php echo htmlspecialchars($nurseNote['symptoms'] ?? 'None recorded'); ?>"</p>
+                    </div>
+                    <?php if (!empty($nurseNote['notes'])): ?>
+                    <div style="flex: 1; min-width: 250px;">
                         <small class="text-gray-500" style="display: block; margin-bottom: 4px; text-transform: uppercase; font-weight: 700;">Nurse Notes</small>
-                        <p class="text-gray-700" style="font-style: italic; margin: 0;">"<?php echo htmlspecialchars($appointment['vitals_notes'] ?? 'No special observations recorded.'); ?>"</p>
+                        <p class="text-gray-700" style="font-size: 0.9rem; margin: 0;"><?php echo nl2br(htmlspecialchars($nurseNote['notes'])); ?></p>
                     </div>
+                    <?php endif; ?>
                 </div>
 
                 <form action="?url=vet/complete/<?php echo $appointment['id']; ?>" method="POST" class="modern-form">

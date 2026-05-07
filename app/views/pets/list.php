@@ -101,7 +101,9 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                                 <?php endif; ?>
                                 <td class="text-center">
                                     <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-                                        <a href="?url=appointment/create&pet_id=<?php echo $pet['id']; ?>" class="btn-pill btn-sm btn-approve">Book 🗓️</a>
+                                        <?php if (!in_array(Auth::role(), ['nurse', 'vet'])): ?>
+                                            <a href="?url=appointment/create&pet_id=<?php echo $pet['id']; ?>" class="btn-pill btn-sm btn-approve">Book 🗓️</a>
+                                        <?php endif; ?>
                                         <a href="?url=medical/viewHistory&pet_id=<?php echo $pet['id']; ?>" class="btn-pill btn-sm btn-dark">History 🏥</a>
                                         <a href="?url=pet/edit&id=<?php echo $pet['id']; ?>" class="btn-pill btn-sm">Edit ✏️</a>
                                         <a href="?url=pet/delete&id=<?php echo $pet['id']; ?>" class="btn-secondary btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this pet?');">Delete 🗑️</a>

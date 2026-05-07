@@ -35,10 +35,18 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                     </div>
 
                     <div class="form-group" style="margin-top: 20px;">
-                        <label for="vitals_notes">Nurse Observation Notes</label>
+                        <label for="symptoms">Observed Symptoms <span class="required">*</span></label>
+                        <div class="input-wrap">
+                            <span class="icon">🤒</span>
+                            <textarea name="symptoms" id="symptoms" rows="3" placeholder="e.g. Coughing, sneezing, loss of appetite..." required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label for="notes">Additional Nurse Notes</label>
                         <div class="input-wrap">
                             <span class="icon">✍️</span>
-                            <textarea name="vitals_notes" id="vitals_notes" rows="4" placeholder="Any initial observations (e.g. skin rash, lethargy)..."></textarea>
+                            <textarea name="notes" id="notes" rows="3" placeholder="Any other relevant information for the Vet..."></textarea>
                         </div>
                     </div>
 

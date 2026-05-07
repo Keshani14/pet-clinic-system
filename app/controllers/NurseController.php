@@ -10,56 +10,62 @@ class NurseController extends Controller {
     }
 
     /**
-     * Show nurse dashboard with summary statistics.
+     * Show nurse dashboard with summary statistics and search/filter.
      */
     public function dashboard() {
         $appointmentModel = $this->model('AppointmentModel');
+        
+        $query  = $_GET['q'] ?? null;
+        $status = $_GET['status'] ?? null;
+        $date   = $_GET['date'] ?? null; // Removed default today
+
+        $appointments = $appointmentModel->searchAppointments($query, $status, $date);
         $todayAppts = $appointmentModel->getTodayAppointments();
 
         // Calculate stats
         $stats = [
             'total_today' => count($todayAppts),
             'pending' => 0,
+            'confirmed' => 0,
+            'checked_in' => 0,
             'ready' => 0
         ];
 
         foreach ($todayAppts as $appt) {
             if ($appt['status'] === 'pending') $stats['pending']++;
+            if ($appt['status'] === 'confirmed') $stats['confirmed']++;
+            if ($appt['status'] === 'checked-in') $stats['checked_in']++;
             if ($appt['status'] === 'ready') $stats['ready']++;
         }
 
-        $this->view('nurse/dashboard', [
+        $this->view('nurse/appointments', [
             'name' => Auth::name(),
             'stats' => $stats,
-            'recent' => array_slice($todayAppts, 0, 5)
+            'appointments' => $appointments,
+            'filters' => [
+                'q' => $query,
+                'status' => $status,
+                'date' => $date
+            ]
         ]);
     }
 
     /**
-     * List all appointments for the nurse to manage.
+     * Alias for dashboard - Patient Queue.
      */
     public function appointments() {
-        $appointmentModel = $this->model('AppointmentModel');
-        $appointments = $appointmentModel->getAllAppointments();
-
-        $this->view('nurse/appointments', [
-            'appointments' => $appointments
-        ]);
+        $this->dashboard();
     }
 
     /**
      * Confirm a pending appointment.
      */
     public function confirm($id) {
-        if (!$id) {
-            header('Location: ?url=nurse/appointments');
-            exit;
-        }
         $appointmentModel = $this->model('AppointmentModel');
-        if ($appointmentModel->updateStatus((int)$id, 'confirmed')) {
+        if ($appointmentModel->updateStatus((int)$id, 'confirmed', $_SESSION['user_id'])) {
             $_SESSION['flash_success'] = '✅ Appointment confirmed.';
         }
-        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? '?url=nurse/appointments'));
+        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? '?url=nurse/dashboard'));
         exit;
     }
 
@@ -67,19 +73,13 @@ class NurseController extends Controller {
      * Mark an appointment as 'checked-in'.
      */
     public function checkIn($id) {
-        if (!$id) {
-            header('Location: ?url=nurse/appointments');
+        $appointmentModel = $this->model('AppointmentModel');
+        if ($appointmentModel->updateStatus((int)$id, 'checked-in', $_SESSION['user_id'])) {
+            $_SESSION['flash_success'] = '📍 Patient checked in. Please record vitals and symptoms.';
+            header('Location: ?url=nurse/prepare/' . $id);
             exit;
         }
-
-        $appointmentModel = $this->model('AppointmentModel');
-        if ($appointmentModel->updateStatus((int)$id, 'checked-in')) {
-            $_SESSION['flash_success'] = '✅ Patient checked in successfully.';
-        } else {
-            $_SESSION['flash_error'] = '❌ Failed to update status.';
-        }
-
-        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? '?url=nurse/appointments'));
+        header('Location: ?url=nurse/dashboard');
         exit;
     }
 
@@ -91,7 +91,7 @@ class NurseController extends Controller {
         $appointment = $appointmentModel->getAppointmentById((int)$id);
 
         if (!$appointment) {
-            header('Location: ?url=nurse/appointments');
+            header('Location: ?url=nurse/dashboard');
             exit;
         }
 
@@ -106,21 +106,26 @@ class NurseController extends Controller {
     public function saveVitals($id) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $appointmentModel = $this->model('AppointmentModel');
-            $success = $appointmentModel->updateVitals((int)$id, [
+            $nurseNoteModel = $this->model('NurseNoteModel');
+
+            $data = [
+                'appointment_id' => (int)$id,
                 'weight' => $_POST['weight'] ?? '',
                 'temperature' => $_POST['temperature'] ?? '',
-                'vitals_notes' => $_POST['vitals_notes'] ?? ''
-            ]);
+                'symptoms' => $_POST['symptoms'] ?? '',
+                'notes' => $_POST['notes'] ?? '',
+                'created_by' => $_SESSION['user_id']
+            ];
 
-            if ($success) {
+            if ($nurseNoteModel->saveNote($data)) {
+                $appointmentModel->updateStatus((int)$id, 'ready', $_SESSION['user_id']);
                 $_SESSION['flash_success'] = '🎯 Vitals saved. Patient is now in the Vet queue.';
-                header('Location: ?url=nurse/appointments');
-                exit;
+            } else {
+                $_SESSION['flash_error'] = '❌ Failed to save vitals.';
             }
         }
-        header('Location: ?url=nurse/appointments');
+        header('Location: ?url=nurse/dashboard');
         exit;
     }
-
-
+    
 }
