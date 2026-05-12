@@ -44,6 +44,8 @@ require_once __DIR__ . '/../../views/layouts/header.php';
               novalidate
               aria-label="Login form">
 
+            <input type="hidden" name="csrf_token" value="<?php echo Auth::generateCsrfToken(); ?>">
+
             <!-- Email -->
             <div class="form-group">
                 <label for="email">Email Address</label>

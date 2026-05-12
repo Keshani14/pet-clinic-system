@@ -75,14 +75,14 @@ $ownerPhone  = $pet['owner_phone'] ?? '';
                         </div>
                     </div>
 
-                    <!-- Pet Age -->
+                    <!-- Pet Date of Birth -->
                     <div class="form-group">
-                        <label for="age">Age (Years) <span class="required">*</span></label>
+                        <label for="dob">Date of Birth <span class="required">*</span></label>
                         <div class="input-wrap">
-                            <span class="icon" aria-hidden="true">🎂</span>
-                            <input type="number" id="age" name="age" placeholder="2" min="1"
-                                   value="<?php echo htmlspecialchars($age); ?>"
-                                   class="<?php echo !empty($errors['age']) ? 'is-invalid' : ''; ?>" required>
+                            <span class="icon" aria-hidden="true">📅</span>
+                            <input type="date" id="dob" name="dob"
+                                   value="<?php echo htmlspecialchars($pet['dob'] ?? ''); ?>"
+                                   class="<?php echo !empty($errors['dob']) ? 'is-invalid' : ''; ?>" required>
                         </div>
                     </div>
 

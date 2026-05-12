@@ -65,7 +65,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                                                             <?php endif; ?>
                                                         </td>
                                                         <td>
-                                                            <a href="?url=appointment/create&type=vaccination&pet_id=<?php echo $pet['id']; ?>&vaccine=<?php echo urlencode($sch['vaccine_name']); ?>" class="btn-pill btn-sm" style="font-size: 0.8rem; padding: 4px 12px; background: #fff; border: 1px solid #fce7f3; color: var(--pink-600);">Book</a>
+                                                            <a href="?url=appointment/create&type=vaccination&pet_id=<?php echo $pet['id']; ?>&vaccine=<?php echo urlencode($sch['vaccine_name']); ?>&date=<?php echo urlencode($sch['due_date'] . ' 09:00'); ?>" class="btn-pill btn-sm" style="font-size: 0.8rem; padding: 4px 12px; background: #fff; border: 1px solid #fce7f3; color: var(--pink-600);">Book</a>
                                                         </td>
                                                     </tr>
                                                     <?php endif; ?>

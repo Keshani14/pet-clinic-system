@@ -17,6 +17,10 @@ class UserController extends Controller {
         $success = false;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // ── CSRF Check ──────────────────────────────────────────
+            if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+                die("CSRF token validation failed.");
+            }
 
             // ── Sanitise inputs ──────────────────────────────────────────
             $firstName       = trim(htmlspecialchars($_POST['first_name']   ?? ''));
@@ -110,10 +114,14 @@ class UserController extends Controller {
         $error     = '';
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             // ── Sanitise inputs ──────────────────────────────────────
             $email    = trim($_POST['email']    ?? '');
             $password = $_POST['password']      ?? '';
+
+            // ── CSRF Check ──────────────────────────────────────────
+            if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+                die("CSRF token validation failed.");
+            }
 
             // ── Basic presence check ─────────────────────────────────
             if (empty($email) || empty($password)) {
@@ -127,15 +135,24 @@ class UserController extends Controller {
                     if ($user['status'] === 'approved') {
                         // ── Credentials valid & approved → write session
                         Auth::setSession($user);
+                        
+                        // Log successful login
+                        error_log("[AUTH] Login success: $email at " . date('Y-m-d H:i:s'));
+                        
                         Auth::redirectToDashboard();
                     } elseif ($user['status'] === 'pending') {
-                        $error = 'Your account is waiting for admin approval.';
+                        $error = '⏳ Your account is waiting for admin approval.';
+                    } elseif ($user['status'] === 'rejected') {
+                        $error = '❌ Your account registration has been rejected.';
                     } else {
-                        $error = 'Your account registration has been rejected.';
+                        $error = '⚠️ Your account is currently inactive.';
                     }
                 } else {
-                    // ── Bad credentials – intentionally vague message ─
-                    $error = 'Incorrect email or password. Please try again.';
+                    // ── Bad credentials ──
+                    $error = '🚫 Incorrect email or password. Please try again.';
+                    
+                    // Log failed attempt
+                    error_log("[AUTH] Login failed: $email at " . date('Y-m-d H:i:s'));
                 }
             }
         }

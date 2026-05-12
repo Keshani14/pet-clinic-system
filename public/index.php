@@ -3,9 +3,24 @@
 // Start the session before any output or routing
 session_start();
 
+// Configuration
+define('APP_DEBUG', true); // Toggle for development
+
+if (APP_DEBUG) {
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+} else {
+    error_reporting(0);
+    ini_set('display_errors', 0);
+}
+
 require_once "../core/Controller.php";
 require_once "../core/Database.php";
-require_once "../core/Auth.php";          // RBAC helper — available to all controllers
+require_once "../core/Auth.php";
+require_once "../core/DbValidator.php";
+
+// Run database health check
+DbValidator::validate();
 
 $url = $_GET['url'] ?? 'home/index';
 $url = explode('/', $url);

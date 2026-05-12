@@ -58,10 +58,16 @@ class Auth {
 
     /** Write user data into the session after a successful login. */
     public static function setSession(array $user): void {
+        // Regenerate session ID to prevent session fixation
+        if (!headers_sent()) {
+            session_regenerate_id(true);
+        }
+        
         $_SESSION['user_id']    = $user['id'];
-        $_SESSION['user_name']  = trim($user['first_name'] . ' ' . $user['last_name']);
+        $_SESSION['user_name']  = trim(($user['first_name'] ?? '') . ' ' . ($user['last_name'] ?? ($user['name'] ?? '')));
         $_SESSION['user_email'] = $user['email'];
         $_SESSION['user_role']  = $user['role'];
+        $_SESSION['last_login'] = time();
     }
 
     /** Destroy the session (logout). */
@@ -86,5 +92,23 @@ class Auth {
     /** Convenience: get current user's display name from session. */
     public static function name(): string {
         return $_SESSION['user_name'] ?? 'User';
+    }
+
+    /* ── CSRF Protection ────────────────────────────────────── */
+
+    /** Generate and store a CSRF token in session. */
+    public static function generateCsrfToken(): string {
+        if (empty($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+        return $_SESSION['csrf_token'];
+    }
+
+    /** Verify a given CSRF token matches the session one. */
+    public static function verifyCsrfToken(string $token): bool {
+        if (empty($_SESSION['csrf_token']) || empty($token)) {
+            return false;
+        }
+        return hash_equals($_SESSION['csrf_token'], $token);
     }
 }

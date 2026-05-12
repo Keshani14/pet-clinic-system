@@ -10,7 +10,7 @@ class PetModel {
     /**
      * Add a new pet to the database
      */
-    public function addPet(?int $ownerId, string $name, string $type, string $breed, int $age, ?string $photo = null, ?string $ownerName = null, ?string $ownerPhone = null, ?string $dob = null): bool {
+    public function addPet(?int $ownerId, string $name, string $type, string $breed, int $age, ?string $photo = null, ?string $ownerName = null, ?string $ownerPhone = null, ?string $dob = null): ?int {
         $stmt = $this->db->conn->prepare(
             "INSERT INTO pets (owner_id, name, type, breed, age, dob, photo, owner_name, owner_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
         );
@@ -30,9 +30,10 @@ class PetModel {
             }
             
             $vaccinationModel->generateInitialSchedule($petId, $type, $dob);
+            return $petId;
         }
         
-        return $success;
+        return null;
     }
 
     /**
@@ -108,14 +109,14 @@ class PetModel {
     /**
      * Update an existing pet
      */
-    public function updatePet(int $id, string $name, string $type, string $breed, int $age, ?string $photo = null, ?string $ownerName = null, ?string $ownerPhone = null): bool {
+    public function updatePet(int $id, string $name, string $type, string $breed, int $age, ?string $photo = null, ?string $ownerName = null, ?string $ownerPhone = null, ?string $dob = null): bool {
         // If a new photo is provided, update it. Otherwise, keep the existing one.
         if ($photo !== null) {
-            $stmt = $this->db->conn->prepare("UPDATE pets SET name=?, type=?, breed=?, age=?, photo=?, owner_name=?, owner_phone=? WHERE id=?");
-            $stmt->bind_param("sssisssi", $name, $type, $breed, $age, $photo, $ownerName, $ownerPhone, $id);
+            $stmt = $this->db->conn->prepare("UPDATE pets SET name=?, type=?, breed=?, age=?, dob=?, photo=?, owner_name=?, owner_phone=? WHERE id=?");
+            $stmt->bind_param("sssissssi", $name, $type, $breed, $age, $dob, $photo, $ownerName, $ownerPhone, $id);
         } else {
-            $stmt = $this->db->conn->prepare("UPDATE pets SET name=?, type=?, breed=?, age=?, owner_name=?, owner_phone=? WHERE id=?");
-            $stmt->bind_param("sssissi", $name, $type, $breed, $age, $ownerName, $ownerPhone, $id);
+            $stmt = $this->db->conn->prepare("UPDATE pets SET name=?, type=?, breed=?, age=?, dob=?, owner_name=?, owner_phone=? WHERE id=?");
+            $stmt->bind_param("ssissssi", $name, $type, $breed, $age, $dob, $ownerName, $ownerPhone, $id);
         }
         $success = $stmt->execute();
         $stmt->close();
