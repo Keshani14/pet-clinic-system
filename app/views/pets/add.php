@@ -75,25 +75,18 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                         <?php endif; ?>
                     </div>
 
-                    <!-- Pet Age & DOB -->
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="age">Age (Years) <span class="required">*</span></label>
-                            <div class="input-wrap">
-                                <span class="icon" aria-hidden="true">🎂</span>
-                                <input type="number" id="age" name="age" placeholder="2" min="0"
-                                       value="<?php echo htmlspecialchars($old['age'] ?? ''); ?>"
-                                       class="<?php echo !empty($errors['age']) ? 'is-invalid' : ''; ?>" required>
-                            </div>
+                    <!-- Pet Date of Birth -->
+                    <div class="form-group">
+                        <label for="dob">Date of Birth <span class="required">*</span></label>
+                        <div class="input-wrap">
+                            <span class="icon" aria-hidden="true">📅</span>
+                            <input type="date" id="dob" name="dob"
+                                   value="<?php echo htmlspecialchars($old['dob'] ?? ''); ?>"
+                                   class="<?php echo !empty($errors['dob']) ? 'is-invalid' : ''; ?>" required>
                         </div>
-                        <div class="form-group">
-                            <label for="dob">Date of Birth</label>
-                            <div class="input-wrap">
-                                <span class="icon" aria-hidden="true">📅</span>
-                                <input type="date" id="dob" name="dob"
-                                       value="<?php echo htmlspecialchars($old['dob'] ?? ''); ?>">
-                            </div>
-                        </div>
+                        <?php if (!empty($errors['dob'])): ?>
+                            <span class="field-error"><span aria-hidden="true">⚠</span> <?php echo htmlspecialchars($errors['dob']); ?></span>
+                        <?php endif; ?>
                     </div>
 
                     <!-- Vaccination Section -->

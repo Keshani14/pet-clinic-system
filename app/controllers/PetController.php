@@ -30,8 +30,15 @@ class PetController extends Controller {
             $name       = trim(htmlspecialchars($_POST['name'] ?? ''));
             $type       = trim(htmlspecialchars($_POST['type'] ?? ''));
             $breed      = trim(htmlspecialchars($_POST['breed'] ?? ''));
-            $age        = (int) ($_POST['age'] ?? 0);
             $dob        = $_POST['dob'] ?? null;
+            
+            // Calculate age from DOB
+            $age = 0;
+            if (!empty($dob)) {
+                $birthDate = new DateTime($dob);
+                $today = new DateTime('today');
+                $age = $birthDate->diff($today)->y;
+            }
             $ownerName  = trim(htmlspecialchars($_POST['owner_name'] ?? ''));
             $ownerPhone = trim(htmlspecialchars($_POST['owner_phone'] ?? ''));
 
@@ -47,6 +54,9 @@ class PetController extends Controller {
             }
             if (empty($breed)) {
                 $errors['breed'] = 'Breed is required.';
+            }
+            if (empty($dob)) {
+                $errors['dob'] = 'Date of birth is required.';
             }
 
             if (empty($errors)) {
@@ -83,7 +93,7 @@ class PetController extends Controller {
                         $ownerId = $_SESSION['user_id'];
                     }
                     
-                    $petId = $petModel->addPet($ownerId, $name, $type, $breed, $age, $photoPath, $ownerName, $ownerPhone, $dob);
+                    $petId = $petModel->addPet($ownerId, $name, $type, $breed, $age, $photoPath, $ownerName, $ownerPhone, $dob, $vacStatus);
                     
                     if ($petId) {
                         // Handle "Already Vaccinated" history
@@ -208,7 +218,15 @@ class PetController extends Controller {
         $name       = trim(htmlspecialchars($_POST['name'] ?? ''));
         $type       = trim(htmlspecialchars($_POST['type'] ?? ''));
         $breed      = trim(htmlspecialchars($_POST['breed'] ?? ''));
-        $age        = (int) ($_POST['age'] ?? 0);
+        $dob        = $_POST['dob'] ?? null;
+
+        // Calculate age from DOB
+        $age = 0;
+        if (!empty($dob)) {
+            $birthDate = new DateTime($dob);
+            $today = new DateTime('today');
+            $age = $birthDate->diff($today)->y;
+        }
         $ownerName  = trim(htmlspecialchars($_POST['owner_name'] ?? ''));
         $ownerPhone = trim(htmlspecialchars($_POST['owner_phone'] ?? ''));
 
@@ -245,7 +263,7 @@ class PetController extends Controller {
             }
         }
 
-        $petModel->updatePet($id, $name, $type, $breed, $age, $photoPath, $ownerName, $ownerPhone);
+        $petModel->updatePet($id, $name, $type, $breed, $age, $photoPath, $ownerName, $ownerPhone, $dob);
         $_SESSION['flash_success'] = '🐾 Pet updated successfully!';
         header('Location: ?url=pet/listPets');
         exit;

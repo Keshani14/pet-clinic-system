@@ -28,7 +28,8 @@ class AppointmentController extends Controller {
             'myPets' => $myPets,
             'old' => [
                 'pet_id' => $preselectedPetId,
-                'reason' => $preselectedReason
+                'reason' => $preselectedReason,
+                'appointment_date' => $_GET['date'] ?? ''
             ]
         ]);
     }

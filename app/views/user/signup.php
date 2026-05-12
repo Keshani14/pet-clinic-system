@@ -26,10 +26,8 @@ require_once __DIR__ . '/../../views/layouts/header.php';
         <?php endif; ?>
 
         <!-- ── Signup Form ──────────────────────────────────── -->
-        <form id="signup-form" method="POST"
-              action="?url=user/signup"
-              novalidate
-              aria-label="Registration form">
+        <form id="signup-form" method="POST" action="?url=user/signup" novalidate aria-label="Registration form">
+            <input type="hidden" name="csrf_token" value="<?php echo Auth::generateCsrfToken(); ?>">
 
             <!-- Name row -->
             <div class="form-row">

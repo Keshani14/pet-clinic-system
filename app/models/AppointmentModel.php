@@ -110,12 +110,19 @@ class AppointmentModel {
     }
 
     /**
-     * Update appointment status with logging.
+     * Update appointment status with logging and validation.
      */
     public function updateStatus(int $id, string $status, ?int $updatedBy = null): bool {
         // Fetch current status for logging
         $currentAppt = $this->getAppointmentById($id);
         $oldStatus = $currentAppt['status'] ?? null;
+
+        // Simple validation: Cannot update from cancelled or completed unless by admin
+        if ($oldStatus === 'cancelled' || $oldStatus === 'completed') {
+            if (Auth::role() !== 'admin') {
+                return false;
+            }
+        }
         
         $stmt = $this->db->conn->prepare("UPDATE appointments SET status = ? WHERE id = ?");
         $stmt->bind_param("si", $status, $id);
