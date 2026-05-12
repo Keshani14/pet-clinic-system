@@ -111,7 +111,11 @@ class PetController extends Controller {
                         }
 
                         $success = true;
-                        $_SESSION['flash_success'] = '🐾 Pet added successfully!';
+                        if ($vacStatus === 'not_vaccinated') {
+                            $_SESSION['flash_success'] = '🐾 Pet added successfully! 💉 A full vaccination schedule has been generated for ' . htmlspecialchars($name) . '. Please check the Vaccination section to book appointments.';
+                        } else {
+                            $_SESSION['flash_success'] = '🐾 Pet added successfully!';
+                        }
                         header('Location: ?url=pet/listPets');
                         exit;
                     } else {
