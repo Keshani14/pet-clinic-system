@@ -10,7 +10,7 @@ class PetModel {
     /**
      * Add a new pet to the database
      */
-    public function addPet(?int $ownerId, string $name, string $type, string $breed, int $age, ?string $photo = null, ?string $ownerName = null, ?string $ownerPhone = null, ?string $dob = null): ?int {
+    public function addPet(?int $ownerId, string $name, string $type, string $breed, int $age, ?string $photo = null, ?string $ownerName = null, ?string $ownerPhone = null, ?string $dob = null, string $vacStatus = 'not_vaccinated'): ?int {
         $stmt = $this->db->conn->prepare(
             "INSERT INTO pets (owner_id, name, type, breed, age, dob, photo, owner_name, owner_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
         );
@@ -29,7 +29,11 @@ class PetModel {
                 $dob = date('Y-m-d', strtotime("-{$age} years"));
             }
             
-            $vaccinationModel->generateInitialSchedule($petId, $type, $dob);
+            // Only generate full schedule if the owner explicitly says "Not Vaccinated"
+            if ($vacStatus === 'not_vaccinated') {
+                $vaccinationModel->generateInitialSchedule($petId, $type, $dob);
+            }
+            
             return $petId;
         }
         

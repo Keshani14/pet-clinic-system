@@ -93,7 +93,7 @@ class PetController extends Controller {
                         $ownerId = $_SESSION['user_id'];
                     }
                     
-                    $petId = $petModel->addPet($ownerId, $name, $type, $breed, $age, $photoPath, $ownerName, $ownerPhone, $dob);
+                    $petId = $petModel->addPet($ownerId, $name, $type, $breed, $age, $photoPath, $ownerName, $ownerPhone, $dob, $vacStatus);
                     
                     if ($petId) {
                         // Handle "Already Vaccinated" history
