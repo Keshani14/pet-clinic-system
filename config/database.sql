@@ -2,6 +2,9 @@
 -- Optimized for reliability, integrity, and scalability.
 -- Last Updated: 2026-05-12
 
+CREATE DATABASE IF NOT EXISTS `pet_clinic`;
+USE `pet_clinic`;
+
 SET FOREIGN_KEY_CHECKS=0;
 
 -- 1. USERS
