@@ -25,9 +25,8 @@ require_once __DIR__ . '/layouts/header.php';
             <li><a href="index.php">Home</a></li>
             <li><a href="?url=home/about" class="active">About</a></li>
             <li><a href="#">Team</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href="?url=home/services">Services</a></li>
+            <li><a href="?url=home/contact">Contact</a></li>
         </ul>
         <div class="nav-auth">
             <?php if (Auth::isLoggedIn()): ?>
