@@ -4,6 +4,17 @@ $pageDescription = 'Learn more about our dedicated team and our mission to provi
 $bodyClass       = 'page-about';
 require_once __DIR__ . '/layouts/header.php';
 ?>
+<body class="page-about">
+<div class="top-bar">
+    <div class="container top-bar-content">
+        <div class="contact-info">
+            <span class="icon">📞</span> +94 112 345 678 | <span class="icon">📧</span> info@petclinic.lk
+        </div>
+        <div class="emergency-info">
+            <span class="icon red">🚑</span> 24/7 Emergency: +94 777 999 000
+        </div>
+    </div>
+</div>
 
 <nav class="home-nav">
     <div class="container nav-content">
@@ -29,11 +40,15 @@ require_once __DIR__ . '/layouts/header.php';
     </div>
 </nav>
 
-<section class="about-hero-section" style="background-image: url('images/pet_clinic_hero_blue.png');">
-    <div class="hero-overlay"></div>
-    <div class="container hero-container">
-        <h1 class="hero-main-title">About Our Clinic</h1>
-        <p class="about-tagline">Compassionate care for every furry family member.</p>
+<section class="about-hero-split">
+    <div class="container hero-split-container">
+        <div class="hero-split-text">
+            <h1 class="hero-split-title">About Our <span>Clinic</span></h1>
+            <p class="hero-split-tagline">Compassionate care for every furry family member. We are dedicated to providing the highest quality medical care for your beloved pets.</p>
+        </div>
+        <div class="hero-split-image-container">
+            <img src="images/hero_banner.png" alt="Our Clinic">
+        </div>
     </div>
 </section>
 
@@ -68,25 +83,13 @@ require_once __DIR__ . '/layouts/header.php';
 </section>
 
 <section class="mission-section">
-    <div class="container text-center">
-        <h2 class="section-title">Our <span>Mission</span></h2>
+    <div class="container">
+        <h2 class="section-title text-center">Our <span>Mission</span></h2>
         <div class="mission-box">
             <p>"To provide world-class veterinary care through innovation, empathy, and a deep-rooted love for animals. We strive to enhance the bond between humans and their pets by ensuring a long, healthy, and happy life for every animal we treat."</p>
         </div>
     </div>
 </section>
-
-<footer class="home-footer">
-    <div class="container">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <span class="footer-logo">🐾</span>
-                <h4>Pet Clinic</h4>
-            </div>
-            <p>&copy; <?php echo date('Y'); ?> Pet Clinic Management System. Delivering Excellence in Pet Care.</p>
-        </div>
-    </div>
-</footer>
 
 <a href="#" class="back-to-top" id="backToTop">
     <span>↑</span>

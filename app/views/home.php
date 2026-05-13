@@ -5,29 +5,29 @@ $bodyClass       = 'page-home';
 require_once __DIR__ . '/layouts/header.php';
 ?>
 
-<!-- Top Bar -->
+<body class="page-home">
 <div class="top-bar">
     <div class="container top-bar-content">
         <div class="contact-info">
-            <span class="icon">📞</span> 11 2 700 899
+            <span class="icon">📞</span> +94 112 345 678 | <span class="icon">📧</span> info@petclinic.lk
         </div>
         <div class="emergency-info">
-            <span class="icon red">✚</span> 776 890 666
+            <span class="icon red">🚑</span> 24/7 Emergency: +94 777 999 000
         </div>
     </div>
 </div>
 
-<!-- Main Navigation -->
 <nav class="home-nav">
     <div class="container nav-content">
         <a href="index.php" class="nav-logo">
             <span>🐾</span> Pet Clinic
         </a>
         <ul class="nav-links-list">
-            <li><a href="index.php">Home</a></li>
+            <li><a href="index.php" class="active">Home</a></li>
             <li><a href="?url=home/about">About</a></li>
             <li><a href="#">Team</a></li>
             <li><a href="#">Services</a></li>
+            <li><a href="#">Blog</a></li>
             <li><a href="#">Contact</a></li>
         </ul>
         <div class="nav-auth">
@@ -41,7 +41,6 @@ require_once __DIR__ . '/layouts/header.php';
     </div>
 </nav>
 
-<!-- Hero Section -->
 <section class="hero-section" style="background-image: url('images/pet_clinic_hero_blue.png');">
     <div class="hero-overlay"></div>
     <div class="container hero-container">
@@ -50,37 +49,22 @@ require_once __DIR__ . '/layouts/header.php';
             <span class="paw paw-2">🐾</span>
             <span class="paw paw-3">🐾</span>
         </div>
-        <h1 class="hero-main-title">CONNECT. CARE. CURE.</h1>
-        
-    </div>
-</section>
-
-<!-- Content Sections -->
-<section class="intro-section">
-    <div class="container text-center">
-        <h2 class="section-title">Welcome to <span>Our Pet Family</span></h2>
-        <p class="intro-text">
-            We are dedicated to providing the highest level of veterinary medicine along with friendly, compassionate service. 
-            We believe in treating every patient as if they were our own pet, and giving them the same loving attention and care.
-        </p>
-    </div>
-</section>
-
-<footer class="home-footer">
-    <div class="container">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <span class="footer-logo">🐾</span>
-                <h4>Pet Clinic</h4>
-            </div>
-            <p>&copy; <?php echo date('Y'); ?> Pet Clinic Management System. Delivering Excellence in Pet Care.</p>
+        <h1 class="hero-main-title">Modern Pet Care</h1>
+        <p class="hero-subtitle">Providing world-class veterinary services with love and compassion.</p>
+        <div class="hero-actions">
+            <a href="?url=user/signup" class="btn-cta-primary">Join Our Clinic Today</a>
         </div>
     </div>
-</footer>
+</section>
 
-<!-- Back to Top -->
-<a href="#" class="back-to-top" id="backToTop">
-    <span>↑</span>
-</a>
+<section class="intro-section">
+    <div class="container">
+        <div class="intro-text">
+            Founded with a vision to redefine veterinary excellence, we combine state-of-the-art medical technology with a heart for animals. Our team of specialists is dedicated to providing personalized care tailored to the unique needs of your furry family members.
+        </div>
+    </div>
+</section>
 
-<?php require_once __DIR__ . '/layouts/footer.php'; ?>
+<a href="#" class="back-to-top">↑</a>
+
+<?php include 'layouts/footer.php'; ?>
