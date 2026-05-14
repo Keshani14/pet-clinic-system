@@ -52,13 +52,15 @@ body {
     padding: 40px 16px;
 }
 
-body.dashboard-layout {
+body.dashboard-layout, 
+body.page-team, 
+body.page-home, 
+body.page-about, 
+body.page-services, 
+body.page-contact {
     display: block;
     padding: 0;
     background-color: #fcfcfd;
-    background-image: 
-        radial-gradient(at 0% 0%, rgba(219, 39, 119, 0.03) 0, transparent 50%), 
-        radial-gradient(at 100% 0%, rgba(219, 39, 119, 0.03) 0, transparent 50%);
 }
 
 /* ── 3. Keyframe Animations ─────────────────────────────────── */
@@ -170,6 +172,27 @@ body.dashboard-layout {
     animation  : shake .35s ease;
 }
 
+/* Alert Close Button */
+.alert { position: relative; }
+.alert-close {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: var(--transition);
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+}
+.alert-close:hover { opacity: 1; transform: translateY(-50%) scale(1.1); }
+
 /* ── 8. Form Layout ─────────────────────────────────────────── */
 .form-row {
     display               : grid;
@@ -241,20 +264,58 @@ input.is-invalid {
     background   : #fff5f5;
 }
 
-/* ── 12. Password Toggle Button ─────────────────────────────── */
-.toggle-pwd {
-    position   : absolute;
-    right      : 12px;
-    background : none;
-    border     : none;
-    cursor     : pointer;
-    font-size  : 1rem;
-    color      : var(--gray-400);
-    padding    : 4px;
-    line-height: 1;
-    transition : color var(--transition);
+/* ── Navigation (Public Pages) ────────────────────────────── */
+.home-nav {
+    background: #ffffff;
+    padding: 20px 0;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    width: 100%;
 }
-.toggle-pwd:hover { color: var(--pink-500); }
+
+.nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #db2777;
+    text-decoration: none;
+}
+
+.nav-links-list {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+    margin: 0;
+}
+
+.nav-links-list a {
+    text-decoration: none;
+    color: var(--gray-600);
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+.nav-links-list a:hover, .nav-links-list a.active {
+    color: #db2777;
+}
+
+.nav-auth {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* ── Common Page Sections ───────────────────────────────────── */
+.section-padding { padding: 80px 0; }
+.text-center { text-align: center; }
 
 /* ── 13. Field-Level Error ──────────────────────────────────── */
 .field-error {

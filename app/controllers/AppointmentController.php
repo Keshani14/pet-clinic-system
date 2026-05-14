@@ -50,7 +50,18 @@ class AppointmentController extends Controller {
                 $errors['appointment_date'] = "Please select a date and time.";
             } else {
                 $appointmentModel = $this->model('AppointmentModel');
-                if ($appointmentModel->isSlotTaken($date)) {
+                
+                // 1. Check if it's in the past
+                $selectedTime = strtotime($date);
+                if ($selectedTime < time()) {
+                    $errors['appointment_date'] = "You cannot book an appointment in the past. Please select a future date and time.";
+                }
+                // 2. Check if within working hours
+                elseif (!$this->isWithinWorkingHours($date)) {
+                    $errors['appointment_date'] = "The clinic is closed at this time. Please select a time within our working hours: Mon-Fri (8 AM - 6 PM) or Sat (9 AM - 4 PM).";
+                }
+                // 3. Check if slot is taken
+                elseif ($appointmentModel->isSlotTaken($date)) {
                     $errors['appointment_date'] = "Sorry, this time slot is already booked. Please choose another time.";
                 }
             }
@@ -130,5 +141,28 @@ class AppointmentController extends Controller {
 
         echo json_encode(['status' => 'success', 'statuses' => $statuses]);
         exit;
+    }
+    /**
+     * Helper to validate working hours.
+     */
+    private function isWithinWorkingHours($dateStr) {
+        try {
+            $dt = new DateTime($dateStr);
+            $dayOfWeek = (int)$dt->format('w'); // 0 (Sun) to 6 (Sat)
+            $time = $dt->format('H:i');
+
+            // Sunday (0) - Closed
+            if ($dayOfWeek === 0) return false;
+
+            // Saturday (6) - 9:00 AM to 4:00 PM
+            if ($dayOfWeek === 6) {
+                return ($time >= '09:00' && $time <= '16:00');
+            }
+
+            // Weekdays (1-5) - 8:00 AM to 6:00 PM (last slot at 5:30)
+            return ($time >= '08:00' && $time <= '17:30');
+        } catch (Exception $e) {
+            return false;
+        }
     }
 }

@@ -158,12 +158,16 @@ class VaccinationModel {
             $stmt->close();
         }
 
+        $oneYearAgo = date('Y-m-d', strtotime('-1 year'));
+
         foreach ($templates as $t) {
             // Calculate due date: DOB + recommended_age_weeks
             $dueDate = date('Y-m-d', strtotime("+{$t['recommended_age_weeks']} weeks", strtotime($dob)));
             
-            // Don't schedule if it was supposed to happen long ago (e.g., > 1 year ago) 
-            // unless it's a recurring booster.
+            // Don't schedule if it was supposed to happen long ago (e.g., > 1 year ago)
+            if ($dueDate < $oneYearAgo) {
+                continue;
+            }
             
             $this->addSchedule([
                 'pet_id' => $petId,

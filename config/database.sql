@@ -26,10 +26,10 @@ CREATE TABLE `users` (
 
 -- Seed Demo Users (Password: password)
 INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `phone`, `password`, `role`, `status`) VALUES 
-(1, 'System', 'Admin', 'admin@test.com', '555-0100', '$2y$10$1TUhKzlcbXBy6zPz.k/64e5.sSNzErxzROz464TIrP6hbvDq9vmim', 'admin', 'approved'),
-(2, 'John', 'Vet', 'vet@test.com', '555-0200', '$2y$10$1TUhKzlcbXBy6zPz.k/64e5.sSNzErxzROz464TIrP6hbvDq9vmim', 'vet', 'approved'),
-(3, 'Sarah', 'Nurse', 'nurse@pet.com', '555-0300', '$2y$10$1TUhKzlcbXBy6zPz.k/64e5.sSNzErxzROz464TIrP6hbvDq9vmim', 'nurse', 'approved'),
-(4, 'Mark', 'Owner', 'owner@pet.com', '555-0400', '$2y$10$1TUhKzlcbXBy6zPz.k/64e5.sSNzErxzROz464TIrP6hbvDq9vmim', 'owner', 'approved');
+(1, 'System', 'Admin', 'admin@test.com', '555-0100', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', 'approved'),
+(2, 'John', 'Vet', 'vet@test.com', '555-0200', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'vet', 'approved'),
+(3, 'Sarah', 'Nurse', 'nurse@pet.com', '555-0300', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'nurse', 'approved'),
+(4, 'Mark', 'Owner', 'owner@pet.com', '555-0400', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'owner', 'approved');
 
 -- 2. PETS
 DROP TABLE IF EXISTS `pets`;

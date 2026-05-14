@@ -10,6 +10,10 @@ class HomeController extends Controller {
         $this->view('about');
     }
 
+    public function team() {
+        $this->view('team');
+    }
+
     public function services() {
         $this->view('services');
     }

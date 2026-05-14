@@ -59,6 +59,14 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                             <strong>🛡️ Vaccination Appointment:</strong> You are booking an immunization for your pet. Please specify the vaccine in the reason box if known.
                         </div>
                         <?php endif; ?>
+
+                        <div class="alert alert-info no-close" style="margin-bottom: 25px; background: #f8fafc; border: 1px solid #e2e8f0; color: #475569; display: flex; align-items: center; gap: 15px;">
+                            <div style="font-size: 1.5rem;">🕒</div>
+                            <div>
+                                <strong style="color: #1e293b; display: block; margin-bottom: 3px;">Clinic Working Hours:</strong>
+                                <small>Mon–Fri: 8 AM – 6 PM | Sat: 9 AM – 4 PM | Sun: Closed</small>
+                            </div>
+                        </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="pet_name">Select Pet <span class="required">*</span></label>
@@ -135,25 +143,56 @@ require_once __DIR__ . '/../../views/layouts/header.php';
         minDate: "today",
         time_24hr: false,
         minuteIncrement: 30,
-        disable: bookedSlots.map(slot => {
-            const start = new Date(new Date(slot.replace(' ', 'T')).getTime() - 29 * 60000);
-            const end = new Date(new Date(slot.replace(' ', 'T')).getTime() + 29 * 60000);
-            return { from: start, to: end };
-        }),
-        onChange: function(selectedDates, dateStr, instance) {
+        disable: [
+            function(date) { return (date.getDay() === 0); }, // Disable Sundays
+            ...bookedSlots.map(slot => {
+                const start = new Date(new Date(slot.replace(' ', 'T')).getTime() - 29 * 60000);
+                const end = new Date(new Date(slot.replace(' ', 'T')).getTime() + 29 * 60000);
+                return { from: start, to: end };
+            })
+        ],
+        onValueUpdate: function(selectedDates, dateStr, instance) {
             if (selectedDates.length > 0) {
-                const selected = dateStr;
-                const isTaken = bookedSlots.some(slot => {
-                    const slotDate = new Date(slot.replace(' ', 'T'));
-                    const selectedDate = new Date(selected.replace(' ', 'T'));
-                    const diff = Math.abs(selectedDate - slotDate) / 60000;
-                    return diff < 30;
-                });
+                const dt = selectedDates[0];
+                const now = new Date();
+                
+                // 1. Check if it's in the past
+                if (dt < now) {
+                    showToast("You cannot book an appointment in the past. Please select a future time.");
+                    instance.clear();
+                    return;
+                }
 
-                if (isTaken) {
-                    alert("⚠️ This time slot is already booked. Please select a different time.");
+                // 2. Dynamic Hour Restrictions
+                const day = dt.getDay();
+                const hours = dt.getHours();
+                const minutes = dt.getMinutes();
+                const timeStr = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');
+
+                let isValid = true;
+                let errorMsg = "";
+
+                if (day === 6) { // Saturday
+                    if (timeStr < '09:00' || timeStr > '15:30') {
+                        isValid = false;
+                        errorMsg = "Saturday appointments are only available between 9:00 AM and 4:00 PM.";
+                    }
+                } else { // Weekdays
+                    if (timeStr < '08:00' || timeStr > '17:30') {
+                        isValid = false;
+                        errorMsg = "Weekday appointments are only available between 8:00 AM and 6:00 PM.";
+                    }
+                }
+
+                if (!isValid) {
+                    showToast(errorMsg);
                     instance.clear();
                 }
+            }
+        },
+        onDayCreate: function(dObj, dStr, fp, dayElem) {
+            if (dayElem.dateObj.getDay() === 0) {
+                dayElem.title = "Clinic is Closed on Sundays";
             }
         }
     });

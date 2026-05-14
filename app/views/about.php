@@ -24,7 +24,7 @@ require_once __DIR__ . '/layouts/header.php';
         <ul class="nav-links-list">
             <li><a href="index.php">Home</a></li>
             <li><a href="?url=home/about" class="active">About</a></li>
-            <li><a href="#">Team</a></li>
+            <li><a href="?url=home/team">Team</a></li>
             <li><a href="?url=home/services">Services</a></li>
             <li><a href="?url=home/contact">Contact</a></li>
         </ul>

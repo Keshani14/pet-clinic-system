@@ -166,7 +166,7 @@ body.page-services {
         <ul class="nav-links-list">
             <li><a href="index.php">Home</a></li>
             <li><a href="?url=home/about">About</a></li>
-            <li><a href="#">Team</a></li>
+            <li><a href="?url=home/team">Team</a></li>
             <li><a href="?url=home/services" class="active">Services</a></li>
             <li><a href="?url=home/contact">Contact</a></li>
         </ul>
