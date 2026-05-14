@@ -84,7 +84,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                                 <td class="text-pink-bold"><?php echo htmlspecialchars($pet['name']); ?></td>
                                 <td class="text-gray-600"><?php echo htmlspecialchars($pet['type']); ?></td>
                                 <td class="text-gray-600"><?php echo htmlspecialchars($pet['breed'] ?? 'Unknown'); ?></td>
-                                <td class="text-gray-600"><?php echo htmlspecialchars($pet['age']); ?> yrs</td>
+                                <td class="text-gray-600"><?php echo htmlspecialchars($pet['age']); ?></td>
                                 <?php if (Auth::role() !== 'owner'): ?>
                                     <td class="text-gray-600">
                                         <?php 

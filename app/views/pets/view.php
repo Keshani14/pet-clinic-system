@@ -29,7 +29,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                             <h3 class="text-gray-800 mb-10">Basic Info</h3>
                             <p><strong>Type:</strong> <?php echo htmlspecialchars($pet['type']); ?></p>
                             <p><strong>Breed:</strong> <?php echo htmlspecialchars($pet['breed']); ?></p>
-                            <p><strong>Age:</strong> <?php echo htmlspecialchars($pet['age']); ?> years</p>
+                            <p><strong>Age:</strong> <?php echo htmlspecialchars($pet['age']); ?></p>
                         </div>
                     </div>
                     <div class="card" style="background: #f0fdf4; border: 2px solid #dcfce7;">

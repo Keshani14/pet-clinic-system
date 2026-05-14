@@ -152,7 +152,7 @@ require_once __DIR__ . '/../layouts/header.php';
                             </div>
                             <div class="pet-info">
                                 <h2><?php echo htmlspecialchars($pet['name']); ?></h2>
-                                <p><?php echo htmlspecialchars($pet['breed']); ?> • <?php echo htmlspecialchars($pet['age']); ?> Years Old</p>
+                                <p><?php echo htmlspecialchars($pet['breed']); ?> • <?php echo htmlspecialchars($pet['age']); ?></p>
                             </div>
                         </div>
 

@@ -21,27 +21,27 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                     </div>
                 <?php endif; ?>
 
-                <!-- Quick Stats -->
+                <!-- Quick Stats (Top Notification Bar) -->
                 <div class="summary-grid" style="grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 30px;">
-                    <div class="summary-card" style="border-top-color: #f59e0b; padding: 15px;">
+                    <div class="summary-card" style="border-top-color: #f59e0b; padding: 15px; position: relative;">
                         <h3 style="font-size: 0.85rem;">Pending</h3>
-                        <div class="value" style="font-size: 1.8rem;"><?php echo $stats['pending']; ?></div>
+                        <div id="stat-pending" class="value" style="font-size: 1.8rem; transition: transform 0.3s;"><?php echo $stats['pending']; ?></div>
                     </div>
-                    <div class="summary-card" style="border-top-color: #10b981; padding: 15px;">
+                    <div class="summary-card" style="border-top-color: #10b981; padding: 15px; position: relative;">
                         <h3 style="font-size: 0.85rem;">Confirmed</h3>
-                        <div class="value" style="font-size: 1.8rem;"><?php echo $stats['confirmed']; ?></div>
+                        <div id="stat-confirmed" class="value" style="font-size: 1.8rem; transition: transform 0.3s;"><?php echo $stats['confirmed']; ?></div>
                     </div>
-                    <div class="summary-card" style="border-top-color: #8b5cf6; padding: 15px;">
+                    <div class="summary-card" style="border-top-color: #8b5cf6; padding: 15px; position: relative;">
                         <h3 style="font-size: 0.85rem;">In Clinic</h3>
-                        <div class="value" style="font-size: 1.8rem;"><?php echo $stats['checked_in']; ?></div>
+                        <div id="stat-in-clinic" class="value" style="font-size: 1.8rem; transition: transform 0.3s;"><?php echo $stats['checked_in']; ?></div>
                     </div>
-                    <div class="summary-card" style="border-top-color: #3b82f6; padding: 15px;">
+                    <div class="summary-card" style="border-top-color: #3b82f6; padding: 15px; position: relative;">
                         <h3 style="font-size: 0.85rem;">Ready</h3>
-                        <div class="value" style="font-size: 1.8rem;"><?php echo $stats['ready']; ?></div>
+                        <div id="stat-ready" class="value" style="font-size: 1.8rem; transition: transform 0.3s;"><?php echo $stats['ready']; ?></div>
                     </div>
-                    <div class="summary-card" style="border-top-color: var(--pink-600); padding: 15px;">
+                    <div class="summary-card" style="border-top-color: var(--pink-600); padding: 15px; position: relative;">
                         <h3 style="font-size: 0.85rem;">Total Today</h3>
-                        <div class="value" style="font-size: 1.8rem;"><?php echo $stats['total_today']; ?></div>
+                        <div id="stat-total" class="value" style="font-size: 1.8rem; transition: transform 0.3s;"><?php echo $stats['total_today']; ?></div>
                     </div>
                 </div>
 
@@ -69,11 +69,12 @@ require_once __DIR__ . '/../../views/layouts/header.php';
 
                         <div>
                             <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--gray-500); margin-bottom: 5px;">Date</label>
-                            <input type="date" name="date" value="<?php echo htmlspecialchars($filters['date'] ?? date('Y-m-d')); ?>" style="padding: 9px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                            <input type="date" name="date" value="<?php echo htmlspecialchars($filters['date'] ?? ''); ?>" style="padding: 9px; border-radius: 8px; border: 1px solid #cbd5e1;">
                         </div>
 
                         <button type="submit" class="btn-pill" style="background: var(--pink-500); color: white; border: none; padding: 10px 20px;">Apply Filters</button>
-                        <a href="?url=nurse/dashboard" class="btn-pill" style="background: var(--gray-200); color: var(--gray-600); border: none; padding: 10px 20px;">Reset</a>
+                        <a href="?url=nurse/dashboard&date=" class="btn-pill" style="background: #e0e7ff; color: #4338ca; border: none; padding: 10px 20px; font-weight: 700;">Show All Dates</a>
+                        <a href="?url=nurse/dashboard" class="btn-pill" style="background: var(--gray-200); color: var(--gray-600); border: none; padding: 10px 20px;">Reset to Today</a>
                     </form>
                 </div>
 
@@ -148,3 +149,52 @@ require_once __DIR__ . '/../../views/layouts/header.php';
 </div>
 
 <?php require_once __DIR__ . '/../../views/layouts/footer.php'; ?>
+
+<script>
+// Real-time Dashboard Notification Bar Polling
+document.addEventListener('DOMContentLoaded', function() {
+    function fetchLiveStats() {
+        // Get current URL parameters (like date, status, q) and pass them to the API
+        const urlParams = new URLSearchParams(window.location.search);
+        let apiUrl = '?url=nurse/getLiveStats';
+        
+        if (urlParams.has('date')) apiUrl += '&date=' + encodeURIComponent(urlParams.get('date'));
+        if (urlParams.has('status')) apiUrl += '&status=' + encodeURIComponent(urlParams.get('status'));
+        if (urlParams.has('q')) apiUrl += '&q=' + encodeURIComponent(urlParams.get('q'));
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(res => {
+                if(res.status === 'success') {
+                    updateStatUI('stat-pending', res.data.pending);
+                    updateStatUI('stat-confirmed', res.data.confirmed);
+                    updateStatUI('stat-in-clinic', res.data.checked_in);
+                    updateStatUI('stat-ready', res.data.ready);
+                    updateStatUI('stat-total', res.data.total_today);
+                }
+            })
+            .catch(error => console.error('Error fetching live stats:', error));
+    }
+
+    function updateStatUI(elementId, newValue) {
+        const el = document.getElementById(elementId);
+        if(!el) return;
+        
+        const currentValue = parseInt(el.textContent);
+        if(currentValue !== newValue) {
+            // Add a little pop animation when value changes
+            el.style.transform = 'scale(1.2)';
+            el.style.color = 'var(--pink-500)';
+            
+            setTimeout(() => {
+                el.textContent = newValue;
+                el.style.transform = 'scale(1)';
+                el.style.color = ''; // Reset to default
+            }, 150);
+        }
+    }
+
+    // Fetch stats every 5 seconds
+    setInterval(fetchLiveStats, 5000);
+});
+</script>

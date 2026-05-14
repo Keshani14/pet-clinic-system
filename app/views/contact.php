@@ -17,7 +17,7 @@ body.page-contact {
 
 /* ── Topbar ── */
 .contact-topbar { background:#ffffff; border-bottom:1px solid #e8e8e8; padding:12px 0; }
-.contact-topbar-inner { max-width:1200px; margin:0 auto; padding:0 30px; display:flex; align-items:center; justify-content:space-between; }
+.contact-topbar-inner { max-width:1500px; margin:0 auto; padding:0 30px; display:flex; align-items:center; justify-content:space-between; }
 .ct-phone { display:flex; align-items:center; gap:8px; font-weight:700; font-size:1rem; color:#1a1a1a; }
 .ct-nav { display:flex; list-style:none; gap:35px; margin:0; padding:0; }
 .ct-nav a { text-decoration:none; color:#444; font-weight:600; font-size:0.97rem; transition:color .2s; }
@@ -48,7 +48,7 @@ body.page-contact {
 .contact-hero p { font-size:1.2rem; opacity:0.9; max-width:550px; margin:0 auto; line-height:1.6; }
 
 /* ── Main Layout ── */
-.contact-main { max-width:1200px; margin:0 auto; padding:70px 30px 100px; }
+.contact-main { max-width:1500px; margin:0 auto; padding:70px 30px 100px; }
 .contact-grid { display:grid; grid-template-columns:1fr 1.3fr; gap:50px; }
 
 /* ── Info Cards ── */
@@ -159,7 +159,7 @@ body.page-contact {
 .alert-error   { background:#fee2e2; color:#dc2626; border:1px solid #fecaca; }
 
 /* ── Map Section ── */
-.map-section { max-width:1200px; margin:0 auto; padding:0 30px 80px; }
+.map-section { max-width:1500px; margin:0 auto; padding:0 30px 80px; }
 .map-section h2 { font-size:1.8rem; font-weight:900; color:#0f172a; margin-bottom:5px; }
 .map-section .map-sub { color:#64748b; margin-bottom:25px; font-size:0.97rem; }
 .map-wrapper { border-radius:20px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,0.1); border:1px solid #e5e7eb; }
@@ -194,20 +194,40 @@ body.page-contact {
 }
 </style>
 
-<!-- ── Topbar ── -->
-<div class="contact-topbar">
-    <div class="contact-topbar-inner">
-        <div class="ct-phone">📞 +94 77 123 4567</div>
-        <ul class="ct-nav">
+<!-- Top Bar -->
+<div class="top-bar">
+    <div class="container top-bar-content">
+        <div class="contact-info">
+            <span class="icon">📞</span> +94 112 345 678 | <span class="icon">📧</span> info@petclinic.lk
+        </div>
+        <div class="emergency-info">
+            <span class="icon red">🚑</span> 24/7 Emergency: +94 777 999 000
+        </div>
+    </div>
+</div>
+
+<nav class="home-nav">
+    <div class="container nav-content">
+        <a href="index.php" class="nav-logo">
+            <span>🐾</span> Pet Clinic
+        </a>
+        <ul class="nav-links-list">
             <li><a href="index.php">Home</a></li>
             <li><a href="?url=home/about">About</a></li>
             <li><a href="#">Team</a></li>
             <li><a href="?url=home/services">Services</a></li>
             <li><a href="?url=home/contact" class="active">Contact</a></li>
         </ul>
-        <a href="?url=user/login" class="ct-emergency">🚑 Emergency: +94 71 999 9999</a>
+        <div class="nav-auth">
+            <?php if (Auth::isLoggedIn()): ?>
+                <a href="<?php echo Auth::ROLE_DASHBOARDS[Auth::role()] ?? '?url=home/index'; ?>" class="btn-cta-primary">Dashboard</a>
+            <?php else: ?>
+                <a href="?url=user/login" class="btn-login-text">Login</a>
+                <a href="?url=user/signup" class="btn-cta-primary">Join Us</a>
+            <?php endif; ?>
+        </div>
     </div>
-</div>
+</nav>
 
 <!-- ── Hero ── -->
 <div class="contact-hero">

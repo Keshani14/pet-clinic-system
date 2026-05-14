@@ -90,9 +90,11 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                                                 <strong><?php echo date('M d', strtotime($appt['appointment_date'])); ?></strong> 
                                                 <small class="text-gray-500"><?php echo date('h:i A', strtotime($appt['appointment_date'])); ?></small>
                                             </td>
-                                            <td>
-                                                <?php if ($appt['status'] === 'approved'): ?>
-                                                    <span class="text-green-bold">Approved</span>
+                                            <td id="status-cell-<?php echo $appt['id']; ?>">
+                                                <?php if (in_array($appt['status'], ['confirmed', 'checked-in', 'ready'])): ?>
+                                                    <span class="text-green-bold"><?php echo ucfirst($appt['status']); ?></span>
+                                                <?php elseif ($appt['status'] === 'completed'): ?>
+                                                    <span style="color: #4338ca; font-weight: 700;"><?php echo ucfirst($appt['status']); ?></span>
                                                 <?php elseif ($appt['status'] === 'pending'): ?>
                                                     <span class="text-gray-600">Pending</span>
                                                 <?php else: ?>
@@ -121,3 +123,49 @@ require_once __DIR__ . '/../../views/layouts/header.php';
 </div>
 
 <?php require_once __DIR__ . '/../../views/layouts/footer.php'; ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const appointmentIds = <?php echo json_encode(array_column($appointments, 'id')); ?>;
+    
+    function checkStatusUpdates() {
+        if (appointmentIds.length === 0) return;
+        
+        fetch('?url=appointment/getStatuses&ids=' + appointmentIds.join(','))
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    for (const [id, status] of Object.entries(data.statuses)) {
+                        updateStatusUI(id, status);
+                    }
+                }
+            })
+            .catch(err => console.error('Error fetching statuses:', err));
+    }
+
+    function updateStatusUI(id, status) {
+        const cell = document.getElementById('status-cell-' + id);
+        if (!cell) return;
+
+        let html = '';
+        if (['confirmed', 'checked-in', 'ready'].includes(status)) {
+            html = `<span class="text-green-bold">${status.charAt(0).toUpperCase() + status.slice(1)}</span>`;
+        } else if (status === 'completed') {
+            html = `<span style="color: #4338ca; font-weight: 700;">${status.charAt(0).toUpperCase() + status.slice(1)}</span>`;
+        } else if (status === 'pending') {
+            html = `<span class="text-gray-600">Pending</span>`;
+        } else {
+            html = `<span class="text-danger-bold">${status.charAt(0).toUpperCase() + status.slice(1)}</span>`;
+        }
+
+        if (cell.innerHTML.trim() !== html.trim()) {
+            cell.innerHTML = html;
+            cell.style.backgroundColor = '#fef3c7';
+            setTimeout(() => { cell.style.backgroundColor = 'transparent'; }, 1000);
+        }
+    }
+
+    // Check every 15 seconds on dashboard
+    setInterval(checkStatusUpdates, 15000);
+});
+</script>

@@ -17,21 +17,28 @@ class NurseController extends Controller {
         
         $query  = $_GET['q'] ?? null;
         $status = $_GET['status'] ?? null;
-        $date   = $_GET['date'] ?? null; // Removed default today
+        
+        $dateParam = $_GET['date'] ?? 'default';
+        if ($dateParam === 'default') {
+            $date = date('Y-m-d'); // First time load
+        } elseif ($dateParam === '') {
+            $date = null; // User explicitly cleared the date
+        } else {
+            $date = $dateParam;
+        }
 
         $appointments = $appointmentModel->searchAppointments($query, $status, $date);
-        $todayAppts = $appointmentModel->getTodayAppointments();
 
-        // Calculate stats
+        // Calculate stats based on the filtered appointments
         $stats = [
-            'total_today' => count($todayAppts),
+            'total_today' => count($appointments),
             'pending' => 0,
             'confirmed' => 0,
             'checked_in' => 0,
             'ready' => 0
         ];
 
-        foreach ($todayAppts as $appt) {
+        foreach ($appointments as $appt) {
             if ($appt['status'] === 'pending') $stats['pending']++;
             if ($appt['status'] === 'confirmed') $stats['confirmed']++;
             if ($appt['status'] === 'checked-in') $stats['checked_in']++;
@@ -55,6 +62,45 @@ class NurseController extends Controller {
      */
     public function appointments() {
         $this->dashboard();
+    }
+
+    /**
+     * API Endpoint: Get real-time stats for the dashboard notification bar.
+     */
+    public function getLiveStats() {
+        header('Content-Type: application/json');
+        
+        $appointmentModel = $this->model('AppointmentModel');
+        
+        // Match the dashboard logic: if date is provided, use it, else use today
+        $dateParam = $_GET['date'] ?? 'default';
+        if ($dateParam === 'default') {
+            $date = date('Y-m-d');
+        } elseif ($dateParam === '') {
+            $date = null;
+        } else {
+            $date = $dateParam;
+        }
+        
+        $appointments = $appointmentModel->searchAppointments(null, null, $date);
+
+        $stats = [
+            'total_today' => count($appointments),
+            'pending' => 0,
+            'confirmed' => 0,
+            'checked_in' => 0,
+            'ready' => 0
+        ];
+
+        foreach ($appointments as $appt) {
+            if ($appt['status'] === 'pending') $stats['pending']++;
+            if ($appt['status'] === 'confirmed') $stats['confirmed']++;
+            if ($appt['status'] === 'checked-in') $stats['checked_in']++;
+            if ($appt['status'] === 'ready') $stats['ready']++;
+        }
+
+        echo json_encode(['status' => 'success', 'data' => $stats]);
+        exit;
     }
 
     /**

@@ -19,7 +19,7 @@ body.page-services {
     padding: 12px 0;
 }
 .services-topbar-inner {
-    max-width: 1200px;
+    max-width: 1500px;
     margin: 0 auto;
     padding: 0 30px;
     display: flex;
@@ -87,7 +87,7 @@ body.page-services {
 
 /* ─── Services Grid ─── */
 .services-cards-section {
-    max-width: 1100px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 30px 80px;
 }
@@ -147,25 +147,39 @@ body.page-services {
 }
 </style>
 
-<!-- Top Bar -->
-<div class="services-topbar">
-    <div class="services-topbar-inner">
-        <div class="svc-phone">
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.82 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-            +94 112 345 678
+<div class="top-bar">
+    <div class="container top-bar-content">
+        <div class="contact-info">
+            <span class="icon">📞</span> +94 112 345 678 | <span class="icon">📧</span> info@petclinic.lk
         </div>
-        <ul class="svc-nav-links">
+        <div class="emergency-info">
+            <span class="icon red">🚑</span> 24/7 Emergency: +94 777 999 000
+        </div>
+    </div>
+</div>
+
+<nav class="home-nav">
+    <div class="container nav-content">
+        <a href="index.php" class="nav-logo">
+            <span>🐾</span> Pet Clinic
+        </a>
+        <ul class="nav-links-list">
             <li><a href="index.php">Home</a></li>
             <li><a href="?url=home/about">About</a></li>
             <li><a href="#">Team</a></li>
             <li><a href="?url=home/services" class="active">Services</a></li>
             <li><a href="?url=home/contact">Contact</a></li>
         </ul>
-        <div class="svc-emergency">
-            <span>🚑</span> +94 777 999 000
+        <div class="nav-auth">
+            <?php if (Auth::isLoggedIn()): ?>
+                <a href="<?php echo Auth::ROLE_DASHBOARDS[Auth::role()] ?? '?url=home/index'; ?>" class="btn-cta-primary">Dashboard</a>
+            <?php else: ?>
+                <a href="?url=user/login" class="btn-login-text">Login</a>
+                <a href="?url=user/signup" class="btn-cta-primary">Join Us</a>
+            <?php endif; ?>
         </div>
     </div>
-</div>
+</nav>
 
 <!-- Page Header -->
 <div class="services-page-header">

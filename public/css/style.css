@@ -28,6 +28,13 @@
     --transition   : .3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ── 2. Utility Classes ─────────────── */
+.container {
+    max-width: 1500px;
+    width: 95%;
+    margin: 0 auto;
+}
+
 /* ── 2. Reset & Base ────────────────────────────────────────── */
 *, *::before, *::after {
     box-sizing: border-box;
@@ -1094,7 +1101,7 @@ body.page-about {
 }
 
 .page-about .container {
-    max-width: 1240px;
+    max-width: 1500px;
     margin: 0 auto;
     padding: 0 24px;
 }

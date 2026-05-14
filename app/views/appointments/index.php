@@ -62,8 +62,10 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                                                 <?php echo htmlspecialchars($appt['reason']); ?>
                                             </div>
                                         </td>
-                                        <td>
-                                            <?php if ($appt['status'] === 'approved'): ?>
+                                        <td id="status-cell-<?php echo $appt['id']; ?>">
+                                            <?php if (in_array($appt['status'], ['confirmed', 'checked-in', 'ready'])): ?>
+                                                <span class="text-green-bold">✅ <?php echo ucfirst($appt['status']); ?></span>
+                                            <?php elseif ($appt['status'] === 'approved'): ?>
                                                 <span class="text-green-bold">✅ Approved</span>
                                             <?php elseif ($appt['status'] === 'cancelled'): ?>
                                                 <span class="text-danger-bold">❌ Cancelled</span>
@@ -96,3 +98,54 @@ require_once __DIR__ . '/../../views/layouts/header.php';
 </div>
 
 <?php require_once __DIR__ . '/../../views/layouts/footer.php'; ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const appointmentIds = <?php echo json_encode(array_column($appointments, 'id')); ?>;
+    
+    function checkStatusUpdates() {
+        if (appointmentIds.length === 0) return;
+        
+        // We can create a simple endpoint or just fetch the current page and parse it,
+        // but for now, let's just use a simple fetch to a new endpoint we'll create.
+        fetch('?url=appointment/getStatuses&ids=' + appointmentIds.join(','))
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    for (const [id, status] of Object.entries(data.statuses)) {
+                        updateStatusUI(id, status);
+                    }
+                }
+            })
+            .catch(err => console.error('Error fetching statuses:', err));
+    }
+
+    function updateStatusUI(id, status) {
+        const cell = document.getElementById('status-cell-' + id);
+        if (!cell) return;
+
+        let html = '';
+        if (['confirmed', 'checked-in', 'ready'].includes(status)) {
+            html = `<span class="text-green-bold">✅ ${status.charAt(0).toUpperCase() + status.slice(1)}</span>`;
+        } else if (status === 'approved') {
+            html = `<span class="text-green-bold">✅ Approved</span>`;
+        } else if (status === 'cancelled') {
+            html = `<span class="text-danger-bold">❌ Cancelled</span>`;
+        } else if (status === 'completed') {
+            html = `<span class="badge badge-vet">🏁 Completed</span>`;
+        } else {
+            html = `<span class="text-gray-600">⏳ Pending</span>`;
+        }
+
+        if (cell.innerHTML.trim() !== html.trim()) {
+            cell.innerHTML = html;
+            // Add a little highlight effect
+            cell.style.backgroundColor = '#fef3c7';
+            setTimeout(() => { cell.style.backgroundColor = 'transparent'; }, 1000);
+        }
+    }
+
+    // Check every 10 seconds
+    setInterval(checkStatusUpdates, 10000);
+});
+</script>

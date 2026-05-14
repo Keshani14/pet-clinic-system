@@ -13,7 +13,7 @@ body.page-services {
 }
 /* ─── Nav ─── */
 .services-topbar { background:#ffffff; border-bottom:1px solid #eee; padding:12px 0; }
-.services-topbar-inner { max-width:1200px; margin:0 auto; padding:0 30px; display:flex; align-items:center; justify-content:space-between; }
+.services-topbar-inner { max-width:1500px; margin:0 auto; padding:0 30px; display:flex; align-items:center; justify-content:space-between; }
 .svc-phone { display:flex; align-items:center; gap:8px; font-weight:700; font-size:1.05rem; color:#1a1a1a; }
 .svc-nav-links { display:flex; list-style:none; gap:40px; margin:0; padding:0; }
 .svc-nav-links a { text-decoration:none; color:#333; font-weight:600; font-size:1rem; transition:color .2s; }
@@ -22,7 +22,7 @@ body.page-services {
 
 /* ─── Breadcrumb ─── */
 .breadcrumb-bar { background:#ffffff; border-bottom:1px solid #eee; padding:14px 0; }
-.breadcrumb-bar .container { max-width:1200px; margin:0 auto; padding:0 30px; }
+.breadcrumb-bar .container { max-width:1500px; margin:0 auto; padding:0 30px; }
 .breadcrumb { display:flex; align-items:center; gap:8px; font-size:0.9rem; color:#888; }
 .breadcrumb a { color:#db2777; text-decoration:none; font-weight:600; }
 .breadcrumb a:hover { text-decoration:underline; }
@@ -46,7 +46,7 @@ body.page-services {
 }
 .svc-hero-text {
     position:relative; z-index:2;
-    max-width:1200px; margin:0 auto; padding:0 30px; width:100%;
+    max-width:1500px; margin:0 auto; padding:0 30px; width:100%;
 }
 .svc-hero-badge {
     display:inline-block; padding:6px 16px;
@@ -61,7 +61,7 @@ body.page-services {
 }
 
 /* ─── Content Layout ─── */
-.svc-detail-body { max-width:1200px; margin:0 auto; padding:70px 30px 100px; }
+.svc-detail-body { max-width:1500px; margin:0 auto; padding:70px 30px 100px; }
 .svc-detail-layout { display:grid; grid-template-columns:1.4fr 1fr; gap:70px; align-items:start; }
 
 .svc-detail-left h2 {
@@ -130,22 +130,39 @@ body.page-services {
 </style>
 
 <!-- Top Bar -->
-<div class="services-topbar">
-    <div class="services-topbar-inner">
-        <div class="svc-phone">
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.82 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-            +94 112 345 678
+<div class="top-bar">
+    <div class="container top-bar-content">
+        <div class="contact-info">
+            <span class="icon">📞</span> +94 112 345 678 | <span class="icon">📧</span> info@petclinic.lk
         </div>
-        <ul class="svc-nav-links">
+        <div class="emergency-info">
+            <span class="icon red">🚑</span> 24/7 Emergency: +94 777 999 000
+        </div>
+    </div>
+</div>
+
+<nav class="home-nav">
+    <div class="container nav-content">
+        <a href="index.php" class="nav-logo">
+            <span>🐾</span> Pet Clinic
+        </a>
+        <ul class="nav-links-list">
             <li><a href="index.php">Home</a></li>
             <li><a href="?url=home/about">About</a></li>
             <li><a href="#">Team</a></li>
             <li><a href="?url=home/services" class="active">Services</a></li>
             <li><a href="?url=home/contact">Contact</a></li>
         </ul>
-        <div class="svc-emergency">🚑 +94 777 999 000</div>
+        <div class="nav-auth">
+            <?php if (Auth::isLoggedIn()): ?>
+                <a href="<?php echo Auth::ROLE_DASHBOARDS[Auth::role()] ?? '?url=home/index'; ?>" class="btn-cta-primary">Dashboard</a>
+            <?php else: ?>
+                <a href="?url=user/login" class="btn-login-text">Login</a>
+                <a href="?url=user/signup" class="btn-cta-primary">Join Us</a>
+            <?php endif; ?>
+        </div>
     </div>
-</div>
+</nav>
 
 <!-- Breadcrumb -->
 <div class="breadcrumb-bar">

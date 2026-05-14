@@ -45,7 +45,7 @@ class PetModel {
      */
     public function getAllPets(): array {
         $query = "
-            SELECT p.id, p.name, p.type, p.breed, p.age, p.photo, p.owner_name, p.owner_phone,
+            SELECT p.id, p.name, p.type, p.breed, p.age, p.dob, p.photo, p.owner_name, p.owner_phone,
                    u.first_name AS owner_first_name, u.last_name AS owner_last_name, u.phone AS owner_phone_user
             FROM pets p
             LEFT JOIN users u ON p.owner_id = u.id
@@ -57,6 +57,7 @@ class PetModel {
         
         if ($result && $result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
+                $row['age'] = $this->calculateAgeFromDob($row['dob'], $row['age']);
                 $pets[] = $row;
             }
         }
@@ -80,7 +81,7 @@ class PetModel {
      */
     public function getPetsByOwner(int $ownerId): array {
         $stmt = $this->db->conn->prepare(
-            "SELECT id, name, type, breed, age, photo, owner_name, owner_phone FROM pets WHERE owner_id = ? ORDER BY created_at DESC"
+            "SELECT id, name, type, breed, age, dob, photo, owner_name, owner_phone FROM pets WHERE owner_id = ? ORDER BY created_at DESC"
         );
         $stmt->bind_param("i", $ownerId);
         $stmt->execute();
@@ -89,6 +90,7 @@ class PetModel {
         $pets = [];
         if ($result && $result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
+                $row['age'] = $this->calculateAgeFromDob($row['dob'], $row['age']);
                 $pets[] = $row;
             }
         }
@@ -107,7 +109,50 @@ class PetModel {
         $result = $stmt->get_result();
         $pet = $result->fetch_assoc();
         $stmt->close();
+        
+        if ($pet) {
+            $pet['age'] = $this->calculateAgeFromDob($pet['dob'], $pet['age']);
+        }
+        
         return $pet ?: null;
+    }
+
+    /**
+     * Helper to calculate human-friendly age string from DOB
+     */
+    private function calculateAgeFromDob(?string $dob, $fallbackAge): string {
+        if (empty($dob)) {
+            return $fallbackAge . ' yrs';
+        }
+        
+        try {
+            $birthDate = new DateTime($dob);
+            $today = new DateTime('today');
+            $diff = $birthDate->diff($today);
+            
+            $y = $diff->y;
+            $m = $diff->m;
+            $d = $diff->d;
+
+            if ($y > 0) {
+                if ($m > 0) {
+                    return $y . ($y == 1 ? ' yr, ' : ' yrs, ') . $m . ($m == 1 ? ' month' : ' months');
+                }
+                return $y . ($y == 1 ? ' yr' : ' yrs');
+            }
+            
+            if ($m > 0) {
+                return $m . ($m == 1 ? ' month' : ' months');
+            }
+            
+            if ($d > 0) {
+                return $d . ($d == 1 ? ' day' : ' days');
+            }
+            
+            return 'Newborn';
+        } catch (Exception $e) {
+            return $fallbackAge . ' yrs';
+        }
     }
 
     /**

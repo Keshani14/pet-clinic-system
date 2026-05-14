@@ -105,4 +105,30 @@ class AppointmentController extends Controller {
             'appointments' => $appointments
         ]);
     }
+
+    /**
+     * API Endpoint: Get statuses for a list of IDs (for real-time updates).
+     */
+    public function getStatuses() {
+        header('Content-Type: application/json');
+        $idsStr = $_GET['ids'] ?? '';
+        if (empty($idsStr)) {
+            echo json_encode(['status' => 'error', 'message' => 'No IDs provided']);
+            exit;
+        }
+
+        $ids = explode(',', $idsStr);
+        $appointmentModel = $this->model('AppointmentModel');
+        $statuses = [];
+
+        foreach ($ids as $id) {
+            $appt = $appointmentModel->getAppointmentById((int)$id);
+            if ($appt) {
+                $statuses[$id] = $appt['status'];
+            }
+        }
+
+        echo json_encode(['status' => 'success', 'statuses' => $statuses]);
+        exit;
+    }
 }
