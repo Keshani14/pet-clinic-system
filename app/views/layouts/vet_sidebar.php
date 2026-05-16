@@ -10,16 +10,19 @@ $currentUrl = $_GET['url'] ?? 'home/index';
     
     <nav class="sidebar-nav">
         <a href="?url=vet/dashboard" class="sidebar-link <?php echo ($currentUrl === 'vet/dashboard') ? 'active' : ''; ?>">
-            Dashboard
+            <span class="icon">📊</span> Dashboard
         </a>
         <a href="?url=pet/listPets" class="sidebar-link <?php echo ($currentUrl === 'pet/listPets') ? 'active' : ''; ?>">
-            Patient Records
+            <span class="icon">🐾</span> Patient Records
         </a>
         <a href="?url=medical/index" class="sidebar-link <?php echo (strpos($currentUrl, 'medical/') === 0) ? 'active' : ''; ?>">
-            Medical Records
+            <span class="icon">📜</span> Medical Records
         </a>
         <a href="?url=vet/appointments" class="sidebar-link <?php echo ($currentUrl === 'vet/appointments') ? 'active' : ''; ?>">
-            Appointments
+            <span class="icon">📅</span> Appointments
+        </a>
+        <a href="?url=user/profile" class="sidebar-link <?php echo ($currentUrl === 'user/profile') ? 'active' : ''; ?>">
+            <span class="icon">👤</span> My Profile
         </a>
     </nav>
     

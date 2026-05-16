@@ -157,7 +157,7 @@ class AppointmentModel {
      * Search and Filter appointments (for Nurse Dashboard).
      */
     public function searchAppointments(?string $query = null, ?string $status = null, ?string $date = null): array {
-        $sql = "SELECT a.*, p.name as pet_name_orig, p.type as pet_type, 
+        $sql = "SELECT a.*, p.name as pet_name_orig, p.type as pet_type, p.age as pet_age, p.dob as pet_dob,
                        u.first_name as owner_first, u.last_name as owner_last,
                        nn.weight, nn.temperature, nn.symptoms, nn.notes as nurse_notes
                 FROM appointments a

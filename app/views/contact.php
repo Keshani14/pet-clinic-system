@@ -209,7 +209,7 @@ body.page-contact {
 <nav class="home-nav">
     <div class="container nav-content">
         <a href="index.php" class="nav-logo">
-            <span>🐾</span> Pet Clinic
+            <span>🐾</span> Furry Friends
         </a>
         <ul class="nav-links-list">
             <li><a href="index.php">Home</a></li>

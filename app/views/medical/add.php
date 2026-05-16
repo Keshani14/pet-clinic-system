@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Add Medical Record — Pet Clinic';
+$pageTitle = 'Add Medical Record — Furry Friends';
 $bodyClass = (Auth::role() === 'vet') ? 'dashboard-layout' : '';
 require_once __DIR__ . '/../../views/layouts/header.php';
 ?>

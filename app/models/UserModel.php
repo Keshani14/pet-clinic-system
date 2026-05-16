@@ -74,6 +74,25 @@ class UserModel {
     }
 
     /**
+     * Find a user row by ID.
+     *
+     * @param  int        $id
+     * @return array|null
+     */
+    public function getUserById(int $id): ?array {
+        $stmt = $this->db->conn->prepare(
+            "SELECT id, first_name, last_name, name, email, phone, role, status, profile_photo, created_at
+             FROM users WHERE id = ? LIMIT 1"
+        );
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user   = $result->fetch_assoc() ?: null;
+        $stmt->close();
+        return $user;
+    }
+
+    /**
      * Find a user row by email address.
      * Returns the full row as an associative array, or null if not found.
      * Used by the login flow to verify credentials.
@@ -140,5 +159,35 @@ class UserModel {
             }
         }
         return $users;
+    }
+
+    /**
+     * Update user profile information.
+     */
+    public function updateProfile(int $id, array $data): bool {
+        $stmt = $this->db->conn->prepare(
+            "UPDATE users SET first_name = ?, last_name = ?, email = ?, phone = ? WHERE id = ?"
+        );
+        $stmt->bind_param("ssssi", 
+            $data['first_name'], 
+            $data['last_name'], 
+            $data['email'], 
+            $data['phone'], 
+            $id
+        );
+        $success = $stmt->execute();
+        $stmt->close();
+        return $success;
+    }
+
+    /**
+     * Update user profile photo path.
+     */
+    public function updateProfilePhoto(int $id, string $photoPath): bool {
+        $stmt = $this->db->conn->prepare("UPDATE users SET profile_photo = ? WHERE id = ?");
+        $stmt->bind_param("si", $photoPath, $id);
+        $success = $stmt->execute();
+        $stmt->close();
+        return $success;
     }
 }

@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Pet Health Tips — Pet Clinic';
+$pageTitle = 'Pet Health Tips — Furry Friends';
 $bodyClass = 'dashboard-layout';
 
 $extraHead = '

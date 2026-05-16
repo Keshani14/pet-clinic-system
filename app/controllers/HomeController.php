@@ -33,7 +33,7 @@ class HomeController extends Controller {
                 'heading'    => 'Expert <span>Pain Management</span> for Your Pet',
                 'summary'    => 'Advanced multimodal pain relief strategies for cats, dogs and more.',
                 'paragraphs' => [
-                    'Pain management is a cornerstone of compassionate veterinary care. At Pet Clinic, we believe every animal deserves to live comfortably and free from unnecessary suffering. Our team of specialists uses the latest multimodal pain control techniques to ensure your pet recovers quickly and comfortably.',
+                    'Pain management is a cornerstone of compassionate veterinary care. At Furry Friends, we believe every animal deserves to live comfortably and free from unnecessary suffering. Our team of specialists uses the latest multimodal pain control techniques to ensure your pet recovers quickly and comfortably.',
                     'Whether your pet is recovering from surgery, managing a chronic condition like arthritis, or receiving treatment for an acute injury, our evidence-based pain protocols are tailored specifically to their needs and species.',
                 ],
                 'features' => [

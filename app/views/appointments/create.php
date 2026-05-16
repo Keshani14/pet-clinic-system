@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Book Appointment — Pet Clinic';
+$pageTitle = 'Book Appointment — Furry Friends';
 $bodyClass = 'dashboard-layout';
 
 // Load Flatpickr for a premium date/time picker experience
@@ -18,7 +18,11 @@ require_once __DIR__ . '/../../views/layouts/header.php';
 
 <div class="dashboard-wrapper">
     <?php 
-    if (file_exists(__DIR__ . '/../../views/layouts/owner_sidebar.php')) {
+    if (Auth::role() === 'nurse') {
+        require_once __DIR__ . '/../../views/layouts/nurse_sidebar.php';
+    } elseif (Auth::role() === 'vet') {
+        require_once __DIR__ . '/../../views/layouts/vet_sidebar.php';
+    } elseif (Auth::role() === 'owner') {
         require_once __DIR__ . '/../../views/layouts/owner_sidebar.php';
     }
     ?>
@@ -26,21 +30,23 @@ require_once __DIR__ . '/../../views/layouts/header.php';
         <div class="card card--xl">
             <div class="card-header">
                 <span class="paw-icon" aria-hidden="true">📅</span>
-                <h1>Book Appointment</h1>
-                <p>Schedule a visit for your furry friend.</p>
+                <h1><?php echo (Auth::role() === 'owner') ? 'Book Appointment' : 'Register Walk-in / Booking'; ?></h1>
+                <p><?php echo (Auth::role() === 'owner') ? 'Schedule a visit for your furry friend.' : 'Register a patient arrival or schedule a new clinical slot.'; ?></p>
             </div>
             
             <div class="card-body">
-                <?php if (empty($myPets)): ?>
+                <?php if (empty($pets)): ?>
                     <div class="text-center py-40">
                         <div class="icon-lg mb-20" style="font-size: 4rem;">🐾</div>
-                        <h2 class="text-gray-800 mb-10">No Pets Found</h2>
+                        <h2 class="text-gray-800 mb-10">No Patients Found</h2>
                         <p class="text-gray-600 mb-30" style="font-size: 1.1rem;">
-                            Please add a pet before booking an appointment.
+                            The clinic database is currently clear.
                         </p>
-                        <a href="?url=pet/addPet" class="btn-primary" style="max-width: 250px; margin: 0 auto; display: block;">
-                            Add Pet +
-                        </a>
+                        <?php if (Auth::role() === 'owner'): ?>
+                            <a href="?url=pet/addPet" class="btn-primary" style="max-width: 250px; margin: 0 auto; display: block;">
+                                Add Pet +
+                            </a>
+                        <?php endif; ?>
                     </div>
                 <?php else: ?>
                     <?php if (!empty($errors['general'])): ?>
@@ -56,7 +62,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                         
                         <?php if ($isVaccination): ?>
                         <div class="alert alert-info" style="margin-bottom: 25px; background: #fff5f5; border: 1px solid #fecaca; color: #991b1b;">
-                            <strong>🛡️ Vaccination Appointment:</strong> You are booking an immunization for your pet. Please specify the vaccine in the reason box if known.
+                            <strong>🛡️ Vaccination Appointment:</strong> You are booking an immunization for this patient.
                         </div>
                         <?php endif; ?>
 
@@ -69,16 +75,20 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="pet_name">Select Pet <span class="required">*</span></label>
+                                <label for="pet_id"><?php echo (Auth::role() === 'owner') ? 'Select Pet' : 'Search Patient'; ?> <span class="required">*</span></label>
                                 <div class="input-wrap">
                                     <span class="icon">🐾</span>
                                     <select name="pet_id" id="pet_id" 
                                             class="<?php echo isset($errors['pet_id']) ? 'is-invalid' : ''; ?>" required>
-                                        <option value="">-- Choose a Pet --</option>
-                                        <?php foreach ($myPets as $pet): ?>
+                                        <option value="">-- Choose a Patient --</option>
+                                        <?php foreach ($pets as $pet): ?>
                                             <option value="<?php echo $pet['id']; ?>"
                                                 <?php echo (isset($old['pet_id']) && $old['pet_id'] == $pet['id']) ? 'selected' : ''; ?>>
-                                                <?php echo htmlspecialchars($pet['name']); ?> (<?php echo htmlspecialchars($pet['type']); ?>)
+                                                <?php echo htmlspecialchars($pet['name']); ?> 
+                                                (<?php echo htmlspecialchars($pet['type']); ?>) 
+                                                <?php if (Auth::role() !== 'owner'): ?>
+                                                    — Owner: <?php echo htmlspecialchars($pet['owner_name'] ?? 'N/A'); ?>
+                                                <?php endif; ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
@@ -107,7 +117,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                             <label for="reason">Reason for Visit <span class="required">*</span></label>
                             <div class="input-wrap">
                                 <span class="icon">📝</span>
-                                <textarea name="reason" id="reason" rows="4" placeholder="Briefly describe why you are booking this appointment..." 
+                                <textarea name="reason" id="reason" rows="4" placeholder="Briefly describe why this appointment is being booked..." 
                                           class="<?php echo isset($errors['reason']) ? 'is-invalid' : ''; ?>" required><?php echo htmlspecialchars($old['reason'] ?? ''); ?></textarea>
                             </div>
                             <?php if (isset($errors['reason'])): ?>
@@ -123,7 +133,11 @@ require_once __DIR__ . '/../../views/layouts/header.php';
 
                 <div class="divider-line"></div>
                 <div class="text-center">
-                    <a href="?url=appointment/myAppointments" class="link-back">← View My Appointments</a>
+                    <?php if (Auth::role() === 'owner'): ?>
+                        <a href="?url=appointment/myAppointments" class="link-back">← View My Appointments</a>
+                    <?php else: ?>
+                        <a href="?url=nurse/dashboard" class="link-back">← Back to Dashboard</a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

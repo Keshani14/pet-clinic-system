@@ -9,13 +9,20 @@ $currentUrl = $_GET['url'] ?? 'nurse/dashboard';
     
     <nav class="sidebar-nav">
         <a href="?url=nurse/dashboard" class="sidebar-link <?php echo ($currentUrl === 'nurse/dashboard') ? 'active' : ''; ?>">
-            Dashboard
+            <span class="icon">📊</span> Dashboard
+        </a>
+        <a href="?url=appointment/create" class="sidebar-link <?php echo ($currentUrl === 'appointment/create') ? 'active' : ''; ?>">
+            <span class="icon">🗓️</span> Book Appointment
         </a>
         <a href="?url=nurse/appointments" class="sidebar-link <?php echo (strpos($currentUrl, 'nurse/appointments') === 0) ? 'active' : ''; ?>">
-            Patient Queue 📋
+            <span class="icon">📋</span> Patient Queue
         </a>
         <a href="?url=pet/listPets" class="sidebar-link <?php echo (strpos($currentUrl, 'pet/') === 0) ? 'active' : ''; ?>">
-            All Pets 🐾
+            <span class="icon">🐾</span> All Pets
+        </a>
+
+        <a href="?url=user/profile" class="sidebar-link <?php echo ($currentUrl === 'user/profile') ? 'active' : ''; ?>">
+            <span class="icon">👤</span> My Profile
         </a>
     </nav>
     

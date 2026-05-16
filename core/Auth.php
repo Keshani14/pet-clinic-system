@@ -67,6 +67,7 @@ class Auth {
         $_SESSION['user_name']  = trim(($user['first_name'] ?? '') . ' ' . ($user['last_name'] ?? ($user['name'] ?? '')));
         $_SESSION['user_email'] = $user['email'];
         $_SESSION['user_role']  = $user['role'];
+        $_SESSION['user_photo'] = $user['profile_photo'] ?? null;
         $_SESSION['last_login'] = time();
     }
 
@@ -92,6 +93,11 @@ class Auth {
     /** Convenience: get current user's display name from session. */
     public static function name(): string {
         return $_SESSION['user_name'] ?? 'User';
+    }
+
+    /** Convenience: get current user's photo from session. */
+    public static function photo(): ?string {
+        return $_SESSION['user_photo'] ?? null;
     }
 
     /* ── CSRF Protection ────────────────────────────────────── */

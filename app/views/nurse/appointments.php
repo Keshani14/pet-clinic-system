@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Patient Queue — Pet Clinic';
+$pageTitle = 'Patient Queue — Furry Friends';
 $bodyClass = 'dashboard-layout';
 require_once __DIR__ . '/../../views/layouts/header.php';
 ?>
@@ -48,7 +48,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                 <!-- Search & Filters -->
                 <div style="background: #f8fafc; padding: 20px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #e2e8f0;">
                     <form action="" method="GET" style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap;">
-                        <input type="hidden" name="url" value="nurse/dashboard">
+                        <input type="hidden" name="url" value="nurse/appointments">
                         
                         <div style="flex: 1; min-width: 200px;">
                             <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--gray-500); margin-bottom: 5px;">Search Patient/Owner</label>
@@ -73,8 +73,8 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                         </div>
 
                         <button type="submit" class="btn-pill" style="background: var(--pink-500); color: white; border: none; padding: 10px 20px;">Apply Filters</button>
-                        <a href="?url=nurse/dashboard&date=" class="btn-pill" style="background: #e0e7ff; color: #4338ca; border: none; padding: 10px 20px; font-weight: 700;">Show All Dates</a>
-                        <a href="?url=nurse/dashboard" class="btn-pill" style="background: var(--gray-200); color: var(--gray-600); border: none; padding: 10px 20px;">Reset to Today</a>
+                        <a href="?url=nurse/appointments&date=" class="btn-pill" style="background: #e0e7ff; color: #4338ca; border: none; padding: 10px 20px; font-weight: 700;">Show All Dates</a>
+                        <a href="?url=nurse/appointments" class="btn-pill" style="background: var(--gray-200); color: var(--gray-600); border: none; padding: 10px 20px;">Reset to Today</a>
                     </form>
                 </div>
 

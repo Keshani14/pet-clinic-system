@@ -1,7 +1,7 @@
 <?php
 // ── Page meta ─────────────────────────────────────────────────
-$pageTitle       = 'Sign Up — Pet Clinic';
-$pageDescription = "Create your Pet Clinic account — book appointments and manage your pet's health records with ease.";
+$pageTitle       = 'Sign Up — Furry Friends';
+$pageDescription = "Create your Furry Friends account — book appointments and manage your pet's health records with ease.";
 require_once __DIR__ . '/../../views/layouts/header.php';
 ?>
 
@@ -11,7 +11,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
     <div class="card-header">
         <span class="paw-icon" aria-hidden="true">🐾</span>
         <h1>Create Your Account</h1>
-        <p>Join Pet Clinic and keep your furry friends healthy!</p>
+        <p>Join Furry Friends and keep your furry friends healthy!</p>
     </div>
 
     <!-- ── Card Body ───────────────────────────────────────── -->
@@ -93,6 +93,27 @@ require_once __DIR__ . '/../../views/layouts/header.php';
                     <span class="field-error" role="alert">
                         <span aria-hidden="true">⚠</span>
                         <?php echo htmlspecialchars($errors['email']); ?>
+                    </span>
+                <?php endif; ?>
+            </div>
+
+            <!-- Phone Number -->
+            <div class="form-group">
+                <label for="phone">
+                    Phone Number
+                </label>
+                <div class="input-wrap">
+                    <span class="icon" aria-hidden="true">📞</span>
+                    <input type="tel" id="phone" name="phone"
+                           placeholder="+94 77 123 4567"
+                           value="<?php echo htmlspecialchars($old['phone'] ?? ''); ?>"
+                           class="<?php echo !empty($errors['phone']) ? 'is-invalid' : ''; ?>"
+                           autocomplete="tel">
+                </div>
+                <?php if (!empty($errors['phone'])): ?>
+                    <span class="field-error" role="alert">
+                        <span aria-hidden="true">⚠</span>
+                        <?php echo htmlspecialchars($errors['phone']); ?>
                     </span>
                 <?php endif; ?>
             </div>

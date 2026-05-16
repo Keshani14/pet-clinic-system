@@ -33,6 +33,18 @@ The system features a **state-of-the-art UI** designed for maximum user engageme
 
 ---
 
+## 🔄 System Workflow
+The platform follows a streamlined patient journey with automated health tracking:
+
+1. **Smart Registration:** When a pet is registered, the system automatically generates a **full vaccination schedule** tailored to the pet type (Dog/Cat) and age.
+2. **Booking:** Owners schedule appointments online, selecting pet type, preferred doctor, and reason for visit (General or Vaccination).
+3. **Confirmation:** Clinic staff review and confirm the appointment. The owner's dashboard updates in real-time.
+4. **Check-in:** Upon arrival, the Nurse checks the pet in, recording vitals (Weight, Temp) and initial symptoms.
+5. **Clinical Action:** The Vet performs the exam. If it's a vaccination appointment, the system records the batch number, next due date, and automatically updates the immunization passport.
+6. **Completion:** The record is finalized, the schedule status is updated, and the pet's digital medical history is immediately available to the owner.
+
+---
+
 ## 🛠️ Technology Stack
 - **Backend:** PHP 8.x (Custom MVC Framework)
 - **Database:** MySQL / MariaDB

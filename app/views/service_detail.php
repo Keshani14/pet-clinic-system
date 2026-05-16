@@ -1,5 +1,5 @@
 <?php
-$pageTitle       = ($service['name'] ?? 'Service') . ' — Pet Clinic';
+$pageTitle       = ($service['name'] ?? 'Service') . ' — Furry Friends';
 $pageDescription = $service['summary'] ?? '';
 $bodyClass       = 'page-services';
 require_once __DIR__ . '/layouts/header.php';
@@ -144,7 +144,7 @@ body.page-services {
 <nav class="home-nav">
     <div class="container nav-content">
         <a href="index.php" class="nav-logo">
-            <span>🐾</span> Pet Clinic
+            <span>🐾</span> Furry Friends
         </a>
         <ul class="nav-links-list">
             <li><a href="index.php">Home</a></li>
@@ -208,7 +208,7 @@ body.page-services {
             <div class="svc-cta-card">
                 <div class="cta-icon"><?php echo $service['icon']; ?></div>
                 <h3>Ready to Get Started?</h3>
-                <p>Register with Pet Clinic today and give your pet the world-class care they deserve.</p>
+                <p>Register with Furry Friends today and give your pet the world-class care they deserve.</p>
                 <a href="?url=user/signup" class="btn-register-now">Register Now — It's Free</a>
                 <a href="?url=user/login" class="btn-login-alt">Already a member? Login</a>
                 <p class="cta-note">✨ No credit card required. Cancel anytime.</p>

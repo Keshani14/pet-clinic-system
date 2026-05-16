@@ -15,21 +15,56 @@ class NurseController extends Controller {
     public function dashboard() {
         $appointmentModel = $this->model('AppointmentModel');
         
+        // Get stats for today
+        $today = date('Y-m-d');
+        $allToday = $appointmentModel->searchAppointments(null, null, $today);
+        
+        $stats = [
+            'total_today' => count($allToday),
+            'pending' => 0,
+            'confirmed' => 0,
+            'checked_in' => 0,
+            'ready' => 0
+        ];
+
+        foreach ($allToday as $appt) {
+            if ($appt['status'] === 'pending') $stats['pending']++;
+            if ($appt['status'] === 'confirmed') $stats['confirmed']++;
+            if ($appt['status'] === 'checked-in') $stats['checked_in']++;
+            if ($appt['status'] === 'ready') $stats['ready']++;
+        }
+
+        // Get 5 most recent activity items for today
+        $recent = array_slice($allToday, 0, 5);
+
+        $this->view('nurse/dashboard', [
+            'name' => Auth::name(),
+            'stats' => $stats,
+            'recent' => $recent
+        ]);
+    }
+
+    /**
+     * Patient Queue — detailed list with search and filters.
+     */
+    public function appointments() {
+        $appointmentModel = $this->model('AppointmentModel');
+        
         $query  = $_GET['q'] ?? null;
         $status = $_GET['status'] ?? null;
         
         $dateParam = $_GET['date'] ?? 'default';
         if ($dateParam === 'default') {
-            $date = date('Y-m-d'); // First time load
+            $date = date('Y-m-d');
         } elseif ($dateParam === '') {
-            $date = null; // User explicitly cleared the date
+            $date = null;
         } else {
             $date = $dateParam;
         }
 
         $appointments = $appointmentModel->searchAppointments($query, $status, $date);
 
-        // Calculate stats based on the filtered appointments
+        // Calculate stats for the current view
         $stats = [
             'total_today' => count($appointments),
             'pending' => 0,
@@ -55,13 +90,6 @@ class NurseController extends Controller {
                 'date' => $date
             ]
         ]);
-    }
-
-    /**
-     * Alias for dashboard - Patient Queue.
-     */
-    public function appointments() {
-        $this->dashboard();
     }
 
     /**
@@ -111,7 +139,7 @@ class NurseController extends Controller {
         if ($appointmentModel->updateStatus((int)$id, 'confirmed', $_SESSION['user_id'])) {
             $_SESSION['flash_success'] = '✅ Appointment confirmed.';
         }
-        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? '?url=nurse/dashboard'));
+        header('Location: ?url=nurse/dashboard');
         exit;
     }
 
@@ -124,6 +152,18 @@ class NurseController extends Controller {
             $_SESSION['flash_success'] = '📍 Patient checked in. Please record vitals and symptoms.';
             header('Location: ?url=nurse/prepare/' . $id);
             exit;
+        }
+        header('Location: ?url=nurse/dashboard');
+        exit;
+    }
+
+    /**
+     * Manually mark an appointment as 'ready' for the vet.
+     */
+    public function markReady($id) {
+        $appointmentModel = $this->model('AppointmentModel');
+        if ($appointmentModel->updateStatus((int)$id, 'ready', $_SESSION['user_id'])) {
+            $_SESSION['flash_success'] = '🎯 Patient marked as Ready for Vet.';
         }
         header('Location: ?url=nurse/dashboard');
         exit;

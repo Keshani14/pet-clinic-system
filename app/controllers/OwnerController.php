@@ -14,8 +14,12 @@ class OwnerController extends Controller {
         $appointments = $appointmentModel->getAppointmentsByOwner($_SESSION['user_id']);
         $reminders = $vaccinationModel->getReminders($_SESSION['user_id']);
 
+        $petModel = $this->model('PetModel');
+        $myPets = $petModel->getPetsByOwner($_SESSION['user_id']);
+        
         $data = [
             'name' => Auth::name(),
+            'pets' => $myPets,
             'appointments' => array_slice($appointments, 0, 3),
             'reminders' => $reminders
         ];

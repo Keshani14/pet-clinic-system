@@ -1,5 +1,5 @@
 <?php
-$pageTitle       = 'Our Services — Pet Clinic';
+$pageTitle       = 'Our Services — Furry Friends';
 $pageDescription = 'Discover the comprehensive veterinary services we offer.';
 $bodyClass       = 'page-services';
 require_once __DIR__ . '/layouts/header.php';
@@ -161,7 +161,7 @@ body.page-services {
 <nav class="home-nav">
     <div class="container nav-content">
         <a href="index.php" class="nav-logo">
-            <span>🐾</span> Pet Clinic
+            <span>🐾</span> Furry Friends
         </a>
         <ul class="nav-links-list">
             <li><a href="index.php">Home</a></li>

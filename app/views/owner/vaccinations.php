@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'My Pets\' Vaccinations — Pet Clinic';
+$pageTitle = 'My Pets\' Vaccinations — Furry Friends';
 $bodyClass = 'dashboard-layout';
 require_once __DIR__ . '/../../views/layouts/header.php';
 ?>

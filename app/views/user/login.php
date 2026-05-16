@@ -1,7 +1,7 @@
 <?php
 // ── Page meta ─────────────────────────────────────────────────
-$pageTitle       = 'Log In — Pet Clinic';
-$pageDescription = 'Log in to your Pet Clinic account to manage appointments and your pet\'s health records.';
+$pageTitle       = 'Log In — Furry Friends';
+$pageDescription = 'Log in to your Furry Friends account to manage appointments and your pet\'s health records.';
 require_once __DIR__ . '/../../views/layouts/header.php';
 ?>
 
