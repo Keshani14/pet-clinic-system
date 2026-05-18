@@ -1,4 +1,4 @@
-# 🐾 Pet Clinic Management System
+# 🐾 PetSync — Pet Clinic Management System
 
 A high-end, full-stack veterinary management platform designed to streamline clinic operations while providing a premium experience for pet owners. Built with a custom **PHP MVC Architecture** and a focus on visual excellence.
 

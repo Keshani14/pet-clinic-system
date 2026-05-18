@@ -1,7 +1,7 @@
 <?php
 // ── Page meta ─────────────────────────────────────────────────
-$pageTitle       = 'Sign Up — Furry Friends';
-$pageDescription = "Create your Furry Friends account — book appointments and manage your pet's health records with ease.";
+$pageTitle       = 'Sign Up — PetSync';
+$pageDescription = "Create your PetSync account — book appointments and manage your pet's health records with ease.";
 require_once __DIR__ . '/../../views/layouts/header.php';
 ?>
 
@@ -11,7 +11,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
     <div class="card-header">
         <span class="paw-icon" aria-hidden="true">🐾</span>
         <h1>Create Your Account</h1>
-        <p>Join Furry Friends and keep your furry friends healthy!</p>
+        <p>Join PetSync and keep your furry friends healthy!</p>
     </div>
 
     <!-- ── Card Body ───────────────────────────────────────── -->

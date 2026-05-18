@@ -1,5 +1,5 @@
 /* =============================================================
-   Pet Clinic — Global Stylesheet
+   PetSync — Global Stylesheet
    File: public/css/style.css
    All pages share these tokens, components, and utilities.
    ============================================================= */
@@ -1715,7 +1715,7 @@ body.page-about {
     }
 }
 
-/* --- Furry Friends Advanced Dashboard Overhaul --- */
+/* --- PetSync Advanced Dashboard Overhaul --- */
 
 /* 👤 Personalized Nurse Header */
 .profile-pill {

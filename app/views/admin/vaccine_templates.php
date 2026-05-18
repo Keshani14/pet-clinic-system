@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Vaccine Templates — Admin';
+$pageTitle = 'Vaccine Templates — PetSync';
 $bodyClass = 'dashboard-layout';
 require_once __DIR__ . '/../../views/layouts/header.php';
 ?>

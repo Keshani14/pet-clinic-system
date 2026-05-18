@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Required Vaccinations — Furry Friends';
+$pageTitle = 'Required Vaccinations — PetSync';
 $bodyClass = 'dashboard-layout';
 
 $extraHead = '

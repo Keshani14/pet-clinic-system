@@ -1,5 +1,5 @@
 <?php
-$pageTitle       = 'Furry Friends — Connect. Care. Cure.';
+$pageTitle       = 'PetSync — Connect. Care. Cure.';
 $pageDescription = 'Providing the highest standard of veterinary care with compassion and expertise.';
 $bodyClass       = 'page-home';
 require_once __DIR__ . '/layouts/header.php';
@@ -9,7 +9,7 @@ require_once __DIR__ . '/layouts/header.php';
 <div class="top-bar">
     <div class="container top-bar-content">
         <div class="contact-info">
-            <span class="icon">📞</span> +94 112 345 678 | <span class="icon">📧</span> info@petclinic.lk
+            <span class="icon">📞</span> +94 112 345 678 | <span class="icon">📧</span> info@petsync.lk
         </div>
         <div class="emergency-info">
             <span class="top-bar-emergency">🚑 24/7 Emergency: +94 777 999 000</span>
@@ -20,7 +20,7 @@ require_once __DIR__ . '/layouts/header.php';
 <nav class="home-nav">
     <div class="container nav-content">
         <a href="index.php" class="nav-logo">
-            <span>🐾</span> Furry Friends
+            <span>🐾</span> PetSync
         </a>
         <ul class="nav-links-list">
             <li><a href="index.php" class="active">Home</a></li>

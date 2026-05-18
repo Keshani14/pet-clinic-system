@@ -1,4 +1,4 @@
--- Pet Clinic Management System - Database Schema
+-- PetSync — Database Schema
 -- Optimized for reliability, integrity, and scalability.
 -- Last Updated: 2026-05-12
 

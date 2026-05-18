@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Patient Directory — Furry Friends';
+$pageTitle = 'Patient Directory — PetSync';
 $userRole = Auth::role();
 $hasSidebar = in_array($userRole, ['vet', 'admin', 'owner', 'nurse']);
 
@@ -30,7 +30,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
     <header style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px;">
         <div>
             <h1 style="margin: 0; font-size: 2.5rem; font-weight: 900; color: #1e293b; letter-spacing: -1.5px;">Patient <span class="text-pink-600">Directory</span></h1>
-            <p style="margin: 8px 0 0; color: #64748b; font-weight: 700; font-size: 1.1rem;">Complete roster of registered patients at Furry Friends Clinic.</p>
+            <p style="margin: 8px 0 0; color: #64748b; font-weight: 700; font-size: 1.1rem;">Complete roster of registered patients at PetSync.</p>
         </div>
         <div style="display: flex; gap: 15px; align-items: center;">
             <div style="position: relative; width: 350px;">

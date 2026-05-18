@@ -1,5 +1,5 @@
 <?php
-$pageTitle       = 'About Us — Furry Friends';
+$pageTitle       = 'About Us — PetSync';
 $pageDescription = 'Learn more about our dedicated team and our mission to provide the best care for your pets.';
 $bodyClass       = 'page-about';
 require_once __DIR__ . '/layouts/header.php';
@@ -8,7 +8,7 @@ require_once __DIR__ . '/layouts/header.php';
 <div class="top-bar">
     <div class="container top-bar-content">
         <div class="contact-info">
-            <span class="icon">📞</span> +94 112 345 678 | <span class="icon">📧</span> info@petclinic.lk
+            <span class="icon">📞</span> +94 112 345 678 | <span class="icon">📧</span> info@petsync.lk
         </div>
         <div class="emergency-info">
             <span class="icon red">🚑</span> 24/7 Emergency: +94 777 999 000
@@ -19,7 +19,7 @@ require_once __DIR__ . '/layouts/header.php';
 <nav class="home-nav">
     <div class="container nav-content">
         <a href="index.php" class="nav-logo">
-            <span>🐾</span> Furry Friends
+            <span>🐾</span> PetSync
         </a>
         <ul class="nav-links-list">
             <li><a href="index.php">Home</a></li>
@@ -57,7 +57,7 @@ require_once __DIR__ . '/layouts/header.php';
             <div class="about-text-content">
                 <h2 class="section-title">Our <span>Story</span></h2>
                 <p class="about-p">
-                    Founded in 2010, Furry Friends has been a cornerstone of the local community, dedicated to the health and well-being of animals. What started as a small family-run practice has grown into a state-of-the-art facility, equipped with the latest medical technology and a team of highly specialized veterinarians.
+                    Founded in 2010, PetSync has been a cornerstone of the local community, dedicated to the health and well-being of animals. What started as a small family-run practice has grown into a state-of-the-art facility, equipped with the latest medical technology and a team of highly specialized veterinarians.
                 </p>
                 <p class="about-p">
                     We understand that your pets are more than just animals—they are members of your family. That's why we take a holistic and compassionate approach to every case, ensuring that both you and your furry friends feel comfortable and informed at every step of the way.

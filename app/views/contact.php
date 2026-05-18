@@ -1,6 +1,6 @@
 <?php
-$pageTitle       = 'Contact Us — PawCare Clinic';
-$pageDescription = 'Get in touch with PawCare Clinic. Find our address, phone, working hours, and send us a message.';
+$pageTitle       = 'Contact Us — PetSync';
+$pageDescription = 'Get in touch with PetSync. Find our address, phone, working hours, and send us a message.';
 $bodyClass       = 'page-contact';
 require_once __DIR__ . '/layouts/header.php';
 ?>
@@ -198,7 +198,7 @@ body.page-contact {
 <div class="top-bar">
     <div class="container top-bar-content">
         <div class="contact-info">
-            <span class="icon">📞</span> +94 112 345 678 | <span class="icon">📧</span> info@petclinic.lk
+            <span class="icon">📞</span> +94 112 345 678 | <span class="icon">📧</span> info@petsync.lk
         </div>
         <div class="emergency-info">
             <span class="icon red">🚑</span> 24/7 Emergency: +94 777 999 000
@@ -209,7 +209,7 @@ body.page-contact {
 <nav class="home-nav">
     <div class="container nav-content">
         <a href="index.php" class="nav-logo">
-            <span>🐾</span> Furry Friends
+            <span>🐾</span> PetSync
         </a>
         <ul class="nav-links-list">
             <li><a href="index.php">Home</a></li>
@@ -253,7 +253,7 @@ body.page-contact {
 
             <!-- Clinic Info -->
             <div class="info-card">
-                <div class="info-card-title">🐾 <span>PawCare Clinic</span> — Contact Info</div>
+                <div class="info-card-title">🐾 <span>PetSync</span> — Contact Info</div>
 
                 <div class="info-row">
                     <div class="info-icon">📍</div>
@@ -275,7 +275,7 @@ body.page-contact {
                     <div class="info-icon">📧</div>
                     <div class="info-text">
                         <strong>Email</strong>
-                        <span>support@pawcareclinic.com</span>
+                        <span>support@petsync.lk</span>
                     </div>
                 </div>
 

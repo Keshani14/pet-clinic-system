@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'My Profile — Furry Friends';
+$pageTitle = 'My Profile — PetSync';
 $bodyClass = 'dashboard-layout';
 require_once __DIR__ . '/../../views/layouts/header.php';
 
@@ -18,7 +18,7 @@ $sidebarPath = ($role === 'nurse') ? '/../../views/layouts/nurse_sidebar.php' : 
                 <div style="background: var(--pink-500); width: 50px; height: 50px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; box-shadow: 0 8px 20px rgba(219, 39, 119, 0.2);">🏥</div>
                 <div>
                     <h1 style="margin: 0; font-size: 2rem; font-weight: 900; color: #1e293b; letter-spacing: -1px;">My Profile</h1>
-                    <p style="margin: 0; color: #64748b; font-weight: 700; font-size: 0.95rem;">Staff Management Portal • Furry Friends Clinic</p>
+                    <p style="margin: 0; color: #64748b; font-weight: 700; font-size: 0.95rem;">Staff Management Portal • PetSync</p>
                 </div>
             </div>
             <div class="notification-bell" style="background: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; cursor: pointer;">

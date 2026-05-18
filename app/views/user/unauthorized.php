@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Access Restricted — Furry Friends';
+$pageTitle = 'Access Restricted — PetSync';
 require_once __DIR__ . '/../../views/layouts/header.php';
 ?>
 

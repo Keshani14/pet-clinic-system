@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Nurse Dashboard — Furry Friends';
+$pageTitle = 'Nurse Dashboard — PetSync';
 $bodyClass = 'dashboard-layout';
 require_once __DIR__ . '/../../views/layouts/header.php';
 ?>
@@ -23,7 +23,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
         <header class="dashboard-header mb-40" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 30px; flex-wrap: wrap;">
             <div class="header-info">
                 <h1 class="text-3xl font-900 text-gray-800">Clinical Overview</h1>
-                <p class="text-gray-500">Monitoring patient flow at <span class="text-pink-600 font-700">Furry Friends</span></p>
+                <p class="text-gray-500">Monitoring patient flow at <span class="text-pink-600 font-700">PetSync</span></p>
             </div>
 
             <!-- 🔍 Quick Command Search -->

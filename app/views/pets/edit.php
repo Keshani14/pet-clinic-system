@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Edit Pet — Furry Friends';
+$pageTitle = 'Edit Pet — PetSync';
 $userRole = Auth::role();
 $bodyClass = 'dashboard-layout';
 

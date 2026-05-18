@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Owner Dashboard — Furry Friends';
+$pageTitle = 'Owner Dashboard — PetSync';
 $bodyClass = 'dashboard-layout';
 require_once __DIR__ . '/../../views/layouts/header.php';
 
@@ -85,7 +85,7 @@ $hasAlerts = $activeAlertCount > 0;
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; padding: 0 5px;">
                 <h2 style="font-size: 1.9rem; font-weight: 900; color: #1e293b; margin: 0; display: flex; align-items: center; gap: 16px; letter-spacing: -0.8px;">
                     <span style="background: linear-gradient(135deg, #fff1f2, #ffeef5); color: #db2777; width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">🐾</span>
-                    My Furry Family
+                    My Pets
                 </h2>
                 <a href="?url=pet/addPet" class="btn-pill" style="padding: 13px 28px; font-size: 0.85rem; background: linear-gradient(135deg, #db2777, #f472b6); color: white; border: none; font-weight: 900; box-shadow: 0 8px 25px rgba(219, 39, 119, 0.25); border-radius: 50px; text-decoration: none; transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1); letter-spacing: 0.5px;">+ Add Member</a>
             </div>

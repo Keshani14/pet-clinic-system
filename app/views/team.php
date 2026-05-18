@@ -1,5 +1,5 @@
 <?php
-$pageTitle       = 'Meet Our Expert Team — Furry Friends';
+$pageTitle       = 'Meet Our Expert Team — PetSync';
 $pageDescription = 'Our specialists are here to provide the best care for your furry friends.';
 $bodyClass       = 'page-team';
 require_once __DIR__ . '/layouts/header.php';
@@ -182,7 +182,7 @@ body.page-team {
 <nav class="home-nav">
     <div class="container nav-content">
         <a href="index.php" class="nav-logo">
-            <span>🐾</span> Furry Friends
+            <span>🐾</span> PetSync
         </a>
         <ul class="nav-links-list">
             <li><a href="index.php">Home</a></li>

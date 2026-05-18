@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Book Appointment — Furry Friends';
+$pageTitle = 'Book Appointment — PetSync';
 $bodyClass = 'dashboard-layout';
 
 // Load Flatpickr for a premium date/time picker experience

@@ -104,8 +104,8 @@ VALUES
   (9103, 9103, 'Canine Influenza', '2025-06-07', '2026-06-07', 'Imported from previous clinic record.', NULL, '2026-05-18 13:00:00'),
   (9104, 9104, 'Feline Chlamydia', '2025-05-25', '2026-05-25', 'Imported from previous clinic record.', NULL, '2026-05-18 13:05:00'),
   (9105, 9105, 'Canine Lyme', '2025-05-12', '2026-05-12', 'Imported from previous clinic record.', NULL, '2026-05-18 13:10:00'),
-  (9106, 9104, 'Feline Rabies Annual', '2026-05-10', '2027-05-10', 'Administered at Furry Friends.', NULL, '2026-05-10 11:00:00'),
-  (9107, 9105, 'Canine Rabies Annual', '2026-05-11', '2027-05-11', 'Administered at Furry Friends.', NULL, '2026-05-11 16:45:00');
+  (9106, 9104, 'Feline Rabies Annual', '2026-05-10', '2027-05-10', 'Administered at PetSync.', NULL, '2026-05-10 11:00:00'),
+  (9107, 9105, 'Canine Rabies Annual', '2026-05-11', '2027-05-11', 'Administered at PetSync.', NULL, '2026-05-11 16:45:00');
 
 -- Status history for the added owner1 appointments.
 INSERT IGNORE INTO `status_logs`

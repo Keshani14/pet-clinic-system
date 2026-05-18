@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Consultation — Furry Friends';
+$pageTitle = 'Consultation — PetSync';
 $bodyClass = 'dashboard-layout';
 require_once __DIR__ . '/../../views/layouts/header.php';
 ?>

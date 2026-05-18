@@ -1,5 +1,5 @@
 <?php
-$pageTitle       = ($service['name'] ?? 'Service') . ' — Furry Friends';
+$pageTitle       = ($service['name'] ?? 'Service') . ' — PetSync';
 $pageDescription = $service['summary'] ?? '';
 $bodyClass       = 'page-services';
 require_once __DIR__ . '/layouts/header.php';
@@ -133,7 +133,7 @@ body.page-services {
 <div class="top-bar">
     <div class="container top-bar-content">
         <div class="contact-info">
-            <span class="icon">📞</span> +94 112 345 678 | <span class="icon">📧</span> info@petclinic.lk
+            <span class="icon">📞</span> +94 112 345 678 | <span class="icon">📧</span> info@petsync.lk
         </div>
         <div class="emergency-info">
             <span class="icon red">🚑</span> 24/7 Emergency: +94 777 999 000
@@ -144,7 +144,7 @@ body.page-services {
 <nav class="home-nav">
     <div class="container nav-content">
         <a href="index.php" class="nav-logo">
-            <span>🐾</span> Furry Friends
+            <span>🐾</span> PetSync
         </a>
         <ul class="nav-links-list">
             <li><a href="index.php">Home</a></li>
@@ -208,7 +208,7 @@ body.page-services {
             <div class="svc-cta-card">
                 <div class="cta-icon"><?php echo $service['icon']; ?></div>
                 <h3>Ready to Get Started?</h3>
-                <p>Register with Furry Friends today and give your pet the world-class care they deserve.</p>
+                <p>Register with PetSync today and give your pet the world-class care they deserve.</p>
                 <a href="?url=user/signup" class="btn-register-now">Register Now — It's Free</a>
                 <a href="?url=user/login" class="btn-login-alt">Already a member? Login</a>
                 <p class="cta-note">✨ No credit card required. Cancel anytime.</p>

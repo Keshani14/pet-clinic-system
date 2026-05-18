@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="<?php echo htmlspecialchars($pageDescription ?? 'Furry Friends — caring for your furry family.'); ?>">
-    <title><?php echo htmlspecialchars($pageTitle ?? 'Furry Friends'); ?></title>
+    <meta name="description" content="<?php echo htmlspecialchars($pageDescription ?? 'PetSync — caring for your furry family.'); ?>">
+    <title><?php echo htmlspecialchars($pageTitle ?? 'PetSync'); ?></title>
 
     <!-- Google Fonts: Nunito -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

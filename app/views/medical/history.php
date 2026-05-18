@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Pet Record: ' . htmlspecialchars($pet['name']) . ' — Furry Friends';
+$pageTitle = 'Pet Record: ' . htmlspecialchars($pet['name']) . ' — PetSync';
 $isVet = (Auth::role() === 'vet' || Auth::role() === 'admin');
 $bodyClass = $isVet ? 'dashboard-layout' : '';
 require_once __DIR__ . '/../../views/layouts/header.php';

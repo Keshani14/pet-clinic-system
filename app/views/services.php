@@ -1,5 +1,5 @@
 <?php
-$pageTitle       = 'Our Services — Furry Friends';
+$pageTitle       = 'Our Services — PetSync';
 $pageDescription = 'Discover the comprehensive veterinary services we offer.';
 $bodyClass       = 'page-services';
 require_once __DIR__ . '/layouts/header.php';
@@ -150,7 +150,7 @@ body.page-services {
 <div class="top-bar">
     <div class="container top-bar-content">
         <div class="contact-info">
-            <span class="icon">📞</span> +94 112 345 678 | <span class="icon">📧</span> info@petclinic.lk
+            <span class="icon">📞</span> +94 112 345 678 | <span class="icon">📧</span> info@petsync.lk
         </div>
         <div class="emergency-info">
             <span class="icon red">🚑</span> 24/7 Emergency: +94 777 999 000
@@ -161,7 +161,7 @@ body.page-services {
 <nav class="home-nav">
     <div class="container nav-content">
         <a href="index.php" class="nav-logo">
-            <span>🐾</span> Furry Friends
+            <span>🐾</span> PetSync
         </a>
         <ul class="nav-links-list">
             <li><a href="index.php">Home</a></li>
