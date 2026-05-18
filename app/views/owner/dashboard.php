@@ -164,9 +164,9 @@ $hasAlerts = $activeAlertCount > 0;
         </section>
 
         <!-- 📅 Upcoming Visits Calendar Grid & Health Insights -->
-        <div class="dashboard-split-grid" style="display: grid; grid-template-columns: 1fr; gap: 50px; align-items: start; margin-top: 65px; animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: 0.3s;">
+        <div class="dashboard-split-grid" style="display: grid; grid-template-columns: 1fr; gap: 50px; align-items: start; margin-top: 65px; animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: 0.3s; width: 100%; min-width: 0;">
             <!-- Calendar Roster -->
-            <div class="card" style="background: linear-gradient(135deg, #ffffff 0%, #fafafe 100%); border-radius: 45px; border: 2px solid rgba(219, 39, 119, 0.08); box-shadow: 0 25px 70px rgba(219, 39, 119, 0.08), 0 8px 25px rgba(0, 0, 0, 0.02); overflow: hidden; transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);">
+            <div class="card upcoming-visits-card" style="background: linear-gradient(135deg, #ffffff 0%, #fafafe 100%); border-radius: 45px; border: 2px solid rgba(219, 39, 119, 0.08); box-shadow: 0 25px 70px rgba(219, 39, 119, 0.08), 0 8px 25px rgba(0, 0, 0, 0.02); overflow: hidden; transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; max-width: none; min-width: 0; box-sizing: border-box;">
                 <div style="padding: 40px 48px; border-bottom: 2px solid rgba(219, 39, 119, 0.05); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
                     <h2 style="font-size: 1.65rem; font-weight: 900; color: #1e293b; margin: 0; display: flex; align-items: center; gap: 16px; letter-spacing: -0.8px;">
                         <span style="background: linear-gradient(135deg, #eef2ff, #e0e7ff); color: #6366f1; width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">🗓️</span>
@@ -183,7 +183,7 @@ $hasAlerts = $activeAlertCount > 0;
                             <p style="color: #64748b; font-weight: 700; margin-top: 8px; font-size: 0.95rem;">No appointments scheduled. Keep your pets healthy with regular checkups!</p>
                         </div>
                     <?php else: ?>
-                        <div style="display: flex; flex-direction: row; gap: 28px; flex-wrap: wrap; align-items: flex-start;">
+                        <div class="upcoming-visits-list" style="display: flex; flex-direction: row; gap: 28px; flex-wrap: nowrap; align-items: flex-start; overflow-x: auto; overflow-y: hidden; padding-bottom: 10px; scroll-snap-type: x proximity; width: 100%; max-width: 100%; box-sizing: border-box;">
                             <?php foreach ($appointments as $appt): 
                                 $dateObj = new DateTime($appt['appointment_date']);
                                 $monthStr = strtoupper($dateObj->format('M'));
@@ -201,7 +201,7 @@ $hasAlerts = $activeAlertCount > 0;
                                     $statusStyles = 'background: linear-gradient(135deg, #fffbeb, #ffedd5); color: #b45309; border: 1.5px solid #fef3c7;';
                                 }
                             ?>
-                                <div class="calendar-visit-row" style="background: linear-gradient(135deg, #f8fafc, #f5f7fb); border-radius: 28px; padding: 22px 24px; border: 1.5px solid rgba(219, 39, 119, 0.04); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1); gap: 16px; min-width: 280px; flex: 0 1 calc(33.333% - 20px); text-align: center;">
+                                <div class="calendar-visit-row" style="background: linear-gradient(135deg, #f8fafc, #f5f7fb); border-radius: 28px; padding: 22px 24px; border: 1.5px solid rgba(219, 39, 119, 0.04); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1); gap: 16px; min-width: 280px; flex: 0 0 280px; text-align: center; scroll-snap-align: start;">
                                     <!-- Mini Calendar Badge -->
                                     <div class="calendar-badge" style="width: 74px; height: 82px; background: white; border-radius: 22px; overflow: hidden; box-shadow: 0 10px 28px rgba(0,0,0,0.05); border: 1.5px solid #e2e8f0; display: flex; flex-direction: column; text-align: center; transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);">
                                             <div style="background: linear-gradient(135deg, #db2777, #ec4899); color: white; font-size: 0.7rem; font-weight: 900; letter-spacing: 1px; padding: 5px 0; text-transform: uppercase;">
@@ -390,6 +390,28 @@ $hasAlerts = $activeAlertCount > 0;
         box-shadow: 0 14px 35px rgba(219, 39, 119, 0.12);
     }
 
+    .upcoming-visits-card {
+        justify-self: stretch;
+    }
+
+    .upcoming-visits-list {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(219, 39, 119, 0.35) transparent;
+    }
+
+    .upcoming-visits-list::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .upcoming-visits-list::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .upcoming-visits-list::-webkit-scrollbar-thumb {
+        background: rgba(219, 39, 119, 0.25);
+        border-radius: 999px;
+    }
+
     .reminder-card-hover:hover {
         background: linear-gradient(135deg, #ffffff, #fafafe) !important;
         border-color: rgba(219, 39, 119, 0.12) !important;
@@ -491,6 +513,8 @@ $hasAlerts = $activeAlertCount > 0;
         .calendar-visit-row {
             padding: 18px 20px !important;
             flex-direction: column !important;
+            flex-basis: 260px !important;
+            min-width: 260px !important;
         }
         
         h1 {
@@ -503,6 +527,10 @@ $hasAlerts = $activeAlertCount > 0;
 
         .dashboard-split-grid {
             gap: 30px !important;
+        }
+
+        .upcoming-visits-card .card-body {
+            padding: 24px 24px 28px !important;
         }
     }
 
@@ -517,6 +545,14 @@ $hasAlerts = $activeAlertCount > 0;
         
         .stat-deck-card {
             padding: 22px 24px !important;
+        }
+
+        .upcoming-visits-card {
+            border-radius: 32px !important;
+        }
+
+        .upcoming-visits-card .card-body {
+            padding: 20px 18px 24px !important;
         }
         
         h1 {
