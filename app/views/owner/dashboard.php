@@ -245,9 +245,9 @@ $hasAlerts = $activeAlertCount > 0;
             </div>
 
             <!-- Health Summary Panel & Dynamic Tips Carousel -->
-            <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="health-summary-row" style="display: flex; flex-direction: row; gap: 32px; align-items: stretch; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; padding-bottom: 10px; width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; scroll-snap-type: x proximity;">
                 <!-- Card: Health Reminders -->
-                <div class="card" style="background: linear-gradient(135deg, #ffffff 0%, #fafafe 100%); border-radius: 45px; padding: 40px; border: 2px solid rgba(219, 39, 119, 0.08); box-shadow: 0 25px 70px rgba(219, 39, 119, 0.08), 0 8px 25px rgba(0, 0, 0, 0.02); position: relative; overflow: hidden; transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);">
+                <div class="card health-summary-card" style="background: linear-gradient(135deg, #ffffff 0%, #fafafe 100%); border-radius: 45px; padding: 40px; border: 2px solid rgba(219, 39, 119, 0.08); box-shadow: 0 25px 70px rgba(219, 39, 119, 0.08), 0 8px 25px rgba(0, 0, 0, 0.02); position: relative; overflow: hidden; transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; max-width: none; min-width: 300px; flex: 1 0 calc(50% - 16px); box-sizing: border-box; scroll-snap-align: start;">
                     <div style="position: absolute; top: -30px; right: -30px; background: linear-gradient(135deg, #fff1f2, #ffeef5); width: 140px; height: 140px; border-radius: 50%; opacity: 0.35;"></div>
                     <h3 style="font-size: 1.4rem; font-weight: 900; color: #1e293b; margin-bottom: 30px; position: relative; display: flex; align-items: center; gap: 14px; letter-spacing: -0.6px;">
                         <span style="background: linear-gradient(135deg, #fff1f2, #ffeef5); color: #db2777; width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; box-shadow: 0 6px 16px rgba(219, 39, 119, 0.12);">💉</span>
@@ -279,7 +279,7 @@ $hasAlerts = $activeAlertCount > 0;
                 </div>
 
                 <!-- 💡 Premium Engaging Health Tips Carousel Box with illustrations -->
-                <div class="card health-tip-interactive-card" style="background: linear-gradient(135deg, #db2777 0%, #f472b6 100%); border-radius: 45px; padding: 38px; border: none; box-shadow: 0 22px 60px rgba(219, 39, 119, 0.22); color: white; position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
+                <div class="card health-tip-interactive-card health-summary-card" style="background: linear-gradient(135deg, #db2777 0%, #f472b6 100%); border-radius: 45px; padding: 38px; border: none; box-shadow: 0 22px 60px rgba(219, 39, 119, 0.22); color: white; position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; max-width: none; min-width: 300px; flex: 1 0 calc(50% - 16px); box-sizing: border-box; scroll-snap-align: start;">
                     <!-- SVG Illustration Background -->
                     <div style="position: absolute; right: -30px; top: -30px; width: 160px; height: 160px; opacity: 0.1; pointer-events: none;">
                         <svg viewBox="0 0 100 100" fill="white">
@@ -394,20 +394,24 @@ $hasAlerts = $activeAlertCount > 0;
         justify-self: stretch;
     }
 
-    .upcoming-visits-list {
+    .upcoming-visits-list,
+    .health-summary-row {
         scrollbar-width: thin;
         scrollbar-color: rgba(219, 39, 119, 0.35) transparent;
     }
 
-    .upcoming-visits-list::-webkit-scrollbar {
+    .upcoming-visits-list::-webkit-scrollbar,
+    .health-summary-row::-webkit-scrollbar {
         height: 8px;
     }
 
-    .upcoming-visits-list::-webkit-scrollbar-track {
+    .upcoming-visits-list::-webkit-scrollbar-track,
+    .health-summary-row::-webkit-scrollbar-track {
         background: transparent;
     }
 
-    .upcoming-visits-list::-webkit-scrollbar-thumb {
+    .upcoming-visits-list::-webkit-scrollbar-thumb,
+    .health-summary-row::-webkit-scrollbar-thumb {
         background: rgba(219, 39, 119, 0.25);
         border-radius: 999px;
     }
@@ -532,6 +536,15 @@ $hasAlerts = $activeAlertCount > 0;
         .upcoming-visits-card .card-body {
             padding: 24px 24px 28px !important;
         }
+
+        .health-summary-row {
+            gap: 24px !important;
+        }
+
+        .health-summary-card {
+            padding: 30px !important;
+            min-width: 300px !important;
+        }
     }
 
     @media (max-width: 480px) {
@@ -553,6 +566,16 @@ $hasAlerts = $activeAlertCount > 0;
 
         .upcoming-visits-card .card-body {
             padding: 20px 18px 24px !important;
+        }
+
+        .health-summary-row {
+            gap: 18px !important;
+        }
+
+        .health-summary-card {
+            border-radius: 32px !important;
+            min-width: 280px !important;
+            padding: 24px !important;
         }
         
         h1 {
